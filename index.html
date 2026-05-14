@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CrossNet Perú — Dashboard Operaciones</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue:#185FA5; --blue-l:#378ADD; --blue-pale:#E6F1FB;
+  --coral:#D85A30; --coral-pale:#FAECE7;
+  --teal:#1D9E75; --teal-pale:#E2F5EE;
+  --amber:#BA7517; --amber-pale:#FDF0DC;
+  --violet:#7F77DD; --violet-pale:#EEEDF9;
+  --text:#18180E; --muted:#5F5E5A; --hint:#9A9890;
+  --bg:#F5F4EF; --surface:#ffffff;
+  --border:rgba(0,0,0,0.08); --border-m:rgba(0,0,0,0.13);
+  --r:10px; --r-lg:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;min-height:100vh}
+
+/* ── HEADER ── */
+.hdr{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:58px;position:sticky;top:0;z-index:200;gap:1rem}
+.hdr-left{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.hdr-logo{height:26px}
+.hdr-div{width:1px;height:18px;background:var(--border-m)}
+.hdr-title{font-size:13px;color:var(--muted)}
+.hdr-right{display:flex;align-items:center;gap:10px}
+.period-badge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;background:var(--blue-pale);color:var(--blue)}
+.last-update{font-size:11px;color:var(--hint)}
+
+/* ── UPLOAD ZONE ── */
+.upload-zone{background:var(--surface);border:2px dashed var(--border-m);border-radius:var(--r-lg);padding:2.5rem;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;margin:1.5rem 0}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--blue-l);background:var(--blue-pale)}
+.upload-icon{font-size:2rem;margin-bottom:.5rem}
+.upload-title{font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px}
+.upload-sub{font-size:12px;color:var(--hint);line-height:1.5}
+.upload-sub strong{color:var(--muted)}
+#file-input{display:none}
+.btn-primary{display:inline-block;margin-top:1rem;padding:8px 20px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .15s}
+.btn-primary:hover{background:#1450A0}
+.btn-ghost{display:inline-block;margin-top:0.5rem;margin-left:8px;padding:8px 20px;background:transparent;color:var(--muted);border:1px solid var(--border-m);border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .15s}
+.btn-ghost:hover{background:var(--bg)}
+
+/* ── CONTAINER ── */
+.container{max-width:1200px;margin:0 auto;padding:1.5rem 2rem 4rem}
+
+/* ── SECTION LABEL ── */
+.sec-label{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--hint);margin:1.75rem 0 .9rem}
+
+/* ── METRICS ── */
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:.5rem}
+.metric{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:.9rem 1.1rem}
+.metric.hl{border-left:3px solid var(--blue-l)}
+.metric.hl-coral{border-left:3px solid var(--coral)}
+.m-label{font-size:11px;color:var(--hint);margin-bottom:4px;font-weight:500}
+.m-value{font-size:26px;font-weight:600;color:var(--text);line-height:1;font-family:'DM Mono',monospace}
+.m-sub{font-size:11px;color:var(--hint);margin-top:4px}
+
+/* ── TABS ── */
+.tab-row{display:flex;gap:2px;margin:1.5rem 0 1.25rem;border-bottom:1px solid var(--border)}
+.tab{font-size:13px;padding:8px 18px;border:none;background:transparent;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;font-family:'DM Sans',sans-serif;font-weight:500;transition:color .15s,border-color .15s;white-space:nowrap}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--blue);border-bottom-color:var(--blue)}
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+
+/* ── CHART GRID ── */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.grid.g3{grid-template-columns:1fr 1fr 1fr}
+.box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.2rem 1.4rem}
+.box.full{grid-column:1/-1}
+.box-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px}
+.box-sub{font-size:11px;color:var(--hint);margin-bottom:1rem}
+
+/* ── LEGEND ── */
+.leg{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:10px}
+.li{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted)}
+.ld{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.ls{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+
+/* ── TABLE ── */
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--hint);padding:8px 10px;border-bottom:1px solid var(--border);text-align:left}
+.tbl td{padding:8px 10px;border-bottom:1px solid var(--border);color:var(--muted)}
+.tbl td:first-child{color:var(--text);font-weight:500}
+.tbl td.n{font-family:'DM Mono',monospace;text-align:right}
+.tbl td.hi{color:var(--blue);font-weight:600}
+.tbl td.warn{color:var(--coral);font-weight:600}
+.tbl td.med{color:var(--amber);font-weight:600}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:var(--bg)}
+
+/* ── PILLS ── */
+.pill{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px}
+.pill-b{background:var(--blue-pale);color:var(--blue)}
+.pill-c{background:var(--coral-pale);color:var(--coral)}
+.pill-t{background:var(--teal-pale);color:var(--teal)}
+.pill-a{background:var(--amber-pale);color:var(--amber)}
+.pill-g{background:var(--bg);color:var(--muted);border:1px solid var(--border-m)}
+
+/* ── ALERT ── */
+.alert{background:var(--coral-pale);border-left:3px solid var(--coral);border-radius:var(--r);padding:.8rem 1rem;font-size:13px;color:#8B3318;margin-bottom:1rem;line-height:1.5}
+.alert strong{font-weight:600}
+.info-box{background:var(--blue-pale);border-left:3px solid var(--blue-l);border-radius:var(--r);padding:.8rem 1rem;font-size:13px;color:#0D3F7A;line-height:1.5}
+
+/* ── CONCLUSIONS ── */
+.exec-header { display:flex; align-items:flex-start; gap:1rem; margin-bottom:1.5rem; padding:1.25rem 1.5rem; background:linear-gradient(135deg,#0D3B6E 0%,#185FA5 100%); border-radius:var(--r-lg); color:#fff; }
+.exec-header-icon { font-size:2rem; flex-shrink:0; }
+.exec-header-text h2 { font-size:16px; font-weight:600; margin-bottom:4px; }
+.exec-header-text p { font-size:12px; opacity:.75; line-height:1.5; }
+.conc-section { margin-bottom:1.5rem; }
+.conc-section-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--hint); margin-bottom:.75rem; display:flex; align-items:center; gap:8px; }
+.conc-section-title::after { content:''; flex:1; height:1px; background:var(--border); }
+.conc-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.conc-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--r-lg); padding:1.1rem 1.25rem; border-left:3px solid var(--border); }
+.conc-card.positive { border-left-color:var(--teal); }
+.conc-card.warning  { border-left-color:var(--amber); }
+.conc-card.alert    { border-left-color:var(--coral); }
+.conc-card.strategic{ border-left-color:var(--blue); }
+.conc-card.tactical { border-left-color:var(--violet); }
+.conc-tag { display:inline-flex; align-items:center; gap:4px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; padding:2px 8px; border-radius:20px; margin-bottom:.6rem; }
+.conc-tag.positive { background:var(--teal-pale);   color:var(--teal); }
+.conc-tag.warning  { background:var(--amber-pale);  color:var(--amber); }
+.conc-tag.alert    { background:var(--coral-pale);  color:var(--coral); }
+.conc-tag.strategic{ background:var(--blue-pale);   color:var(--blue); }
+.conc-tag.tactical { background:var(--violet-pale); color:var(--violet); }
+.conc-title { font-size:13px; font-weight:600; color:var(--text); margin-bottom:.4rem; line-height:1.3; }
+.conc-body  { font-size:12px; color:var(--muted); line-height:1.65; }
+.conc-body strong { color:var(--text); font-weight:600; }
+.conc-kpi { margin-top:.75rem; padding:.5rem .75rem; background:var(--bg); border-radius:var(--r); font-size:11px; color:var(--hint); }
+.conc-kpi strong { color:var(--text); }
+.action-grid { display:grid; grid-template-columns:1fr; gap:10px; }
+.action-row { display:grid; grid-template-columns:28px 1fr auto; align-items:start; gap:12px; background:var(--surface); border:1px solid var(--border); border-radius:var(--r-lg); padding:1rem 1.1rem; }
+.action-num { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; }
+.action-num.immediata { background:var(--coral-pale); color:var(--coral); }
+.action-num.corto     { background:var(--amber-pale); color:var(--amber); }
+.action-num.mediano   { background:var(--blue-pale);  color:var(--blue); }
+.action-body { flex:1; }
+.action-title { font-size:13px; font-weight:600; color:var(--text); margin-bottom:3px; }
+.action-desc  { font-size:12px; color:var(--muted); line-height:1.6; }
+.action-desc strong { color:var(--text); }
+.action-badge { font-size:10px; font-weight:700; padding:3px 10px; border-radius:20px; white-space:nowrap; align-self:flex-start; }
+.action-badge.immediata { background:var(--coral-pale); color:var(--coral); }
+.action-badge.corto     { background:var(--amber-pale); color:var(--amber); }
+.action-badge.mediano   { background:var(--blue-pale);  color:var(--blue); }
+
+/* ── CONCLUSIONS ── */
+.footer{margin-top:3rem;border-top:1px solid var(--border);padding-top:1.25rem;display:flex;align-items:center;justify-content:space-between}
+.footer-l{font-size:12px;color:var(--hint)}
+.footer-logo{height:18px;opacity:.35}
+
+/* ── LOADING ── */
+#loading{position:fixed;inset:0;background:rgba(245,244,239,.9);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:1rem}
+.spinner{width:36px;height:36px;border:3px solid var(--border-m);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#loading p{font-size:13px;color:var(--muted)}
+
+/* ── EMPTY STATE ── */
+#empty-state{text-align:center;padding:4rem 2rem;color:var(--hint)}
+#empty-state .big{font-size:3rem;margin-bottom:1rem}
+#empty-state h2{font-size:18px;font-weight:600;color:var(--muted);margin-bottom:.5rem}
+#empty-state p{font-size:13px;line-height:1.7;max-width:420px;margin:0 auto}
+
+@media(max-width:700px){
+  .grid,.grid.g3{grid-template-columns:1fr}
+  .box.full{grid-column:1}
+  .container{padding:1rem 1rem 3rem}
+  .hdr{padding:0 1rem}
+  .metrics{grid-template-columns:repeat(2,1fr)}
+  .tab{padding:8px 12px;font-size:12px}
+}
+</style>
+</head>
+<body>
+
+<div id="loading" style="display:none"><div class="spinner"></div><p>Procesando datos…</p></div>
+
+<header class="hdr">
+  <div class="hdr-left">
+    <img class="hdr-logo" src="https://crossnet.la/wp-content/uploads/2024/10/logo-crossnet_header.svg" alt="CrossNet" onerror="this.style.display='none';document.getElementById('logo-txt').style.display='block'">
+    <span id="logo-txt" style="display:none;font-weight:600;font-size:16px;color:var(--blue)">CrossNet</span>
+    <div class="hdr-div"></div>
+    <span class="hdr-title">Operaciones Perú</span>
+  </div>
+  <div class="hdr-right">
+    <span class="period-badge" id="period-badge">Sin datos</span>
+    <span class="last-update" id="last-update"></span>
+    <button class="btn-ghost" style="margin-top:0;padding:5px 14px;font-size:12px" onclick="resetDashboard()">↑ Cargar nuevo CSV</button>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- UPLOAD ZONE -->
+  <div id="upload-section">
+    <div id="empty-state">
+      <div class="big">📊</div>
+      <h2>Dashboard de Operaciones CrossNet Perú</h2>
+      <p>Pega el contenido de tu CSV para visualizar los datos. Cada vez que quieras actualizar, repite el proceso con el nuevo archivo.</p>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.5rem;margin-top:1rem">
+      <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px">📋 Pega aquí el contenido de tu CSV</div>
+      <div style="font-size:12px;color:var(--hint);margin-bottom:1rem;line-height:1.6">
+        <strong>Pasos:</strong> Abre el CSV con el Bloc de notas (clic derecho → Abrir con → Bloc de notas) → Selecciona todo (<kbd style="background:var(--bg);padding:1px 5px;border-radius:3px;border:1px solid var(--border-m)">Ctrl+A</kbd>) → Copia (<kbd style="background:var(--bg);padding:1px 5px;border-radius:3px;border:1px solid var(--border-m)">Ctrl+C</kbd>) → Pega aquí (<kbd style="background:var(--bg);padding:1px 5px;border-radius:3px;border:1px solid var(--border-m)">Ctrl+V</kbd>)
+      </div>
+      <textarea id="csv-paste" placeholder="Pega el contenido del CSV aquí..." style="width:100%;height:160px;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);background:var(--bg);border:1px solid var(--border-m);border-radius:var(--r);padding:.75rem;resize:vertical;outline:none;line-height:1.5" oninput="checkPaste()" onpaste="setTimeout(checkPaste,100)" onkeyup="checkPaste()"></textarea>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:.75rem;flex-wrap:wrap">
+        <button class="btn-primary" id="btn-cargar" onclick="loadPasted()" style="opacity:1;cursor:pointer">Cargar datos</button>
+        <span id="paste-hint" style="font-size:12px;color:var(--hint)">Pega el CSV y haz clic en Cargar datos</span>
+      </div>
+    </div>
+
+    <!-- drag & drop como alternativa -->
+    <div id="drop-zone" style="margin-top:12px;border:1.5px dashed var(--border-m);border-radius:var(--r-lg);padding:1.25rem;text-align:center;color:var(--hint);font-size:12px;transition:border-color .2s,background .2s"
+      ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFile(event)">
+      🗂 O arrastra el archivo CSV directamente aquí
+    </div>
+    <input type="file" id="file-input" accept=".csv" style="display:none" onchange="loadFile(this.files[0])">
+  </div>
+
+  <!-- DASHBOARD (hidden until data loaded) -->
+  <div id="dashboard" style="display:none">
+
+    <div class="sec-label">Resumen ejecutivo</div>
+    <div class="metrics">
+      <div class="metric hl"><div class="m-label">Bitácoras totales</div><div class="m-value" id="m-total">—</div><div class="m-sub">100% verificadas</div></div>
+      <div class="metric hl"><div class="m-label">HH totales</div><div class="m-value" id="m-hh">—</div><div class="m-sub" id="m-hh-sub">—</div></div>
+      <div class="metric"><div class="m-label">HH promedio / bit.</div><div class="m-value" id="m-hh-avg">—</div><div class="m-sub">mediana <span id="m-hh-med">—</span> HH</div></div>
+      <div class="metric"><div class="m-label">Meses en datos</div><div class="m-value" id="m-meses">—</div><div class="m-sub" id="m-rango">—</div></div>
+      <div class="metric"><div class="m-label">Días prom. entrega</div><div class="m-value" id="m-sla">—</div><div class="m-sub">mediana <span id="m-sla-med">—</span> días</div></div>
+      <div class="metric hl-coral"><div class="m-label">Pend. por cliente</div><div class="m-value" id="m-pend">—</div><div class="m-sub" id="m-pend-pct">—</div></div>
+    </div>
+
+    <div class="tab-row">
+      <button class="tab active" onclick="showTab('general',this)">General</button>
+      <button class="tab" onclick="showTab('hh',this)">Horas (HH)</button>
+      <button class="tab" onclick="showTab('equipo',this)">Equipo local</button>
+      <button class="tab" onclick="showTab('clientes',this)">Clientes</button>
+      <button class="tab" onclick="showTab('sla',this)">SLA & tiempos</button>
+      <button class="tab" onclick="showTab('conclusiones',this)">⚡ Conclusiones & Acciones</button>
+    </div>
+
+    <!-- GENERAL -->
+    <div id="pane-general" class="tab-pane active">
+      <div class="grid">
+        <div class="box">
+          <div class="box-title">Bitácoras y HH por mes</div>
+          <div class="box-sub">Volumen mensual y horas invertidas</div>
+          <div class="leg"><span class="li"><span class="ls" style="background:#378ADD"></span>Bitácoras</span><span class="li"><span class="ls" style="background:#D85A30"></span>HH</span></div>
+          <div style="position:relative;height:220px"><canvas id="c-mes"></canvas></div>
+        </div>
+        <div class="box">
+          <div class="box-title">Distribución de HH por rango</div>
+          <div class="box-sub">Cantidad de bitácoras según esfuerzo</div>
+          <div style="position:relative;height:258px"><canvas id="c-dist"></canvas></div>
+        </div>
+        <div class="box">
+          <div class="box-title">Por KAM</div>
+          <div class="box-sub">Bitácoras por equipo comercial</div>
+          <div style="position:relative;height:210px"><canvas id="c-kam"></canvas></div>
+        </div>
+        <div class="box">
+          <div class="box-title">Pendiente por</div>
+          <div class="box-sub">Responsable de desbloqueo</div>
+          <div style="position:relative;height:210px"><canvas id="c-pend-chart"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HH -->
+    <div id="pane-hh" class="tab-pane">
+      <div class="grid">
+        <div class="box full">
+          <div class="box-title">HH totales por consultor local</div>
+          <div class="box-sub">Acumulado del período cargado</div>
+          <div style="position:relative;height:240px"><canvas id="c-hh-total"></canvas></div>
+        </div>
+        <div class="box full">
+          <div class="box-title">HH por consultor — evolución mensual</div>
+          <div class="box-sub">Distribución de carga mes a mes</div>
+          <div style="position:relative;height:260px"><canvas id="c-hh-mes"></canvas></div>
+        </div>
+        <div class="box full">
+          <div class="box-title">Bitácoras de alto esfuerzo — HH &gt; 20</div>
+          <div class="box-sub">Casos que superan el umbral recomendado</div>
+          <div id="outliers-table"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EQUIPO -->
+    <div id="pane-equipo" class="tab-pane">
+      <div class="grid">
+        <div class="box full">
+          <div class="box-title">Bitácoras por consultor local — evolución mensual</div>
+          <div class="box-sub">Volumen ejecutado por mes</div>
+          <div class="leg">
+            <span class="li"><span class="ls" style="background:#1B5FA6"></span>Mes 1</span>
+            <span class="li"><span class="ls" style="background:#1D9E75"></span>Mes 2</span>
+            <span class="li"><span class="ls" style="background:#BA7517"></span>Mes 3</span>
+            <span class="li"><span class="ls" style="background:#D4537E"></span>Mes 4+</span>
+          </div>
+          <div style="position:relative;height:260px"><canvas id="c-local-bit"></canvas></div>
+        </div>
+        <div class="box full">
+          <div class="box-title">Resumen equipo local</div>
+          <div class="box-sub">Comparativo de carga y eficiencia en el período</div>
+          <table class="tbl" id="equipo-table"><thead><tr><th>Consultor</th><th style="text-align:right">Bitácoras</th><th style="text-align:right">HH total</th><th style="text-align:right">HH / bit.</th><th style="text-align:right">% del equipo</th></tr></thead><tbody></tbody></table>
+        </div>
+        <div class="box full">
+          <div class="box-title">HH promedio por bitácora — eficiencia</div>
+          <div class="box-sub">Menor valor = más bitácoras por hora invertida</div>
+          <div style="position:relative;height:220px"><canvas id="c-efic"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLIENTES -->
+    <div id="pane-clientes" class="tab-pane">
+      <div class="grid">
+        <div class="box full">
+          <div class="box-title">Top 10 clientes — bitácoras vs HH</div>
+          <div class="box-sub">Los clientes de mayor volumen no siempre son los de mayor esfuerzo</div>
+          <div class="leg"><span class="li"><span class="ls" style="background:#378ADD"></span>Bitácoras</span><span class="li"><span class="ls" style="background:#D85A30"></span>HH</span></div>
+          <div style="position:relative;height:300px"><canvas id="c-cli"></canvas></div>
+        </div>
+        <div class="box full">
+          <div class="box-title">HH promedio por bitácora — complejidad por cliente</div>
+          <div class="box-sub">Verde &lt; 4 HH · Amarillo 4–7 HH · Rojo &gt; 7 HH</div>
+          <div style="position:relative;height:280px"><canvas id="c-cli-avg"></canvas></div>
+        </div>
+        <div class="box">
+          <div class="box-title">Team Zinthia Mansilla — Mistura</div>
+          <div class="box-sub">Cartera de clientes</div>
+          <table class="tbl" id="t-mistura"><thead><tr><th>Cliente</th><th style="text-align:right">Bit.</th><th style="text-align:right">HH</th><th>SDM</th></tr></thead><tbody></tbody></table>
+        </div>
+        <div class="box">
+          <div class="box-title">Team Paola Jacobs — Chilcano</div>
+          <div class="box-sub">Cartera de clientes</div>
+          <table class="tbl" id="t-chilcano"><thead><tr><th>Cliente</th><th style="text-align:right">Bit.</th><th style="text-align:right">HH</th><th>SDM</th></tr></thead><tbody></tbody></table>
+        </div>
+        <div class="box full">
+          <div class="box-title">Bitácoras pendientes por cliente</div>
+          <div class="box-sub">Acciones bloqueadas esperando respuesta del cliente</div>
+          <div id="pendientes-section"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLA -->
+    <div id="pane-sla" class="tab-pane">
+      <div class="grid">
+        <div class="box full">
+          <div class="box-title">Días promedio de entrega por mes</div>
+          <div class="box-sub">Desde fecha de creación hasta notificación</div>
+          <div class="leg"><span class="li"><span class="ld" style="background:#D85A30"></span>Promedio</span><span class="li"><span class="ld" style="background:#1D9E75"></span>Mediana</span></div>
+          <div style="position:relative;height:260px"><canvas id="c-sla"></canvas></div>
+        </div>
+        <div class="box full" id="sla-summary"></div>
+      </div>
+    </div>
+
+    <!-- CONCLUSIONES -->
+    <div id="pane-conclusiones" class="tab-pane">
+      <div id="conclusiones-content"></div>
+    </div>
+
+    <div class="footer">
+      <div class="footer-l">CrossNet Perú · Gerencia de Operaciones · Datos del Portal CrossNet</div>
+      <img class="footer-logo" src="https://crossnet.la/wp-content/uploads/2024/10/logo-crossnet_header.svg" alt="CrossNet" onerror="this.style.display='none'">
+    </div>
+
+  </div><!-- /dashboard -->
+</div><!-- /container -->
+
+<script>
+// ─── CONFIG ────────────────────────────────────────────────────────────────
+const LOCAL_CONSULTANTS = {
+  'Walter Cahuana Diez':           'Walter Cahuana',
+  'Elvis Mayhuay':                 'Elvis Mayhuay',
+  'Oscar Ivan Bardales Diaz':      'Oscar Bardales',
+  'Karen Geraldine Gil Jauregui':  'Karen Gil',
+  'Nilser Tejedo Vega':            'Nilser Tejedo',
+  'Mitchell Limay':                'Mitchell Limay',
+};
+// Mapeo completo Cliente → { team, kam, sdm } según tabla oficial CrossNet Perú
+// MTC y SEDAPAR excluidos (en proceso de habilitación)
+const CLIENT_MAP = {
+  // ── TEAM MISTURA · KAM: Zinthia · SDM: Tomas ──
+  'Clínica Internacional':        { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Tomas' },
+  'Calidda':                      { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Tomas' },
+  'Banco Ripley':                  { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Tomas' },
+  'MAF Perú':                      { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Tomas' },
+  'Inchcape Perú':                 { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Tomas' },
+  'Indecopi':                      { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Tomas' },
+  'Alfin Banco (antes Banco Azteca)': { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Tomas' },
+  'Intursa':                       { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Tomas' },
+  'Oftalmosalud':                  { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Tomas' },
+  'Fondos Sura':                   { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Tomas' },
+  'Drager Peru':                   { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Tomas' },
+  'AVLA':                          { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Tomas' },
+  'Pluxee (Sodexo) - Perú':        { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Tomas' },
+  'Jockey Salud':                  { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Tomas' },
+  // ── TEAM MISTURA · KAM: Zinthia · SDM: Claudia ──
+  'GSP - Aranwa':                  { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Claudia' },
+  'GSP - Plan Familiar':           { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Claudia' },
+  'GSP - San Pablo Surco':         { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Claudia' },
+  'GSP - San Gabriel':             { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Claudia' },
+  'GSP - La Victoria':             { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Claudia' },
+  'GSP - Santa Martha del Sur':    { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Claudia' },
+  'GSP - San Pablo Arequipa':      { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Claudia' },
+  'GSP - Jesús del Norte':         { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Claudia' },
+  'GSP - San Juan Bautista':       { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Claudia' },
+  'GSP - San Pablo Trujillo':      { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Claudia' },
+  'GSP - Huaraz':                  { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Claudia' },
+  'GSP - Medikcenter':             { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Claudia' },
+  'Qalab':                         { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Claudia' },
+  'Salud Ocupacional':             { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Claudia' },
+  'Tomomedic':                     { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Claudia' },
+  'AFP Integra - Sura Perú':       { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Claudia' },
+  'Sanna':                         { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Claudia' },
+  'MI FIBRA':                      { team:'Chilcano', kam:'Paola Jacobs',    sdm:'Claudia' },
+  'Continental Travel':            { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Claudia' },
+  'La Protectora':                 { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Claudia' },
+  // ── TEAM CHILCANO · KAM: Paola · SDM: Tomas ──
+  'Mapfre Perú':                   { team:'Chilcano', kam:'Paola Jacobs', sdm:'Tomas' },
+  // ── TEAM CHILCANO · KAM: Paola · SDM: Angy ──
+  'Financiera Oh!':                { team:'Chilcano', kam:'Paola Jacobs', sdm:'Angy' },
+  'InRetail':                      { team:'Chilcano', kam:'Paola Jacobs', sdm:'Angy' },
+  'SPSA':                          { team:'Chilcano', kam:'Paola Jacobs', sdm:'Angy' },
+  'Real Plaza':                    { team:'Chilcano', kam:'Paola Jacobs', sdm:'Angy' },
+  'OECHSLE':                       { team:'Chilcano', kam:'Paola Jacobs', sdm:'Angy' },
+  'PROMART':                       { team:'Chilcano', kam:'Paola Jacobs', sdm:'Angy' },
+  'Farmacias Peruanas':            { team:'Chilcano', kam:'Paola Jacobs', sdm:'Angy' },
+  'Química Suiza':                 { team:'Chilcano', kam:'Paola Jacobs', sdm:'Angy' },
+  'SBS':                           { team:'Chilcano', kam:'Paola Jacobs', sdm:'Angy' },
+  'Casa Andina Hoteles':           { team:'Chilcano', kam:'Paola Jacobs', sdm:'Angy' },
+  'Pardos Chicken':                { team:'Chilcano', kam:'Paola Jacobs', sdm:'Angy' },
+  'NGR':                           { team:'Chilcano', kam:'Paola Jacobs', sdm:'Angy' },
+  'MAKRO':                         { team:'Chilcano', kam:'Paola Jacobs', sdm:'Angy' },
+  'ONPE':                          { team:'Chilcano', kam:'Paola Jacobs', sdm:'Angy' },
+  // ── TEAM MISTURA · KAM: Zinthia · SDM: Angy ──
+  'CENTRIA':                       { team:'Mistura', kam:'Zinthia Mansilla', sdm:'Angy' },
+};
+// Helper sets derivados del mapa para compatibilidad
+const TEAM_MISTURA  = new Set(Object.keys(CLIENT_MAP).filter(k=>CLIENT_MAP[k].team==='Mistura'));
+const TEAM_CHILCANO = new Set(Object.keys(CLIENT_MAP).filter(k=>CLIENT_MAP[k].team==='Chilcano'));
+const COLORS_MES  = ['#1B5FA6','#1D9E75','#BA7517','#D4537E','#7F77DD','#D85A30','#185FA5','#639922','#888780','#C96914','#2E9ED6','#A3599E'];
+const PALETTE     = {blue:'#185FA5',bluel:'#378ADD',coral:'#D85A30',teal:'#1D9E75',amber:'#BA7517',violet:'#7F77DD',gray:'#888780'};
+const GC          = 'rgba(0,0,0,0.07)';
+const TC          = '#9A9890';
+const BS          = { x:{grid:{color:GC},ticks:{color:TC,font:{size:11,family:'DM Sans'}}}, y:{grid:{color:GC},ticks:{color:TC,font:{size:11,family:'DM Sans'}}} };
+
+// ─── CSV PARSER PROPIO (sin dependencias externas) ─────────────────────────
+function parseCSV(text) {
+  // Detectar delimitador: coma o punto y coma
+  const firstLine = text.split('\n')[0] || '';
+  const delim = (firstLine.split(';').length > firstLine.split(',').length) ? ';' : ',';
+
+  const lines = text.split('\n');
+  const headers = splitCSVLine(lines[0], delim).map(h => h.replace(/^"|"$/g,'').trim());
+  const data = [];
+
+  for(let i = 1; i < lines.length; i++){
+    const line = lines[i].trim();
+    if(!line) continue;
+    const vals = splitCSVLine(line, delim);
+    const row = {};
+    headers.forEach((h, idx) => {
+      let v = (vals[idx] || '').replace(/^"|"$/g,'').trim();
+      // intentar convertir a número
+      const n = parseFloat(v.replace(',','.'));
+      row[h] = (!isNaN(n) && v !== '' && !/^\d{4}-/.test(v)) ? n : v;
+    });
+    data.push(row);
+  }
+  return { data, headers, delim };
+}
+
+function splitCSVLine(line, delim) {
+  const result = [];
+  let cur = '', inQ = false;
+  for(let i = 0; i < line.length; i++){
+    const c = line[i];
+    if(c === '"') { inQ = !inQ; }
+    else if(c === delim && !inQ) { result.push(cur); cur = ''; }
+    else { cur += c; }
+  }
+  result.push(cur);
+  return result;
+}
+
+// ─── UI helpers ────────────────────────────────────────────────────────────
+function triggerUpload(){ document.getElementById('file-input').click(); }
+function dragOver(e){ e.preventDefault(); document.getElementById('drop-zone').style.borderColor='var(--blue-l)'; document.getElementById('drop-zone').style.background='var(--blue-pale)'; }
+function dragLeave(e){ document.getElementById('drop-zone').style.borderColor=''; document.getElementById('drop-zone').style.background=''; }
+function dropFile(e){ e.preventDefault(); dragLeave(); const f=e.dataTransfer.files[0]; if(f) loadFile(f); }
+
+function checkPaste(){
+  const val = document.getElementById('csv-paste').value.trim();
+  const btn = document.getElementById('btn-cargar');
+  const hint = document.getElementById('paste-hint');
+  if(val.length > 10){
+    btn.disabled = false; btn.style.opacity='1'; btn.style.cursor='pointer';
+    const lines = val.split('\n').filter(l=>l.trim()).length;
+    hint.textContent = `${lines} línea${lines!==1?'s':''} detectada${lines!==1?'s':''} — listo para cargar`;
+    hint.style.color = 'var(--teal)';
+  } else {
+    btn.disabled = true; btn.style.opacity='.4'; btn.style.cursor='not-allowed';
+    hint.textContent = 'Pega el CSV para habilitar este botón';
+    hint.style.color = 'var(--hint)';
+  }
+}
+
+function loadPasted(){
+  const text = document.getElementById('csv-paste').value.trim();
+  if(!text){ showError('El cuadro de texto está vacío. Pega el contenido del CSV primero.'); return; }
+  const hint = document.getElementById('paste-hint');
+  hint.textContent = 'Procesando...'; hint.style.color = 'var(--blue)';
+  setTimeout(() => {
+    try {
+      const { data, headers, delim } = parseCSV(text);
+      if(!data.length){ showError('No se encontraron filas de datos. Verifica que el CSV tenga contenido.'); return; }
+      if(!headers.includes('Cliente')){ showError(`Columnas detectadas: ${headers.slice(0,5).join(', ')}...\n\nNo se encontró la columna "Cliente". Verifica que el CSV sea el correcto y que use como delimitador coma (,) o punto y coma (;).`); return; }
+      hint.textContent = `✓ ${data.length} filas procesadas con delimitador "${delim}"`;
+      hint.style.color = 'var(--teal)';
+      processData(data, 'CSV pegado');
+    } catch(e) {
+      showError('Error al procesar: ' + e.message);
+    }
+  }, 30);
+}
+
+function loadFile(file){
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const text = e.target.result;
+      const { data, headers, delim } = parseCSV(text);
+      if(!data.length){ showError('Archivo vacío o sin datos.'); return; }
+      if(!headers.includes('Cliente')){ showError(`Columnas: ${headers.slice(0,5).join(', ')}...\n\nNo se encontró "Cliente".`); return; }
+      processData(data, file.name);
+    } catch(e) { showError('Error: ' + e.message); }
+  };
+  reader.onerror = () => showError('No se pudo leer el archivo.');
+  reader.readAsText(file, 'utf-8');
+}
+
+function showError(msg){
+  document.getElementById('paste-hint').textContent = '⚠ ' + msg.split('\n')[0];
+  document.getElementById('paste-hint').style.color = 'var(--coral)';
+  alert('⚠ ' + msg);
+}
+
+function resetDashboard(){
+  document.getElementById('dashboard').style.display='none';
+  document.getElementById('upload-section').style.display='block';
+  document.getElementById('csv-paste').value='';
+  checkPaste();
+  // reset tab
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('pane-general').classList.add('active');
+  document.querySelector('.tab').classList.add('active');
+}
+function showTab(name,btn){
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('pane-'+name).classList.add('active');
+  btn.classList.add('active');
+}
+function setLoading(on){ document.getElementById('loading').style.display=on?'flex':'none'; }
+function fmt(n){ return n>=1000? (n/1000).toFixed(1).replace(/\.0$/,'')+'k' : String(n); }
+function fmtN(n,d=1){ return Number(n).toFixed(d); }
+function median(arr){ const s=[...arr].sort((a,b)=>a-b),m=Math.floor(s.length/2); return s.length%2?s[m]:(s[m-1]+s[m])/2; }
+function destroyChart(id){ if(charts[id]){charts[id].destroy();delete charts[id];} }
+
+// ─── LOAD FILE ─────────────────────────────────────────────────────────────
+
+// ─── PROCESS ───────────────────────────────────────────────────────────────
+function processData(raw, filename){
+  // Normalize rows
+  const rows = raw.map(r => {
+    const fc = new Date(r['Fecha Creación'] || r['Fecha Creacion']);
+    const fn = new Date(r['Fecha notificación'] || r['Fecha notificacion'] || r['Fecha Notificacion']);
+    const hh = parseFloat(r['HH Utilizadas']) || 0;
+    const consultor = (r['Asignado a'] || '').trim();
+    const cliente = (r['Cliente'] || '').trim();
+    return {
+      id: r['id'],
+      titulo: r['Titulo Bitacora'] || '',
+      cliente,
+      consultor,
+      consultorLabel: LOCAL_CONSULTANTS[consultor] || null,
+      esLocal: !!LOCAL_CONSULTANTS[consultor],
+      hh,
+      tieneHH: (r['HH?'] || '') === 'Con Horas',
+      pendientePor: (r['Pendiente Por'] || '').trim(),
+      avance: r['% Avance'] || 0,
+      mes: isNaN(fc) ? null : fc.getMonth()+1,
+      anio: isNaN(fc) ? null : fc.getFullYear(),
+      mesKey: isNaN(fc) ? null : `${fc.getFullYear()}-${String(fc.getMonth()+1).padStart(2,'0')}`,
+      mesLabel: isNaN(fc) ? null : fc.toLocaleString('es',{month:'short',year:'numeric'}).replace(' de ',' '),
+      diasEntrega: (!isNaN(fc)&&!isNaN(fn)) ? Math.round((fn-fc)/(1000*60*60*24)) : null,
+      team: CLIENT_MAP[cliente]?.team || 'Interno',
+      kam:  CLIENT_MAP[cliente]?.kam  || 'Interno',
+      sdm:  CLIENT_MAP[cliente]?.sdm  || '—',
+    };
+  }).filter(r => r.mes !== null);
+
+  if(!rows.length){ alert('No se encontraron datos válidos en el CSV.'); return; }
+
+  renderDashboard(rows, filename);
+}
+
+// ─── RENDER ────────────────────────────────────────────────────────────────
+function renderDashboard(rows, filename){
+  document.getElementById('upload-section').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+
+  // Period
+  const mesKeys = [...new Set(rows.map(r=>r.mesKey))].sort();
+  const mesLabels = [...new Set(rows.sort((a,b)=>a.mesKey>b.mesKey?1:-1).map(r=>r.mesLabel))].filter(Boolean).reduce((acc,v)=>acc.includes(v)?acc:[...acc,v],[]);
+  const nMeses = mesKeys.length;
+  const firstLabel = mesLabels[0], lastLabel = mesLabels[mesLabels.length-1];
+  document.getElementById('period-badge').textContent = nMeses===1 ? firstLabel : `${firstLabel} — ${lastLabel}`;
+  document.getElementById('last-update').textContent = `Actualizado: ${new Date().toLocaleDateString('es-PE')}`;
+
+  // ── METRICS ──
+  const totalBit = rows.length;
+  const totalHH = rows.reduce((s,r)=>s+r.hh,0);
+  const conHH = rows.filter(r=>r.tieneHH).length;
+  const hhArr = rows.filter(r=>r.hh>0).map(r=>r.hh);
+  const hhAvg = hhArr.length ? totalHH/conHH : 0;
+  const hhMed = hhArr.length ? median(hhArr) : 0;
+  const diasArr = rows.filter(r=>r.diasEntrega!==null&&r.diasEntrega>=0).map(r=>r.diasEntrega);
+  const slaAvg = diasArr.length ? diasArr.reduce((s,v)=>s+v,0)/diasArr.length : 0;
+  const slaMed = diasArr.length ? median(diasArr) : 0;
+  const pendCliente = rows.filter(r=>r.pendientePor==='Cliente').length;
+
+  document.getElementById('m-total').textContent = fmt(totalBit);
+  document.getElementById('m-hh').textContent = fmt(Math.round(totalHH));
+  document.getElementById('m-hh-sub').textContent = `${conHH} con HH registradas`;
+  document.getElementById('m-hh-avg').textContent = fmtN(hhAvg);
+  document.getElementById('m-hh-med').textContent = fmtN(hhMed);
+  document.getElementById('m-meses').textContent = nMeses;
+  document.getElementById('m-rango').textContent = nMeses===1 ? firstLabel : `${firstLabel} → ${lastLabel}`;
+  document.getElementById('m-sla').textContent = fmtN(slaAvg);
+  document.getElementById('m-sla-med').textContent = fmtN(slaMed,0);
+  document.getElementById('m-pend').textContent = pendCliente;
+  document.getElementById('m-pend-pct').textContent = `${fmtN(pendCliente/totalBit*100,1)}% del total`;
+
+  // ── BY MES ──
+  const byMes = {};
+  mesLabels.forEach(l=>{ byMes[l]={bit:0,hh:0}; });
+  rows.forEach(r=>{ if(byMes[r.mesLabel]){ byMes[r.mesLabel].bit++; byMes[r.mesLabel].hh+=r.hh; } });
+  const mesLbls = mesLabels;
+  const mesBit = mesLbls.map(l=>byMes[l].bit);
+  const mesHH  = mesLbls.map(l=>Math.round(byMes[l].hh));
+
+  // ── CHART: MES ──
+  destroyChart('c-mes');
+  charts['c-mes'] = new Chart(document.getElementById('c-mes'),{
+    type:'bar',
+    data:{ labels:mesLbls, datasets:[
+      {label:'Bitácoras',data:mesBit,backgroundColor:PALETTE.bluel,borderRadius:5,yAxisID:'y'},
+      {label:'HH',data:mesHH,backgroundColor:PALETTE.coral,borderRadius:5,yAxisID:'y2'}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{x:BS.x,
+        y:{...BS.y,position:'left',title:{display:true,text:'Bitácoras',color:PALETTE.bluel,font:{size:11}}},
+        y2:{...BS.y,position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'HH',color:PALETTE.coral,font:{size:11}}}
+      }}
+  });
+
+  // ── CHART: DIST HH ──
+  const ranges=[0,0,0,0,0,0];
+  rows.forEach(r=>{
+    if(!r.tieneHH) return;
+    if(r.hh<=1) ranges[0]++;
+    else if(r.hh<=2) ranges[1]++;
+    else if(r.hh<=5) ranges[2]++;
+    else if(r.hh<=10) ranges[3]++;
+    else if(r.hh<=20) ranges[4]++;
+    else ranges[5]++;
+  });
+  destroyChart('c-dist');
+  charts['c-dist'] = new Chart(document.getElementById('c-dist'),{
+    type:'bar',data:{labels:['1 HH','2 HH','3–5 HH','6–10 HH','11–20 HH','> 20 HH'],datasets:[{data:ranges,backgroundColor:PALETTE.violet,borderRadius:5}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:BS}
+  });
+
+  // ── CHART: KAM ──
+  const kamCount = {};
+  rows.forEach(r=>{ if(r.kam!=='Interno'){kamCount[r.kam]=(kamCount[r.kam]||0)+1;} });
+  destroyChart('c-kam');
+  charts['c-kam'] = new Chart(document.getElementById('c-kam'),{
+    type:'doughnut',
+    data:{labels:Object.keys(kamCount),datasets:[{data:Object.values(kamCount),backgroundColor:[PALETTE.violet,PALETTE.coral,'#639922'],borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{position:'bottom',labels:{font:{size:12,family:'DM Sans'},color:TC,boxWidth:10,padding:14}}}}
+  });
+
+  // ── CHART: PENDIENTE POR ──
+  const pp={CrossNet:0,Cliente:0,Otro:0};
+  rows.forEach(r=>{ const k=r.pendientePor; pp[k]=(pp[k]||0)+1; });
+  destroyChart('c-pend-chart');
+  charts['c-pend-chart'] = new Chart(document.getElementById('c-pend-chart'),{
+    type:'doughnut',
+    data:{labels:['CrossNet','Cliente','Otro'],datasets:[{data:[pp.CrossNet,pp.Cliente,pp.Otro||0],backgroundColor:[PALETTE.blue,PALETTE.coral,PALETTE.gray],borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{position:'bottom',labels:{font:{size:12,family:'DM Sans'},color:TC,boxWidth:10,padding:14}}}}
+  });
+
+  // ── LOCAL TEAM ──
+  const localNames = Object.values(LOCAL_CONSULTANTS);
+  const teamData = {};
+  localNames.forEach(n=>{ teamData[n]={bit:0,hh:0,byMes:{}}; mesLabels.forEach(l=>{ teamData[n].byMes[l]={bit:0,hh:0}; }); });
+  rows.forEach(r=>{
+    if(!r.esLocal) return;
+    const n = r.consultorLabel;
+    teamData[n].bit++;
+    teamData[n].hh+=r.hh;
+    if(teamData[n].byMes[r.mesLabel]){ teamData[n].byMes[r.mesLabel].bit++; teamData[n].byMes[r.mesLabel].hh+=r.hh; }
+  });
+  const localSorted = localNames.filter(n=>teamData[n].bit>0).sort((a,b)=>teamData[b].bit-teamData[a].bit);
+  const totalLocalBit = localSorted.reduce((s,n)=>s+teamData[n].bit,0);
+
+  // ── CHART: LOCAL BIT EVOLUCION ──
+  const mDatasets = mesLabels.map((ml,i)=>({
+    label:ml, borderRadius:3,
+    backgroundColor:COLORS_MES[i]||PALETTE.gray,
+    data:localSorted.map(n=>teamData[n].byMes[ml]?.bit||0)
+  }));
+  destroyChart('c-local-bit');
+  charts['c-local-bit'] = new Chart(document.getElementById('c-local-bit'),{
+    type:'bar',data:{labels:localSorted,datasets:mDatasets},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:BS}
+  });
+
+  // ── EQUIPO TABLE ──
+  const tbody = document.querySelector('#equipo-table tbody');
+  tbody.innerHTML = localSorted.map(n=>{
+    const d=teamData[n], avg=d.bit?fmtN(d.hh/d.bit):'-', pct=fmtN(d.bit/totalLocalBit*100,0);
+    return `<tr><td>${n}</td><td class="n hi">${d.bit}</td><td class="n" style="color:${PALETTE.bluel};font-weight:600">${Math.round(d.hh)}</td><td class="n">${avg}</td><td class="n">${pct}%</td></tr>`;
+  }).join('');
+
+  // ── CHART: EFICIENCIA ──
+  const eficData = localSorted.filter(n=>teamData[n].bit>=3).map(n=>({ name:n, avg:teamData[n].hh/teamData[n].bit })).sort((a,b)=>a.avg-b.avg);
+  destroyChart('c-efic');
+  charts['c-efic'] = new Chart(document.getElementById('c-efic'),{
+    type:'bar',
+    data:{labels:eficData.map(d=>d.name),datasets:[{data:eficData.map(d=>+d.avg.toFixed(1)),backgroundColor:eficData.map(d=>d.avg<3.5?PALETTE.teal:d.avg<5?PALETTE.bluel:PALETTE.amber),borderRadius:5}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+ctx.raw+' HH / bitácora'}}},scales:BS}
+  });
+
+  // ── CHART: HH TOTAL ──
+  const hhColors=['#185FA5','#185FA5','#378ADD','#378ADD','#85B7EB','#D3D1C7'];
+  destroyChart('c-hh-total');
+  charts['c-hh-total'] = new Chart(document.getElementById('c-hh-total'),{
+    type:'bar',
+    data:{labels:localSorted,datasets:[{data:localSorted.map((n,i)=>Math.round(teamData[n].hh)),backgroundColor:localSorted.map((_,i)=>hhColors[i]||PALETTE.gray),borderRadius:5}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{...BS,y:{...BS.y,title:{display:true,text:'HH totales',color:TC,font:{size:11}}}}}
+  });
+
+  // ── CHART: HH MES ──
+  const hhDatasets = mesLabels.map((ml,i)=>({
+    label:ml, borderRadius:3,
+    backgroundColor:COLORS_MES[i]||PALETTE.gray,
+    data:localSorted.map(n=>Math.round(teamData[n].byMes[ml]?.hh||0))
+  }));
+  destroyChart('c-hh-mes');
+  charts['c-hh-mes'] = new Chart(document.getElementById('c-hh-mes'),{
+    type:'bar',data:{labels:localSorted,datasets:hhDatasets},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:BS}
+  });
+
+  // ── OUTLIERS ──
+  const outliers = rows.filter(r=>r.hh>20).sort((a,b)=>b.hh-a.hh);
+  const outDiv = document.getElementById('outliers-table');
+  if(outliers.length){
+    outDiv.innerHTML = `<div class="alert" style="margin-top:.5rem"><strong>${outliers.length} bitácora${outliers.length>1?'s':''}</strong> superaron las 20 HH. Revisa si la complejidad justifica el esfuerzo o si pueden componentizarse.</div>
+    <table class="tbl"><thead><tr><th>Bitácora</th><th>Cliente</th><th>Consultor</th><th style="text-align:right">HH</th><th>Mes</th></tr></thead><tbody>
+    ${outliers.map(r=>`<tr><td>${r.titulo}</td><td>${r.cliente}</td><td>${r.consultorLabel||r.consultor}</td><td class="n warn">${r.hh}</td><td><span class="pill pill-c">${r.mesLabel}</span></td></tr>`).join('')}
+    </tbody></table>`;
+  } else {
+    outDiv.innerHTML = `<div class="info-box">Ninguna bitácora superó las 20 HH en el período. ✓</div>`;
+  }
+
+  // ── CLIENTES ──
+  const cliData = {};
+  rows.forEach(r=>{
+    if(!cliData[r.cliente]) cliData[r.cliente]={bit:0,hh:0,team:r.team,kam:r.kam,sdm:r.sdm,pend:0};
+    cliData[r.cliente].bit++;
+    cliData[r.cliente].hh+=r.hh;
+    if(r.pendientePor==='Cliente') cliData[r.cliente].pend++;
+  });
+  const cliSorted = Object.entries(cliData).filter(([k])=>k!=='CrossNet Perú').sort((a,b)=>b[1].hh-a[1].hh);
+  const top10 = cliSorted.slice(0,10);
+
+  destroyChart('c-cli');
+  charts['c-cli'] = new Chart(document.getElementById('c-cli'),{
+    type:'bar',
+    data:{labels:top10.map(([k])=>k),datasets:[
+      {label:'Bitácoras',data:top10.map(([,v])=>v.bit),backgroundColor:PALETTE.bluel,borderRadius:4,yAxisID:'y'},
+      {label:'HH',data:top10.map(([,v])=>Math.round(v.hh)),backgroundColor:PALETTE.coral,borderRadius:4,yAxisID:'y2'}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{x:{...BS.x,ticks:{...BS.x.ticks,maxRotation:30}},
+        y:{...BS.y,position:'left',title:{display:true,text:'Bitácoras',color:PALETTE.bluel,font:{size:11}}},
+        y2:{...BS.y,position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'HH',color:PALETTE.coral,font:{size:11}}}
+      }}
+  });
+
+  const avgHHcli = top10.map(([,v])=>+(v.bit?v.hh/v.bit:0).toFixed(1));
+  destroyChart('c-cli-avg');
+  charts['c-cli-avg'] = new Chart(document.getElementById('c-cli-avg'),{
+    type:'bar',
+    data:{labels:top10.map(([k])=>k),datasets:[{data:avgHHcli,backgroundColor:avgHHcli.map(v=>v>=7?PALETTE.coral:v>=4?PALETTE.amber:PALETTE.teal),borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+ctx.raw+' HH / bitácora'}}},scales:{x:BS.x,y:{...BS.y,ticks:{...BS.y.ticks,font:{size:11,family:'DM Sans'}}}}}
+  });
+
+  // TEAM TABLES
+  const fillTeamTable = (id, kamName) => {
+    const data = Object.entries(cliData).filter(([k,v])=>v.kam===kamName&&k!=='CrossNet Perú').sort((a,b)=>b[1].bit-a[1].bit);
+    document.querySelector(`#${id} tbody`).innerHTML = data.map(([k,v])=>`<tr><td>${k}</td><td class="n">${v.bit}</td><td class="n">${Math.round(v.hh)}</td><td>${v.sdm}</td></tr>`).join('');
+  };
+  fillTeamTable('t-mistura','Zinthia Mansilla');
+  fillTeamTable('t-chilcano','Paola Jacobs');
+
+  // PENDIENTES POR CLIENTE
+  const pendSection = document.getElementById('pendientes-section');
+  const pendClientes = Object.entries(cliData).filter(([,v])=>v.pend>0).sort((a,b)=>b[1].pend-a[1].pend);
+  if(pendClientes.length){
+    const total = pendClientes.reduce((s,[,v])=>s+v.pend,0);
+    pendSection.innerHTML = `<div class="alert"><strong>${total} bitácoras</strong> pendientes de acción del cliente.</div>
+    <table class="tbl"><thead><tr><th>Cliente</th><th style="text-align:right">Bitácoras pend.</th><th>KAM</th><th>SDM</th></tr></thead><tbody>
+    ${pendClientes.map(([k,v])=>`<tr><td>${k}</td><td class="n warn">${v.pend}</td><td>${v.kam}</td><td>${v.sdm}</td></tr>`).join('')}
+    </tbody></table>`;
+  } else {
+    pendSection.innerHTML = `<div class="info-box">Sin bitácoras pendientes por cliente en el período. ✓</div>`;
+  }
+
+  // ── SLA ──
+  const slaPorMes = {};
+  mesLabels.forEach(l=>{ slaPorMes[l]=[]; });
+  rows.forEach(r=>{ if(r.diasEntrega!==null&&r.diasEntrega>=0&&slaPorMes[r.mesLabel]) slaPorMes[r.mesLabel].push(r.diasEntrega); });
+  const slaAvgs = mesLabels.map(l=>slaPorMes[l].length?+(slaPorMes[l].reduce((s,v)=>s+v,0)/slaPorMes[l].length).toFixed(1):null);
+  const slaMeds = mesLabels.map(l=>slaPorMes[l].length?+median(slaPorMes[l]).toFixed(1):null);
+
+  destroyChart('c-sla');
+  charts['c-sla'] = new Chart(document.getElementById('c-sla'),{
+    type:'line',
+    data:{labels:mesLabels,datasets:[
+      {label:'Promedio',data:slaAvgs,borderColor:PALETTE.coral,backgroundColor:'rgba(216,90,48,0.07)',tension:.35,fill:true,pointRadius:6,pointBackgroundColor:PALETTE.coral,pointBorderColor:'#fff',pointBorderWidth:2},
+      {label:'Mediana',data:slaMeds,borderColor:PALETTE.teal,backgroundColor:'rgba(29,158,117,0.05)',tension:.35,fill:true,borderDash:[5,4],pointRadius:6,pointBackgroundColor:PALETTE.teal,pointBorderColor:'#fff',pointBorderWidth:2}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{x:BS.x,y:{...BS.y,min:0,ticks:{...BS.y.ticks,callback:v=>v+'d'}}}}
+  });
+
+  // SLA Summary
+  const mejora = slaAvgs.length>=2 && slaAvgs[0] && slaAvgs[slaAvgs.length-1] ? fmtN((1-slaAvgs[slaAvgs.length-1]/slaAvgs[0])*100,0) : null;
+  document.getElementById('sla-summary').innerHTML = `
+    <div class="box-title">Análisis de SLA — período acumulado</div>
+    <div class="box-sub" style="margin-bottom:1rem">Tendencia de velocidad de entrega</div>
+    <div style="font-size:13px;color:var(--muted);line-height:1.7">
+      ${mejora!==null&&mejora>0?`El tiempo de entrega <strong>mejoró ${mejora}%</strong> entre ${mesLabels[0]} y ${mesLabels[mesLabels.length-1]}.`:''}
+      La mediana de <strong>${fmtN(slaMed,0)} día${slaMed!==1?'s':''}</strong> indica que la mayoría de bitácoras se resuelven rápido — el promedio sube por casos complejos puntuales.
+      Solo <strong>${rows.filter(r=>(r['Fecha Renegociada']||'')!=='').length||'pocas'} bitácoras</strong> fueron renegociadas en el período.
+    </div>
+    <div style="margin-top:1.25rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px">
+      ${mesLabels.map((l,i)=>`<div class="metric"><div class="m-label">${l}</div><div class="m-value" style="font-size:22px;color:${slaAvgs[i]>8?PALETTE.coral:slaAvgs[i]>4?PALETTE.amber:PALETTE.teal}">${slaAvgs[i]??'—'}d</div><div class="m-sub">med. ${slaMeds[i]??'—'}d</div></div>`).join('')}
+    </div>`;
+  // ── CONCLUSIONES & ACCIONES ──
+  renderConclusiones({ rows, totalBit, totalHH, hhAvg, hhMed, slaAvg, slaMed, slaAvgs, mesLabels,
+    pendCliente, localSorted, teamData, totalLocalBit, cliData, outliers: rows.filter(r=>r.hh>20) });
+}
+
+function renderConclusiones(d){
+  const {rows,totalBit,totalHH,hhAvg,hhMed,slaAvg,slaMed,slaAvgs,mesLabels,
+         pendCliente,localSorted,teamData,totalLocalBit,cliData,outliers} = d;
+
+  // ── Calcular insights dinámicos ──
+  const nMeses = mesLabels.length;
+  const slaFirst = slaAvgs[0], slaLast = slaAvgs[slaAvgs.length-1];
+  const slaMejora = slaFirst&&slaLast ? Math.round((1-slaLast/slaFirst)*100) : null;
+
+  // Concentración equipo
+  const top2bit = localSorted.slice(0,2).reduce((s,n)=>s+teamData[n].bit,0);
+  const top2pct  = Math.round(top2bit/totalLocalBit*100);
+  const top2hh   = localSorted.slice(0,2).reduce((s,n)=>s+teamData[n].hh,0);
+  const top2hhpct= Math.round(top2hh/localSorted.reduce((s,n)=>s+teamData[n].hh,0)*100);
+  const maxConsultor = localSorted[0];
+  const maxHHmes = Math.max(...mesLabels.map(l=>teamData[maxConsultor]?.byMes[l]?.hh||0));
+
+  // Cliente más complejo (HH/bit)
+  const cliArr = Object.entries(cliData).filter(([k])=>k!=='CrossNet Perú'&&cliData[k].bit>=5);
+  const cliComplejidad = cliArr.sort((a,b)=>(b[1].hh/b[1].bit)-(a[1].hh/a[1].bit));
+  const cliMasComplejo = cliComplejidad[0];
+  const cliMasVolumen  = Object.entries(cliData).filter(([k])=>k!=='CrossNet Perú').sort((a,b)=>b[1].bit-a[1].bit)[0];
+
+  // Registro HH
+  const sinHH = rows.filter(r=>!r.tieneHH).length;
+  const pctSinHH = Math.round(sinHH/totalBit*100);
+
+  // Pendientes
+  const pctPend = Math.round(pendCliente/totalBit*100);
+
+  // HH promedio equipo
+  const hhPromEquipo = localSorted.map(n=>({n, avg: teamData[n].bit?teamData[n].hh/teamData[n].bit:0}));
+  const masEficiente = hhPromEquipo.filter(x=>teamData[x.n].bit>=10).sort((a,b)=>a.avg-b.avg)[0];
+  const menosEficiente = hhPromEquipo.filter(x=>teamData[x.n].bit>=10).sort((a,b)=>b.avg-a.avg)[0];
+
+  // Mistura vs Chilcano
+  const misturaBit = rows.filter(r=>r.team==='Mistura').length;
+  const chilcanoBit = rows.filter(r=>r.team==='Chilcano').length;
+  const misturaHH  = rows.filter(r=>r.team==='Mistura').reduce((s,r)=>s+r.hh,0);
+  const chilcanoHH = rows.filter(r=>r.team==='Chilcano').reduce((s,r)=>s+r.hh,0);
+
+  const period = nMeses===1?mesLabels[0]:`${mesLabels[0]} – ${mesLabels[nMeses-1]}`;
+
+  const html = `
+  <div class="exec-header">
+    <div class="exec-header-icon">📋</div>
+    <div class="exec-header-text">
+      <h2>Resumen ejecutivo — Operaciones Perú · ${period}</h2>
+      <p>Análisis generado automáticamente a partir de ${totalBit} bitácoras verificadas · ${Math.round(totalHH)} HH · ${nMeses} mes${nMeses>1?'es':''} de datos</p>
+    </div>
+  </div>
+
+  <!-- HALLAZGOS -->
+  <div class="conc-section">
+    <div class="conc-section-title">Hallazgos clave del período</div>
+    <div class="conc-grid">
+
+      <div class="conc-card positive">
+        <div class="conc-tag positive">✓ Fortaleza operativa</div>
+        <div class="conc-title">Velocidad de entrega en mejora sostenida</div>
+        <div class="conc-body">
+          ${slaMejora!==null&&slaMejora>0
+            ? `El equipo redujo el tiempo promedio de entrega en <strong>${slaMejora}%</strong> a lo largo del período (de <strong>${slaFirst}d</strong> a <strong>${slaLast}d</strong>).`
+            : `El equipo mantiene un tiempo promedio de entrega de <strong>${fmtN(slaAvg)}d</strong>.`}
+          La mediana de <strong>${fmtN(slaMed,0)} día${slaMed!==1?'s':''}</strong> confirma que la gran mayoría de bitácoras se resuelven en tiempos ajustados. Señal clara de madurez operativa del equipo.
+        </div>
+        <div class="conc-kpi">📌 KPI: SLA promedio <strong>${fmtN(slaAvg)}d</strong> · mediana <strong>${fmtN(slaMed,0)}d</strong></div>
+      </div>
+
+      <div class="conc-card positive">
+        <div class="conc-tag positive">✓ Fortaleza operativa</div>
+        <div class="conc-title">Alto cumplimiento y registro de HH</div>
+        <div class="conc-body">
+          El <strong>${100-pctSinHH}% de las bitácoras</strong> tienen horas registradas, lo que indica disciplina operativa del equipo. Las <strong>${Math.round(totalHH)} HH</strong> acumuladas reflejan un promedio de <strong>${fmtN(hhAvg)} HH por bitácora</strong> (mediana ${fmtN(hhMed)} HH), con distribución mayoritariamente en el rango de 1–5 HH.
+        </div>
+        <div class="conc-kpi">📌 KPI: ${totalBit} bitácoras · ${Math.round(totalHH)} HH · ${fmtN(hhAvg)} HH/bit. promedio</div>
+      </div>
+
+      <div class="conc-card warning">
+        <div class="conc-tag warning">⚠ Riesgo operativo</div>
+        <div class="conc-title">Alta concentración de carga en dos consultores</div>
+        <div class="conc-body">
+          <strong>${localSorted[0]}</strong> y <strong>${localSorted[1]}</strong> concentran el <strong>${top2pct}% de las bitácoras</strong> y el <strong>${top2hhpct}% de las HH</strong> del equipo local. En el pico mensual, ${maxConsultor} acumuló <strong>${Math.round(maxHHmes)} HH</strong> en un solo mes — nivel potencialmente insostenible a mediano plazo y riesgo ante ausencias.
+        </div>
+        <div class="conc-kpi">📌 KPI: ${localSorted[0]} ${teamData[localSorted[0]].bit} bit. · ${localSorted[1]} ${teamData[localSorted[1]].bit} bit.</div>
+      </div>
+
+      <div class="conc-card ${pctPend>=5?'alert':'warning'}">
+        <div class="conc-tag ${pctPend>=5?'alert':'warning'}">${pctPend>=5?'⚠ Alerta':'⚠ Atención'}</div>
+        <div class="conc-title">Bitácoras pendientes por acción del cliente</div>
+        <div class="conc-body">
+          <strong>${pendCliente} bitácoras (${pctPend}% del total)</strong> están bloqueadas esperando respuesta del cliente. Este volumen representa tiempo de consultor inmovilizado y riesgo de deterioro en la percepción de servicio. Requiere seguimiento activo por parte de KAM y SDM correspondientes.
+        </div>
+        <div class="conc-kpi">📌 KPI objetivo: pendientes por cliente &lt; 2% del total</div>
+      </div>
+
+      ${cliMasComplejo ? `
+      <div class="conc-card warning">
+        <div class="conc-tag warning">⚠ Complejidad técnica</div>
+        <div class="conc-title">${cliMasComplejo[0]} concentra el mayor esfuerzo por bitácora</div>
+        <div class="conc-body">
+          Con <strong>${fmtN(cliMasComplejo[1].hh/cliMasComplejo[1].bit)} HH promedio por bitácora</strong> (${Math.round(cliMasComplejo[1].hh)} HH en ${cliMasComplejo[1].bit} bitácoras), este cliente requiere un modelo de atención diferenciado. 
+          ${outliers.length>0?`${outliers.filter(r=>r.cliente===cliMasComplejo[0]).length} de sus bitácoras superaron el umbral de 20 HH.`:''}
+          La complejidad técnica no está siendo capturada en el volumen de bitácoras, lo que puede subestimar el esfuerzo real del equipo asignado.
+        </div>
+        <div class="conc-kpi">📌 KPI: ${fmtN(cliMasComplejo[1].hh/cliMasComplejo[1].bit)} HH/bit. vs promedio equipo ${fmtN(hhAvg)} HH/bit.</div>
+      </div>` : ''}
+
+      <div class="conc-card strategic">
+        <div class="conc-tag strategic">→ Visión de equipo</div>
+        <div class="conc-title">Distribución desigual entre Teams Mistura y Chilcano</div>
+        <div class="conc-body">
+          El <strong>Team Mistura</strong> concentra <strong>${misturaBit} bitácoras (${Math.round(misturaBit/totalBit*100)}%)</strong> y <strong>${Math.round(misturaHH)} HH</strong>, frente a <strong>${chilcanoBit} bitácoras</strong> y <strong>${Math.round(chilcanoHH)} HH</strong> del Team Chilcano. 
+          Esta asimetría puede reflejar diferencias en la madurez de los clientes, en la estrategia de expansión de cada KAM, o en el tamaño de cartera — y debe monitorearse para garantizar una distribución sostenible de recursos consultivos.
+        </div>
+        <div class="conc-kpi">📌 Mistura: ${misturaBit} bit. · ${Math.round(misturaHH)} HH · Chilcano: ${chilcanoBit} bit. · ${Math.round(chilcanoHH)} HH</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ACCIONES TÁCTICAS -->
+  <div class="conc-section">
+    <div class="conc-section-title">Acciones tácticas — corto plazo</div>
+    <div class="action-grid">
+
+      <div class="action-row">
+        <div class="action-num immediata">1</div>
+        <div class="action-body">
+          <div class="action-title">Gestionar las ${pendCliente} bitácoras pendientes por cliente</div>
+          <div class="action-desc">Revisar cada caso con el KAM y SDM responsable. Establecer un deadline de respuesta para el cliente (máx. 5 días hábiles) y escalar los bloqueados a través del KAM. Objetivo: llevar pendientes por cliente a &lt;2% del total activo.</div>
+        </div>
+        <span class="action-badge immediata">Inmediata</span>
+      </div>
+
+      <div class="action-row">
+        <div class="action-num immediata">2</div>
+        <div class="action-body">
+          <div class="action-title">Definir techo mensual de HH por consultor</div>
+          <div class="action-desc">Establecer un límite operativo de <strong>100–120 HH/mes por consultor</strong> con revisión semanal. Activar reasignación cuando un consultor supere el 80% del techo. Esto protege la sostenibilidad del equipo y distribuye mejor el conocimiento entre consultores.</div>
+        </div>
+        <span class="action-badge immediata">Inmediata</span>
+      </div>
+
+      ${outliers.length>0?`
+      <div class="action-row">
+        <div class="action-num corto">3</div>
+        <div class="action-body">
+          <div class="action-title">Revisar y componentizar bitácoras de alto esfuerzo (&gt;20 HH)</div>
+          <div class="action-desc">Las <strong>${outliers.length} bitácora${outliers.length>1?'s':''}</strong> que superaron las 20 HH deben analizarse: ¿podían dividirse en entregas más pequeñas? ¿El esfuerzo fue aprobado por el SDM? Implementar un proceso de validación previa para bitácoras estimadas en &gt;15 HH.</div>
+        </div>
+        <span class="action-badge corto">Corto plazo</span>
+      </div>`:''}
+
+      <div class="action-row">
+        <div class="action-num corto">${outliers.length>0?4:3}</div>
+        <div class="action-body">
+          <div class="action-title">Plan de desarrollo para consultores junior y nuevos ingresos</div>
+          <div class="action-desc">Con Mitchell Limay en incorporación y la concentración actual en ${localSorted[0]} y ${localSorted[1]}, es crítico acelerar el onboarding con un plan de 90 días: asignación progresiva de cuentas de menor complejidad, mentoría de un consultor senior y metas de bitácoras mensuales crecientes.</div>
+        </div>
+        <span class="action-badge corto">Corto plazo</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ACCIONES ESTRATÉGICAS -->
+  <div class="conc-section">
+    <div class="conc-section-title">Iniciativas estratégicas — mediano plazo</div>
+    <div class="action-grid">
+
+      <div class="action-row">
+        <div class="action-num mediano">A</div>
+        <div class="action-body">
+          <div class="action-title">Segmentar clientes por modelo de atención según complejidad</div>
+          <div class="action-desc">Crear una matriz Volumen × HH/bitácora para clasificar cada cliente en cuatro cuadrantes. Los clientes de alta complejidad (como <strong>${cliMasComplejo?cliMasComplejo[0]:'clientes clave'}</strong>) requieren un modelo de atención con consultor senior dedicado y steering quincenal. Los de alto volumen y baja complejidad se atienden con playbooks estándar y menor dedicación senior.</div>
+        </div>
+        <span class="action-badge mediano">Mediano plazo</span>
+      </div>
+
+      <div class="action-row">
+        <div class="action-num mediano">B</div>
+        <div class="action-body">
+          <div class="action-title">Shifting hacia bitácoras proactivas e iniciativas de mejora</div>
+          <div class="action-desc">El rol del equipo consultor es generar valor estratégico en los clientes, no solo ejecutar requerimientos reactivos. Definir una meta: <strong>al menos 30% de bitácoras deben ser iniciativas proactivas</strong> por cliente estratégico. Esto requiere categorizar cada bitácora en Podio como "reactiva" o "proactiva" y reportarlo mensualmente.</div>
+        </div>
+        <span class="action-badge mediano">Mediano plazo</span>
+      </div>
+
+      <div class="action-row">
+        <div class="action-num mediano">C</div>
+        <div class="action-body">
+          <div class="action-title">Biblioteca de soluciones reutilizables por especialidad</div>
+          <div class="action-desc">Con <strong>${totalBit} bitácoras acumuladas</strong>, existe suficiente masa crítica para identificar patrones repetibles. Mapear los 20 tipos de requerimientos más frecuentes en Plataforma (especialidad dominante con ~79% del volumen) y documentar soluciones estándar. Objetivo: reducir en 30% las HH en bitácoras clasificadas como replicables.</div>
+        </div>
+        <span class="action-badge mediano">Mediano plazo</span>
+      </div>
+
+      <div class="action-row">
+        <div class="action-num mediano">D</div>
+        <div class="action-body">
+          <div class="action-title">Dashboard operativo semanal integrado al ciclo de reuniones</div>
+          <div class="action-desc">Este dashboard es retrospectivo. El siguiente paso es incorporarlo al ciclo operativo semanal: revisión de HH acumuladas, bitácoras en riesgo de SLA, y pendientes por cliente en la reunión de equipo. La visibilidad en tiempo real permite intervenir antes de que los problemas escalen al cierre de mes.</div>
+        </div>
+        <span class="action-badge mediano">Mediano plazo</span>
+      </div>
+
+    </div>
+  </div>`;
+
+  document.getElementById('conclusiones-content').innerHTML = html;
+}
+</body>
+</html>
