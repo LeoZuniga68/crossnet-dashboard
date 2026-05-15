@@ -194,6 +194,7 @@ textarea:focus{border-color:var(--blue-l)}
       <button class="tab" onclick="showTab('hh',this)">Horas (HH)</button>
       <button class="tab" onclick="showTab('equipo',this)">Equipo local</button>
       <button class="tab" onclick="showTab('clientes',this)">Clientes</button>
+      <button class="tab" onclick="showTab('sdm',this)">Gestión SDM</button>
       <button class="tab" onclick="showTab('sla',this)">SLA & tiempos</button>
       <button class="tab" onclick="showTab('conclusiones',this)">⚡ Conclusiones</button>
     </div>
@@ -230,6 +231,19 @@ textarea:focus{border-color:var(--blue-l)}
         <div class="box"><div class="box-title">Team Zinthia Mansilla — Mistura</div><div class="box-sub">Cartera de clientes</div><table class="tbl" id="t-mistura"><thead><tr><th>Cliente</th><th style="text-align:right">Bit.</th><th style="text-align:right">HH</th><th>SDM</th></tr></thead><tbody></tbody></table></div>
         <div class="box"><div class="box-title">Team Paola Jacobs — Chilcano</div><div class="box-sub">Cartera de clientes</div><table class="tbl" id="t-chilcano"><thead><tr><th>Cliente</th><th style="text-align:right">Bit.</th><th style="text-align:right">HH</th><th>SDM</th></tr></thead><tbody></tbody></table></div>
         <div class="box full"><div class="box-title">Bitácoras pendientes por cliente</div><div class="box-sub">Bloqueadas esperando acción del cliente</div><div id="pendientes-section"></div></div>
+      </div>
+    </div>
+
+    <div id="pane-sdm" class="tab-pane">
+      <div class="grid">
+        <div class="box full"><div class="box-title">Resumen por SDM — Q1 2026</div><div class="box-sub">Volumen, HH administradas y eficiencia de distribución</div><table class="tbl" id="sdm-resumen"><thead><tr><th>SDM</th><th style="text-align:right">Bitácoras</th><th style="text-align:right">HH total</th><th style="text-align:right">HH/bit.</th><th style="text-align:right">Clientes</th><th style="text-align:right">Pend. cliente</th><th style="text-align:right">SLA prom.</th></tr></thead><tbody></tbody></table></div>
+        <div class="box full"><div class="box-title">Bitácoras por SDM — evolución mensual</div><div class="box-sub">Volumen gestionado mes a mes</div><div class="leg" id="leg-sdm-mes"></div><div class="chart-wrap" id="ch-sdm-mes"></div></div>
+        <div class="box full"><div class="box-title">HH por SDM — evolución mensual</div><div class="box-sub">Horas administradas por cada SDM mes a mes</div><div class="leg" id="leg-sdm-hh"></div><div class="chart-wrap" id="ch-sdm-hh"></div></div>
+        <div class="box"><div class="box-title">Distribución de carga entre consultores — Tomas</div><div class="box-sub">¿Concentra en pocos o distribuye bien?</div><div class="chart-wrap" id="ch-sdm-tomas"></div></div>
+        <div class="box"><div class="box-title">Distribución de carga entre consultores — Claudia</div><div class="box-sub">¿Concentra en pocos o distribuye bien?</div><div class="chart-wrap" id="ch-sdm-claudia"></div></div>
+        <div class="box"><div class="box-title">Distribución de carga entre consultores — Angy</div><div class="box-sub">¿Concentra en pocos o distribuye bien?</div><div class="chart-wrap" id="ch-sdm-angy"></div></div>
+        <div class="box"><div class="box-title">HH promedio / bitácora por SDM</div><div class="box-sub">Complejidad promedio de los requerimientos que gestiona cada SDM</div><div class="chart-wrap" id="ch-sdm-avg"></div></div>
+        <div class="box full"><div class="box-title">Clientes por SDM — bitácoras y HH</div><div class="box-sub">Cartera detallada de cada SDM</div><div id="sdm-clientes-detail"></div></div>
       </div>
     </div>
 
@@ -743,10 +757,147 @@ function renderAll(rows){
 
   // CONCLUSIONES
   renderConclusiones({rows,totalBit,totalHH,hhAvg,hhMed,slaAvg,slaMed,slaAvgs,mesLabels,pendCliente,localSorted,tData,totalLocalBit,cliData,outliers});
+
+  // SDM
+  renderSDM(rows, mesLabels, cliData);
 }
 
 // ═══════════════════════════════════════════════════
-// CONCLUSIONES
+// RENDER SDM
+// ═══════════════════════════════════════════════════
+function renderSDM(rows, mesLabels, cliData){
+  const SDMs = ['Tomas','Claudia','Angy'];
+  const SDM_COLORS = {Tomas:'#185FA5', Claudia:'#1D9E75', Angy:'#D4537E'};
+
+  // Agrupar datos por SDM
+  const sdmData = {};
+  SDMs.forEach(s=>{
+    sdmData[s] = {
+      bit:0, hh:0, pend:0,
+      clientes: new Set(),
+      consultores: {},
+      diasArr: [],
+      byMes: {}
+    };
+    mesLabels.forEach(l=>{ sdmData[s].byMes[l]={bit:0,hh:0}; });
+  });
+
+  rows.forEach(r=>{
+    const s = r.sdm;
+    if(!sdmData[s]) return;
+    sdmData[s].bit++;
+    sdmData[s].hh += r.hh;
+    sdmData[s].clientes.add(r.cliente);
+    if(r.pendientePor==='Cliente') sdmData[s].pend++;
+    if(r.diasEntrega!==null&&r.diasEntrega>=0) sdmData[s].diasArr.push(r.diasEntrega);
+    if(sdmData[s].byMes[r.mesLabel]){ sdmData[s].byMes[r.mesLabel].bit++; sdmData[s].byMes[r.mesLabel].hh+=r.hh; }
+    // por consultor
+    const cn = r.consultorLabel || r.consultor;
+    sdmData[s].consultores[cn] = (sdmData[s].consultores[cn]||0) + 1;
+  });
+
+  // ── TABLA RESUMEN ──
+  document.querySelector('#sdm-resumen tbody').innerHTML = SDMs.map(s=>{
+    const d = sdmData[s];
+    const slaP = d.diasArr.length ? fmtN(d.diasArr.reduce((a,v)=>a+v,0)/d.diasArr.length) : '—';
+    const hhAvgS = d.bit ? fmtN(d.hh/d.bit) : '—';
+    const pendCls = d.pend > 0 ? 'warn' : '';
+    return `<tr>
+      <td><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${SDM_COLORS[s]};margin-right:6px"></span><strong>${s}</strong></td>
+      <td class="n hi">${d.bit}</td>
+      <td class="n" style="color:#378ADD;font-weight:600">${Math.round(d.hh)}</td>
+      <td class="n">${hhAvgS}</td>
+      <td class="n">${d.clientes.size}</td>
+      <td class="n ${pendCls}">${d.pend}</td>
+      <td class="n">${slaP}d</td>
+    </tr>`;
+  }).join('');
+
+  // ── LEYENDAS ──
+  const legHTML = SDMs.map(s=>`<span class="li"><span class="ls" style="background:${SDM_COLORS[s]}"></span>${s}</span>`).join('');
+  document.getElementById('leg-sdm-mes').innerHTML = legHTML;
+  document.getElementById('leg-sdm-hh').innerHTML = legHTML;
+
+  setTimeout(()=>{
+    // ── CHART: BIT POR SDM POR MES ──
+    svgBar(
+      document.getElementById('ch-sdm-mes'),
+      mesLabels,
+      SDMs.map(s=>({ data: mesLabels.map(l=>sdmData[s].byMes[l]?.bit||0), color: SDM_COLORS[s] })),
+      {h:240, labels:true}
+    );
+
+    // ── CHART: HH POR SDM POR MES ──
+    svgBar(
+      document.getElementById('ch-sdm-hh'),
+      mesLabels,
+      SDMs.map(s=>({ data: mesLabels.map(l=>Math.round(sdmData[s].byMes[l]?.hh||0)), color: SDM_COLORS[s] })),
+      {h:240, labels:true}
+    );
+
+    // ── CHARTS: DISTRIBUCIÓN CONSULTORES POR SDM ──
+    SDMs.forEach(s=>{
+      const cnData = sdmData[s].consultores;
+      const cnSorted = Object.entries(cnData).sort((a,b)=>b[1]-a[1]);
+      const total = cnSorted.reduce((sum,[,v])=>sum+v,0);
+      // Color by concentration: top CN > 50% = alert
+      const top1pct = cnSorted.length ? cnSorted[0][1]/total : 0;
+      const barColors = cnSorted.map((_,i)=>i===0&&top1pct>0.5?'#D85A30':i===0?'#1D9E75':'#378ADD');
+      svgBarH(
+        document.getElementById('ch-sdm-'+s.toLowerCase()),
+        cnSorted.map(([k])=>k),
+        cnSorted.map(([,v])=>v),
+        barColors,
+        {l:150}
+      );
+    });
+
+    // ── CHART: HH PROMEDIO POR SDM ──
+    const sdmAvgHH = SDMs.map(s=>sdmData[s].bit?+(sdmData[s].hh/sdmData[s].bit).toFixed(1):0);
+    svgBarH(
+      document.getElementById('ch-sdm-avg'),
+      SDMs,
+      sdmAvgHH,
+      sdmAvgHH.map(v=>v>=5?'#D85A30':v>=3.5?'#BA7517':'#1D9E75'),
+      {l:100}
+    );
+  }, 150);
+
+  // ── DETALLE CLIENTES POR SDM ──
+  const detailHTML = SDMs.map(s=>{
+    const clis = Object.entries(cliData)
+      .filter(([,v])=>v.sdm===s)
+      .sort((a,b)=>b[1].bit-a[1].bit);
+    const totalBitSDM = clis.reduce((sum,[,v])=>sum+v.bit,0);
+    const totalHHSDM  = clis.reduce((sum,[,v])=>sum+v.hh,0);
+    return `
+      <div style="margin-bottom:1.5rem">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:.5rem">
+          <span style="width:12px;height:12px;border-radius:50%;background:${SDM_COLORS[s]};display:inline-block"></span>
+          <strong style="font-size:13px">${s}</strong>
+          <span style="font-size:12px;color:var(--hint)">${clis.length} clientes · ${totalBitSDM} bitácoras · ${Math.round(totalHHSDM)} HH</span>
+        </div>
+        <table class="tbl">
+          <thead><tr><th>Cliente</th><th>Team</th><th style="text-align:right">Bit.</th><th style="text-align:right">HH</th><th style="text-align:right">HH/bit.</th><th style="text-align:right">Pend.</th></tr></thead>
+          <tbody>
+            ${clis.map(([k,v])=>`<tr>
+              <td>${k}</td>
+              <td><span style="font-size:11px;padding:1px 7px;border-radius:10px;background:${v.team==='Chilcano'?'var(--blue-pale)':'var(--amber-pale)'};color:${v.team==='Chilcano'?'var(--blue)':'var(--amber)'};font-weight:600">${v.team}</span></td>
+              <td class="n">${v.bit}</td>
+              <td class="n">${Math.round(v.hh)}</td>
+              <td class="n">${v.bit?fmtN(v.hh/v.bit):'-'}</td>
+              <td class="n ${v.pend>0?'warn':''}">${v.pend||'—'}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>`;
+  }).join('<hr style="border:none;border-top:1px solid var(--border);margin:1rem 0">');
+
+  document.getElementById('sdm-clientes-detail').innerHTML = detailHTML;
+}
+
+// ═══════════════════════════════════════════════════
+// RENDER CONCLUSIONES
 // ═══════════════════════════════════════════════════
 function renderConclusiones(d){
   const {rows,totalBit,totalHH,hhAvg,hhMed,slaAvg,slaMed,slaAvgs,mesLabels,pendCliente,localSorted,tData,totalLocalBit,cliData,outliers}=d;
