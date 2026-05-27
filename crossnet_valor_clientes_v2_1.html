@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CrossNet Perú — Valor al Cliente Q1 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#185FA5;--blue-l:#378ADD;--blue-pale:#E6F1FB;--teal:#1D9E75;--teal-pale:#E2F5EE;--coral:#D85A30;--coral-pale:#FAECE7;--amber:#BA7517;--amber-pale:#FDF0DC;--violet:#7F77DD;--violet-pale:#EEEDF9;--pink:#D4537E;--text:#18180E;--muted:#5F5E5A;--hint:#9A9890;--bg:#F5F4EF;--surface:#fff;--border:rgba(0,0,0,0.08);--border-m:rgba(0,0,0,0.13);--r:10px;--r-lg:14px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;min-height:100vh}
+.hdr{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:58px;position:sticky;top:0;z-index:200;gap:1rem;flex-wrap:wrap}
+.hdr-left{display:flex;align-items:center;gap:12px}.hdr-logo{height:26px}.hdr-div{width:1px;height:18px;background:var(--border-m)}.hdr-title{font-size:13px;color:var(--muted)}
+.hdr-right{display:flex;align-items:center;gap:8px}
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
+.badge-blue{background:var(--blue-pale);color:var(--blue)}.badge-teal{background:var(--teal-pale);color:var(--teal)}.badge-amber{background:var(--amber-pale);color:var(--amber)}
+.container{max-width:1280px;margin:0 auto;padding:1.5rem 2rem 4rem}
+.sec-label{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--hint);margin:1.75rem 0 .9rem;display:flex;align-items:center;gap:8px}.sec-label::after{content:'';flex:1;height:.5px;background:var(--border)}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:.5rem}
+.metric{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:.9rem 1.1rem}
+.metric.hl-blue{border-left:3px solid var(--blue-l)}.metric.hl-teal{border-left:3px solid var(--teal)}.metric.hl-green{border-left:3px solid #1D9E75}.metric.hl-coral{border-left:3px solid var(--coral)}.metric.hl-amber{border-left:3px solid var(--amber)}
+.m-label{font-size:11px;color:var(--hint);margin-bottom:4px;font-weight:500}.m-value{font-size:23px;font-weight:600;color:var(--text);line-height:1;font-family:'DM Mono',monospace}.m-sub{font-size:11px;color:var(--hint);margin-top:4px}
+.tab-row{display:flex;gap:2px;margin:1.5rem 0 1.25rem;border-bottom:1px solid var(--border);overflow-x:auto}
+.tab{font-size:13px;padding:8px 16px;border:none;background:transparent;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;font-family:'DM Sans',sans-serif;font-weight:500;white-space:nowrap}
+.tab:hover{color:var(--text)}.tab.active{color:var(--blue);border-bottom-color:var(--blue)}
+.tab-pane{display:none}.tab-pane.active{display:block}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.2rem 1.4rem}
+.box.full{grid-column:1/-1}.box-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px}.box-sub{font-size:11px;color:var(--hint);margin-bottom:1rem}
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--hint);padding:7px 8px;border-bottom:1px solid var(--border);text-align:left;white-space:nowrap}
+.tbl td{padding:7px 8px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:middle}
+.tbl td:first-child{color:var(--text);font-weight:500}.tbl td.n{font-family:'DM Mono',monospace;text-align:right;font-size:12px}
+.tbl td.hi{color:var(--blue);font-weight:600}.tbl td.warn{color:var(--coral);font-weight:600}.tbl td.good{color:var(--teal);font-weight:600}.tbl td.amber{color:var(--amber);font-weight:600}
+.tbl tr:last-child td{border-bottom:none}.tbl tr:hover td{background:var(--bg)}
+.pill{display:inline-block;font-size:10px;font-weight:600;padding:1px 7px;border-radius:20px}
+.pill-blue{background:var(--blue-pale);color:var(--blue)}.pill-teal{background:var(--teal-pale);color:var(--teal)}.pill-coral{background:var(--coral-pale);color:var(--coral)}.pill-amber{background:var(--amber-pale);color:var(--amber)}.pill-violet{background:var(--violet-pale);color:var(--violet)}.pill-gray{background:var(--bg);color:var(--muted);border:.5px solid var(--border-m)}
+.alert{background:var(--coral-pale);border-left:3px solid var(--coral);border-radius:var(--r);padding:.8rem 1rem;font-size:13px;color:#8B3318;margin-bottom:1rem;line-height:1.5}.alert strong{font-weight:600}
+.info-box{background:var(--blue-pale);border-left:3px solid var(--blue-l);border-radius:var(--r);padding:.8rem 1rem;font-size:13px;color:#0D3F7A;line-height:1.5}
+.flt-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1rem}
+.flt{font-size:12px;padding:4px 12px;border:.5px solid var(--border-m);border-radius:20px;cursor:pointer;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif}
+.flt.on{background:var(--surface);color:var(--text);font-weight:500;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
+.chart-wrap{width:100%;overflow:visible}.chart-wrap svg{width:100%;display:block}
+/* client detail */
+.cli-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.25rem 1.5rem;margin-bottom:14px}
+.cli-name{font-size:17px;font-weight:600;color:var(--text);margin-bottom:3px}
+.cli-meta{font-size:12px;color:var(--hint);margin-bottom:1rem;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-bottom:1rem}
+.kpi{background:var(--bg);border-radius:var(--r);padding:.6rem .85rem}
+.kpi-lbl{font-size:10px;color:var(--hint);font-weight:500;margin-bottom:2px}
+.kpi-val{font-size:19px;font-weight:600;font-family:'DM Mono',monospace;line-height:1.2}
+.kpi-sub{font-size:10px;color:var(--hint);margin-top:1px}
+.dim-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px}
+.dim-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:1rem 1.1rem;border-top:3px solid transparent}
+.dim-box.evol{border-top-color:var(--blue)}.dim-box.soporte{border-top-color:var(--teal)}.dim-box.fact{border-top-color:var(--amber)}
+.dim-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--hint);margin-bottom:.6rem}
+.dim-stat{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:.5px solid var(--border);font-size:12px}
+.dim-stat:last-child{border-bottom:none}
+.dim-stat-lbl{color:var(--muted)}.dim-stat-val{font-family:'DM Mono',monospace;font-weight:500;color:var(--text)}
+.footer{margin-top:3rem;border-top:1px solid var(--border);padding-top:1.25rem;display:flex;align-items:center;justify-content:space-between}
+.footer-l{font-size:12px;color:var(--hint)}.footer-logo{height:18px;opacity:.35}
+/* seg cards */
+.seg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:1rem}
+.seg-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:1rem 1.1rem;border-left:3px solid var(--border-m);cursor:pointer}
+.seg-card:hover{border-color:var(--border-m)}
+.seg-num{font-size:24px;font-weight:600;font-family:'DM Mono',monospace}
+.seg-title{font-size:12px;font-weight:600;color:var(--text);margin:3px 0}.seg-desc{font-size:11px;color:var(--hint);line-height:1.5}
+@media(max-width:700px){.grid,.dim-row{grid-template-columns:1fr}.box.full{grid-column:1}.container{padding:1rem 1rem 3rem}.hdr{padding:0 1rem}.metrics{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <div class="hdr-left">
+    <img class="hdr-logo" src="https://crossnet.la/wp-content/uploads/2024/10/logo-crossnet_header.svg" alt="CrossNet" onerror="this.style.display='none';document.getElementById('ltxt').style.display='block'">
+    <span id="ltxt" style="display:none;font-weight:600;font-size:16px;color:var(--blue)">CrossNet</span>
+    <div class="hdr-div"></div>
+    <span class="hdr-title">Valor al Cliente · Perú</span>
+  </div>
+  <div class="hdr-right">
+    <span class="badge badge-blue">Q1 2026</span>
+    <span class="badge badge-teal">Evolutivo</span>
+    <span class="badge badge-teal">Soporte CSR</span>
+    <span class="badge badge-amber">Facturación</span>
+  </div>
+</header>
+
+<div class="container">
+<div class="sec-label">Resumen ejecutivo — cartera Perú Q1 2026</div>
+<div class="metrics">
+  <div class="metric hl-amber"><div class="m-label">Facturación mensual</div><div class="m-value">$445k</div><div class="m-sub">USD · 35 clientes</div></div>
+  <div class="metric hl-blue"><div class="m-label">HH evolutivas Q1</div><div class="m-value">1,298</div><div class="m-sub">bitácoras CN</div></div>
+  <div class="metric hl-teal"><div class="m-label">Tickets CSR Q1</div><div class="m-value">1,481</div><div class="m-sub">soporte 7×24×365</div></div>
+  <div class="metric hl-teal"><div class="m-label">HH soporte CSR</div><div class="m-value">509</div><div class="m-sub">horas de soporte</div></div>
+  <div class="metric hl-blue"><div class="m-label">HH totales Q1</div><div class="m-value">1,807</div><div class="m-sub">evol. + soporte</div></div>
+  <div class="metric"><div class="m-label">Bitácoras Q1</div><div class="m-value">395</div><div class="m-sub">reqs. evolutivos</div></div>
+  <div class="metric hl-coral"><div class="m-label">Sin actividad evol.</div><div class="m-value">13</div><div class="m-sub">clientes · 0 bitácoras</div></div>
+  <div class="metric"><div class="m-label">SLA CSR prom.</div><div class="m-value">75%</div><div class="m-sub">resueltos &lt;24h</div></div>
+</div>
+
+<div class="tab-row">
+  <button class="tab active" onclick="showTab('general',this)">Visión general</button>
+  <button class="tab" onclick="showTab('segmentos',this)">Segmentos</button>
+  <button class="tab" onclick="showTab('cartera',this)">Cartera completa</button>
+  <button class="tab" onclick="showTab('cliente',this)">Por cliente</button>
+  <button class="tab" onclick="showTab('soporte',this)">Soporte CSR</button>
+  <button class="tab" onclick="showTab('alertas',this)">⚠ Alertas</button>
+</div>
+
+<!-- GENERAL -->
+<div id="pane-general" class="tab-pane active">
+  <div class="grid">
+    <div class="box full"><div class="box-title">Top 15 clientes — HH totales de servicio (evolutivo + soporte) vs facturación</div><div class="box-sub">Barra azul = HH evolutivas · barra verde = HH soporte CSR · línea naranja = facturación mensual USD</div><div class="chart-wrap" id="ch-top15"></div></div>
+    <div class="box full"><div class="box-title">Composición del servicio por cliente — % evolutivo vs soporte</div><div class="box-sub">Top 15 por HH totales. Muestra qué porcentaje del esfuerzo es consultoría evolutiva vs soporte operativo</div><div class="chart-wrap" id="ch-composicion"></div></div>
+    <div class="box"><div class="box-title">Facturación por KAM</div><div class="box-sub">Distribución de cartera</div><div class="chart-wrap" id="ch-kam"></div></div>
+    <div class="box"><div class="box-title">HH totales por Team</div><div class="box-sub">Evolutivo + soporte combinados</div><div class="chart-wrap" id="ch-team-hh"></div></div>
+  </div>
+</div>
+
+<!-- SEGMENTOS -->
+<div id="pane-segmentos" class="tab-pane">
+  <div class="info-box" style="margin-bottom:1rem">Segmentación por <strong>facturación mensual</strong> (estratégico &gt; USD 10k) y <strong>HH evolutivas Q1</strong> (alta dedicación ≥ 30 HH). Permite identificar dónde enfocar o redistribuir esfuerzos consultivos.</div>
+  <div class="seg-grid" id="seg-grid"></div>
+  <div class="box full" style="margin-top:14px">
+    <div class="box-title">Detalle por segmento</div>
+    <div class="box-sub" style="margin-bottom:.75rem"></div>
+    <div class="flt-bar" id="seg-filters"></div>
+    <table class="tbl"><thead><tr><th>Cliente</th><th>KAM</th><th>SDM</th><th style="text-align:right">Facturación</th><th style="text-align:right">Bitácoras</th><th style="text-align:right">HH evol.</th><th style="text-align:right">Tickets</th><th style="text-align:right">HH soporte</th><th style="text-align:right">HH total</th><th style="text-align:right">SLA CSR</th><th>Segmento</th></tr></thead><tbody id="seg-tbody"></tbody></table>
+  </div>
+</div>
+
+<!-- CARTERA -->
+<div id="pane-cartera" class="tab-pane">
+  <div class="flt-bar">
+    <button class="flt on" onclick="filterCartera('all',this)">Todos</button>
+    <button class="flt" onclick="filterCartera('Chilcano',this)">Team Chilcano</button>
+    <button class="flt" onclick="filterCartera('Mistura',this)">Team Mistura</button>
+    <button class="flt" onclick="filterCartera('Tomas',this)">SDM Tomas</button>
+    <button class="flt" onclick="filterCartera('Claudia',this)">SDM Claudia</button>
+    <button class="flt" onclick="filterCartera('Angy',this)">SDM Angy</button>
+  </div>
+  <div class="box full">
+    <table class="tbl" id="cartera-table">
+      <thead><tr><th>#</th><th>Cliente</th><th>Team</th><th>SDM</th><th style="text-align:right">USD/mes</th><th style="text-align:right">Bitácoras</th><th style="text-align:right">HH evol.</th><th style="text-align:right">Tickets</th><th style="text-align:right">HH sop.</th><th style="text-align:right">HH total</th><th style="text-align:right">% evol.</th><th style="text-align:right">SLA CSR</th><th style="text-align:right">USD/HH</th><th>Segmento</th></tr></thead>
+      <tbody id="cartera-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- POR CLIENTE -->
+<div id="pane-cliente" class="tab-pane">
+  <div style="margin-bottom:1rem">
+    <label style="font-size:12px;color:var(--hint);font-weight:500;display:block;margin-bottom:4px">Selecciona un cliente:</label>
+    <select id="cli-select" onchange="renderCliente(this.value)" style="font-size:13px;padding:6px 12px;border:1px solid var(--border-m);border-radius:var(--r);background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;width:100%;max-width:400px"></select>
+  </div>
+  <div id="cli-detail"></div>
+</div>
+
+<!-- SOPORTE CSR -->
+<div id="pane-soporte" class="tab-pane">
+  <div class="grid">
+    <div class="box full"><div class="box-title">Top 20 clientes por volumen de tickets CSR</div><div class="box-sub">Incidentes + requerimientos + consultas + otros tipos de soporte</div><div class="chart-wrap" id="ch-csr-tickets"></div></div>
+    <div class="box full"><div class="box-title">SLA de resolución &lt;24h por cliente</div><div class="box-sub">% de tickets resueltos dentro de las 24 horas. Verde ≥80% · Amarillo 60–80% · Rojo &lt;60%</div><div class="chart-wrap" id="ch-sla-csr"></div></div>
+    <div class="box full"><div class="box-title">HH de soporte CSR por cliente — Top 15</div><div class="box-sub">Esfuerzo real del Centro de Servicios Regional por cliente</div><div class="chart-wrap" id="ch-hh-csr"></div></div>
+    <div class="box full"><div class="box-title">Evolución mensual de tickets por Team</div><div class="box-sub">Enero → Febrero → Marzo</div><div class="chart-wrap" id="ch-csr-mes"></div></div>
+  </div>
+</div>
+
+<!-- ALERTAS -->
+<div id="pane-alertas" class="tab-pane">
+  <div class="grid">
+    <div class="box full"><div class="box-title">Clientes con alto valor y baja dedicación evolutiva</div><div class="box-sub">Facturan más de USD 5k/mes pero recibieron menos de 10 HH evolutivas en Q1</div><div id="alert-baja-evol"></div></div>
+    <div class="box full"><div class="box-title">Alta dedicación total vs baja facturación</div><div class="box-sub">Se les dedica mucho esfuerzo (evolutivo + soporte) pero facturan poco — oportunidad de upsell o rebalanceo</div><div id="alert-alta-ded"></div></div>
+    <div class="box full"><div class="box-title">SLA CSR por debajo del 65%</div><div class="box-sub">Clientes con menor cumplimiento de tiempo de resolución — riesgo de percepción de mal servicio</div><div id="alert-sla"></div></div>
+    <div class="box full"><div class="box-title">Clientes en habilitación activa</div><div class="box-sub">Tienen HB pero aún no generan actividad evolutiva — requieren acompañamiento de onboarding</div><div id="alert-hb"></div></div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-l">CrossNet Perú · Gerencia de Operaciones · Q1 2026 · Evolutivo + Soporte CSR + Facturación</div>
+  <img class="footer-logo" src="https://crossnet.la/wp-content/uploads/2024/10/logo-crossnet_header.svg" alt="CrossNet" onerror="this.style.display='none'">
+</div>
+</div>
+
+<script>
+const DATA = [{"cliente": "Mapfre Perú", "fr": 75304.93, "hb": 3312.0, "total": 78616.93, "bitacoras": 44, "hh_evol": 118.0, "sla_evol": 5.9, "tickets": 80, "hh_soporte": 38.2, "incidentes": 32, "reqs_csr": 23, "sla_pct": 63.7, "t_resol_avg": 42.3, "hh_total": 156.2, "usd_por_hh_evol": 1915.0, "usd_por_hh_total": 1446.0, "team": "Chilcano", "kam": "Paola Jacobs", "sdm": "Tomas", "segmento": "Estratégico · alta dedicación", "bit_m1": 12, "bit_m2": 12, "bit_m3": 20, "hh_m1": 39.0, "hh_m2": 25.0, "hh_m3": 54.0, "tick_m1": 30, "tick_m2": 19, "tick_m3": 31, "hh_csr_m1": 13.6, "hh_csr_m2": 15.2, "hh_csr_m3": 9.5, "fr_trim": 225914.79, "nota": ""}, {"cliente": "Clínica Internacional", "fr": 36662.5, "hb": 0.0, "total": 36662.5, "bitacoras": 6, "hh_evol": 13.0, "sla_evol": 4.3, "tickets": 56, "hh_soporte": 5.9, "incidentes": 5, "reqs_csr": 47, "sla_pct": 71.4, "t_resol_avg": 21.4, "hh_total": 18.9, "usd_por_hh_evol": 8461.0, "usd_por_hh_total": 5819.0, "team": "Mistura", "kam": "Zinthia Mansilla", "sdm": "Tomas", "segmento": "Estratégico · baja dedicación", "bit_m1": 3, "bit_m2": 1, "bit_m3": 2, "hh_m1": 3.0, "hh_m2": 8.0, "hh_m3": 2.0, "tick_m1": 13, "tick_m2": 15, "tick_m3": 28, "hh_csr_m1": 3.6, "hh_csr_m2": 0.6, "hh_csr_m3": 1.8, "fr_trim": 109987.5, "nota": ""}, {"cliente": "Grupo San Pablo (GSP)", "fr": 32892.28, "hb": 950.0, "total": 33842.28, "bitacoras": 51, "hh_evol": 198.0, "sla_evol": 3.9, "tickets": 242, "hh_soporte": 55.6, "incidentes": 78, "reqs_csr": 93, "sla_pct": 71.9, "t_resol_avg": 28.7, "hh_total": 253.6, "usd_por_hh_evol": 498.0, "usd_por_hh_total": 389.0, "team": "Mistura", "kam": "Zinthia Mansilla", "sdm": "Claudia", "segmento": "Estratégico · alta dedicación", "bit_m1": 17, "bit_m2": 18, "bit_m3": 16, "hh_m1": 45.0, "hh_m2": 95.0, "hh_m3": 58.0, "tick_m1": 85, "tick_m2": 80, "tick_m3": 77, "hh_csr_m1": 8.7, "hh_csr_m2": 25.3, "hh_csr_m3": 21.6, "fr_trim": 98676.84, "nota": ""}, {"cliente": "Financiera Oh!", "fr": 32380.95, "hb": 3332.0, "total": 35712.95, "bitacoras": 27, "hh_evol": 238.0, "sla_evol": 9.4, "tickets": 167, "hh_soporte": 70.7, "incidentes": 34, "reqs_csr": 101, "sla_pct": 76.0, "t_resol_avg": 30.1, "hh_total": 308.6, "usd_por_hh_evol": 408.0, "usd_por_hh_total": 315.0, "team": "Chilcano", "kam": "Paola Jacobs", "sdm": "Angy", "segmento": "Estratégico · alta dedicación", "bit_m1": 6, "bit_m2": 6, "bit_m3": 15, "hh_m1": 37.0, "hh_m2": 33.0, "hh_m3": 168.0, "tick_m1": 45, "tick_m2": 50, "tick_m3": 72, "hh_csr_m1": 16.7, "hh_csr_m2": 44.4, "hh_csr_m3": 9.6, "fr_trim": 97142.85, "nota": ""}, {"cliente": "Calidda", "fr": 26007.9, "hb": 0.0, "total": 26007.9, "bitacoras": 0, "hh_evol": 0, "sla_evol": 0.0, "tickets": 0, "hh_soporte": 0, "incidentes": 0, "reqs_csr": 0, "sla_pct": 0.0, "t_resol_avg": 0.0, "hh_total": 0, "usd_por_hh_evol": 0, "usd_por_hh_total": 0, "team": "Mistura", "kam": "Zinthia Mansilla", "sdm": "Tomas", "segmento": "En habilitación", "bit_m1": 0, "bit_m2": 0, "bit_m3": 0, "hh_m1": 0.0, "hh_m2": 0.0, "hh_m3": 0.0, "tick_m1": 0, "tick_m2": 0, "tick_m3": 0, "hh_csr_m1": 0.0, "hh_csr_m2": 0.0, "hh_csr_m3": 0.0, "nota": "Salió a producción el 8 de mayo. Actividad Q1 corresponde a proyectos, no a servicio consultivo regular.", "fr_trim": 78023.7}, {"cliente": "Sanna", "fr": 21978.5, "hb": 855.0, "total": 22833.5, "bitacoras": 27, "hh_evol": 109.0, "sla_evol": 5.3, "tickets": 107, "hh_soporte": 36.5, "incidentes": 35, "reqs_csr": 56, "sla_pct": 78.5, "t_resol_avg": 16.1, "hh_total": 145.5, "usd_por_hh_evol": 605.0, "usd_por_hh_total": 453.0, "team": "Mistura", "kam": "Zinthia Mansilla", "sdm": "Claudia", "segmento": "Estratégico · alta dedicación", "bit_m1": 7, "bit_m2": 13, "bit_m3": 7, "hh_m1": 21.0, "hh_m2": 69.0, "hh_m3": 19.0, "tick_m1": 19, "tick_m2": 42, "tick_m3": 46, "hh_csr_m1": 4.3, "hh_csr_m2": 26.5, "hh_csr_m3": 5.7, "fr_trim": 65935.5, "nota": ""}, {"cliente": "ONPE", "fr": 19568.0, "hb": 0.0, "total": 19568.0, "bitacoras": 8, "hh_evol": 19.0, "sla_evol": 9.9, "tickets": 27, "hh_soporte": 7.2, "incidentes": 13, "reqs_csr": 6, "sla_pct": 74.1, "t_resol_avg": 26.0, "hh_total": 26.2, "usd_por_hh_evol": 3090.0, "usd_por_hh_total": 2241.0, "team": "Chilcano", "kam": "Paola Jacobs", "sdm": "Angy", "segmento": "Estratégico · baja dedicación", "bit_m1": 3, "bit_m2": 2, "bit_m3": 3, "hh_m1": 7.0, "hh_m2": 5.0, "hh_m3": 7.0, "tick_m1": 6, "tick_m2": 12, "tick_m3": 9, "hh_csr_m1": 1.0, "hh_csr_m2": 5.7, "hh_csr_m3": 0.5, "fr_trim": 58704.0, "nota": ""}, {"cliente": "AFP Integra - Sura Perú", "fr": 14008.6, "hb": 332.5, "total": 14341.1, "bitacoras": 29, "hh_evol": 74.0, "sla_evol": 2.5, "tickets": 108, "hh_soporte": 32.2, "incidentes": 11, "reqs_csr": 75, "sla_pct": 66.7, "t_resol_avg": 45.2, "hh_total": 106.2, "usd_por_hh_evol": 568.0, "usd_por_hh_total": 396.0, "team": "Mistura", "kam": "Zinthia Mansilla", "sdm": "Claudia", "segmento": "Estratégico · alta dedicación", "bit_m1": 16, "bit_m2": 6, "bit_m3": 7, "hh_m1": 31.0, "hh_m2": 19.0, "hh_m3": 24.0, "tick_m1": 42, "tick_m2": 27, "tick_m3": 39, "hh_csr_m1": 12.3, "hh_csr_m2": 9.0, "hh_csr_m3": 10.9, "fr_trim": 42025.8, "nota": ""}, {"cliente": "SBS", "fr": 13564.0, "hb": 0.0, "total": 13564.0, "bitacoras": 15, "hh_evol": 44.0, "sla_evol": 19.3, "tickets": 23, "hh_soporte": 12.1, "incidentes": 13, "reqs_csr": 4, "sla_pct": 73.9, "t_resol_avg": 25.8, "hh_total": 56.1, "usd_por_hh_evol": 925.0, "usd_por_hh_total": 725.0, "team": "Chilcano", "kam": "Paola Jacobs", "sdm": "Angy", "segmento": "Estratégico · alta dedicación", "bit_m1": 9, "bit_m2": 4, "bit_m3": 2, "hh_m1": 23.0, "hh_m2": 15.0, "hh_m3": 6.0, "tick_m1": 7, "tick_m2": 13, "tick_m3": 3, "hh_csr_m1": 4.6, "hh_csr_m2": 7.5, "hh_csr_m3": 0.0, "fr_trim": 40692.0, "nota": ""}, {"cliente": "MI FIBRA", "fr": 13369.0, "hb": 4251.25, "total": 17620.25, "bitacoras": 41, "hh_evol": 103.0, "sla_evol": 5.8, "tickets": 35, "hh_soporte": 20.4, "incidentes": 20, "reqs_csr": 3, "sla_pct": 80.0, "t_resol_avg": 27.7, "hh_total": 123.4, "usd_por_hh_evol": 389.0, "usd_por_hh_total": 325.0, "team": "Chilcano", "kam": "Paola Jacobs", "sdm": "Claudia", "segmento": "Estratégico · alta dedicación", "bit_m1": 12, "bit_m2": 14, "bit_m3": 15, "hh_m1": 23.0, "hh_m2": 42.0, "hh_m3": 38.0, "tick_m1": 11, "tick_m2": 12, "tick_m3": 12, "hh_csr_m1": 8.3, "hh_csr_m2": 6.8, "hh_csr_m3": 5.4, "fr_trim": 40107.0, "nota": ""}, {"cliente": "InRetail (grupo)", "fr": 13009.21, "hb": 2646.0, "total": 15655.21, "bitacoras": 20, "hh_evol": 68.0, "sla_evol": 11.5, "tickets": 46, "hh_soporte": 15.7, "incidentes": 15, "reqs_csr": 22, "sla_pct": 58.7, "t_resol_avg": 73.4, "hh_total": 83.7, "usd_por_hh_evol": 574.0, "usd_por_hh_total": 466.0, "team": "Chilcano", "kam": "Paola Jacobs", "sdm": "Angy", "segmento": "Estratégico · alta dedicación", "bit_m1": 11, "bit_m2": 5, "bit_m3": 4, "hh_m1": 44.0, "hh_m2": 13.0, "hh_m3": 11.0, "tick_m1": 16, "tick_m2": 13, "tick_m3": 17, "hh_csr_m1": 4.6, "hh_csr_m2": 4.8, "hh_csr_m3": 6.2, "fr_trim": 39027.63, "nota": ""}, {"cliente": "Farmacias Peruanas", "fr": 12808.6, "hb": 0.0, "total": 12808.6, "bitacoras": 4, "hh_evol": 9.0, "sla_evol": 9.2, "tickets": 81, "hh_soporte": 23.5, "incidentes": 12, "reqs_csr": 52, "sla_pct": 85.2, "t_resol_avg": 13.5, "hh_total": 32.5, "usd_por_hh_evol": 4270.0, "usd_por_hh_total": 1182.0, "team": "Chilcano", "kam": "Paola Jacobs", "sdm": "Angy", "segmento": "Estratégico · baja dedicación", "bit_m1": 2, "bit_m2": 1, "bit_m3": 1, "hh_m1": 4.0, "hh_m2": 1.0, "hh_m3": 4.0, "tick_m1": 21, "tick_m2": 27, "tick_m3": 33, "hh_csr_m1": 3.0, "hh_csr_m2": 1.4, "hh_csr_m3": 19.2, "fr_trim": 38425.8, "nota": ""}, {"cliente": "Banco Ripley", "fr": 12004.1, "hb": 0.0, "total": 12004.1, "bitacoras": 20, "hh_evol": 69.0, "sla_evol": 5.8, "tickets": 55, "hh_soporte": 7.8, "incidentes": 15, "reqs_csr": 30, "sla_pct": 83.6, "t_resol_avg": 25.7, "hh_total": 76.8, "usd_por_hh_evol": 522.0, "usd_por_hh_total": 469.0, "team": "Mistura", "kam": "Zinthia Mansilla", "sdm": "Tomas", "segmento": "Estratégico · alta dedicación", "bit_m1": 6, "bit_m2": 5, "bit_m3": 9, "hh_m1": 26.0, "hh_m2": 19.0, "hh_m3": 24.0, "tick_m1": 15, "tick_m2": 23, "tick_m3": 17, "hh_csr_m1": 4.1, "hh_csr_m2": 2.5, "hh_csr_m3": 1.2, "fr_trim": 36012.3, "nota": ""}, {"cliente": "MAKRO", "fr": 11053.64, "hb": 0.0, "total": 11053.64, "bitacoras": 0, "hh_evol": 0.0, "sla_evol": 0.0, "tickets": 2, "hh_soporte": 0.2, "incidentes": 1, "reqs_csr": 0, "sla_pct": 50.0, "t_resol_avg": 38.6, "hh_total": 0.2, "usd_por_hh_evol": 0, "usd_por_hh_total": 165805.0, "team": "Chilcano", "kam": "Paola Jacobs", "sdm": "Angy", "segmento": "Alto valor · sin evolutivo", "bit_m1": 0, "bit_m2": 0, "bit_m3": 0, "hh_m1": 0.0, "hh_m2": 0.0, "hh_m3": 0.0, "tick_m1": 1, "tick_m2": 0, "tick_m3": 1, "hh_csr_m1": 0.0, "hh_csr_m2": 0.0, "hh_csr_m3": 0.2, "fr_trim": 33160.92, "nota": ""}, {"cliente": "Indecopi", "fr": 10744.29, "hb": 0.0, "total": 10744.29, "bitacoras": 3, "hh_evol": 8.0, "sla_evol": 2.0, "tickets": 11, "hh_soporte": 3.1, "incidentes": 4, "reqs_csr": 4, "sla_pct": 63.6, "t_resol_avg": 154.6, "hh_total": 11.1, "usd_por_hh_evol": 4029.0, "usd_por_hh_total": 2904.0, "team": "Mistura", "kam": "Zinthia Mansilla", "sdm": "Tomas", "segmento": "Estratégico · baja dedicación", "bit_m1": 0, "bit_m2": 2, "bit_m3": 1, "hh_m1": 0.0, "hh_m2": 3.0, "hh_m3": 5.0, "tick_m1": 3, "tick_m2": 4, "tick_m3": 4, "hh_csr_m1": 1.8, "hh_csr_m2": 1.2, "hh_csr_m3": 0.0, "fr_trim": 32232.87, "nota": ""}, {"cliente": "Alfin Banco (antes Banco Azteca)", "fr": 10093.09, "hb": 1425.0, "total": 11518.09, "bitacoras": 10, "hh_evol": 21.0, "sla_evol": 1.8, "tickets": 23, "hh_soporte": 12.8, "incidentes": 5, "reqs_csr": 13, "sla_pct": 65.2, "t_resol_avg": 26.1, "hh_total": 33.8, "usd_por_hh_evol": 1442.0, "usd_por_hh_total": 896.0, "team": "Mistura", "kam": "Zinthia Mansilla", "sdm": "Tomas", "segmento": "Estratégico · baja dedicación", "bit_m1": 1, "bit_m2": 1, "bit_m3": 8, "hh_m1": 1.0, "hh_m2": 5.0, "hh_m3": 15.0, "tick_m1": 8, "tick_m2": 5, "tick_m3": 10, "hh_csr_m1": 3.8, "hh_csr_m2": 3.5, "hh_csr_m3": 5.5, "fr_trim": 30279.27, "nota": ""}, {"cliente": "NGR", "fr": 7277.54, "hb": 0.0, "total": 7277.54, "bitacoras": 5, "hh_evol": 14.0, "sla_evol": 12.3, "tickets": 72, "hh_soporte": 15.3, "incidentes": 21, "reqs_csr": 19, "sla_pct": 87.5, "t_resol_avg": 25.8, "hh_total": 29.3, "usd_por_hh_evol": 1559.0, "usd_por_hh_total": 745.0, "team": "Chilcano", "kam": "Paola Jacobs", "sdm": "Angy", "segmento": "Estándar", "bit_m1": 4, "bit_m2": 0, "bit_m3": 1, "hh_m1": 13.0, "hh_m2": 0.0, "hh_m3": 1.0, "tick_m1": 18, "tick_m2": 33, "tick_m3": 21, "hh_csr_m1": 3.6, "hh_csr_m2": 6.5, "hh_csr_m3": 5.2, "fr_trim": 21832.62, "nota": ""}, {"cliente": "Casa Andina Hoteles", "fr": 7031.22, "hb": 3845.6, "total": 10876.82, "bitacoras": 6, "hh_evol": 15.0, "sla_evol": 7.2, "tickets": 23, "hh_soporte": 14.8, "incidentes": 4, "reqs_csr": 6, "sla_pct": 56.5, "t_resol_avg": 102.4, "hh_total": 29.8, "usd_por_hh_evol": 1406.0, "usd_por_hh_total": 708.0, "team": "Chilcano", "kam": "Paola Jacobs", "sdm": "Angy", "segmento": "Estándar", "bit_m1": 3, "bit_m2": 1, "bit_m3": 2, "hh_m1": 9.0, "hh_m2": 2.0, "hh_m3": 4.0, "tick_m1": 10, "tick_m2": 7, "tick_m3": 6, "hh_csr_m1": 7.6, "hh_csr_m2": 3.2, "hh_csr_m3": 4.0, "fr_trim": 21093.66, "nota": ""}, {"cliente": "MAF Perú", "fr": 6201.05, "hb": 0.0, "total": 6201.05, "bitacoras": 14, "hh_evol": 40.0, "sla_evol": 6.8, "tickets": 21, "hh_soporte": 14.5, "incidentes": 9, "reqs_csr": 11, "sla_pct": 66.7, "t_resol_avg": 19.4, "hh_total": 54.5, "usd_por_hh_evol": 465.0, "usd_por_hh_total": 341.0, "team": "Mistura", "kam": "Zinthia Mansilla", "sdm": "Tomas", "segmento": "Alta dedicación · bajo valor", "bit_m1": 8, "bit_m2": 1, "bit_m3": 5, "hh_m1": 23.0, "hh_m2": 1.0, "hh_m3": 16.0, "tick_m1": 3, "tick_m2": 4, "tick_m3": 14, "hh_csr_m1": 0.5, "hh_csr_m2": 3.3, "hh_csr_m3": 10.7, "fr_trim": 18603.15, "nota": ""}, {"cliente": "Continental Travel", "fr": 5607.88, "hb": 1566.75, "total": 7174.63, "bitacoras": 5, "hh_evol": 13.0, "sla_evol": 4.2, "tickets": 16, "hh_soporte": 2.6, "incidentes": 6, "reqs_csr": 7, "sla_pct": 68.8, "t_resol_avg": 27.4, "hh_total": 15.6, "usd_por_hh_evol": 1294.0, "usd_por_hh_total": 1078.0, "team": "Mistura", "kam": "Zinthia Mansilla", "sdm": "Claudia", "segmento": "Estándar", "bit_m1": 1, "bit_m2": 0, "bit_m3": 4, "hh_m1": 1.0, "hh_m2": 0.0, "hh_m3": 12.0, "tick_m1": 4, "tick_m2": 5, "tick_m3": 7, "hh_csr_m1": 0.0, "hh_csr_m2": 2.1, "hh_csr_m3": 0.5, "fr_trim": 16823.64, "nota": ""}, {"cliente": "Inchcape Perú", "fr": 5026.27, "hb": 114.0, "total": 5140.27, "bitacoras": 15, "hh_evol": 30.0, "sla_evol": 2.8, "tickets": 85, "hh_soporte": 35.8, "incidentes": 9, "reqs_csr": 24, "sla_pct": 84.7, "t_resol_avg": 20.4, "hh_total": 65.8, "usd_por_hh_evol": 503.0, "usd_por_hh_total": 229.0, "team": "Mistura", "kam": "Zinthia Mansilla", "sdm": "Tomas", "segmento": "Alta dedicación · bajo valor", "bit_m1": 8, "bit_m2": 1, "bit_m3": 6, "hh_m1": 16.0, "hh_m2": 1.0, "hh_m3": 13.0, "tick_m1": 31, "tick_m2": 28, "tick_m3": 26, "hh_csr_m1": 9.3, "hh_csr_m2": 6.2, "hh_csr_m3": 20.3, "fr_trim": 15078.81, "nota": ""}, {"cliente": "Pardos Chicken", "fr": 4821.67, "hb": 465.5, "total": 5287.17, "bitacoras": 0, "hh_evol": 0.0, "sla_evol": 0.0, "tickets": 72, "hh_soporte": 2.0, "incidentes": 10, "reqs_csr": 50, "sla_pct": 84.7, "t_resol_avg": 8.6, "hh_total": 2.0, "usd_por_hh_evol": 0, "usd_por_hh_total": 7233.0, "team": "Chilcano", "kam": "Paola Jacobs", "sdm": "Angy", "segmento": "Estándar", "bit_m1": 0, "bit_m2": 0, "bit_m3": 0, "hh_m1": 0.0, "hh_m2": 0.0, "hh_m3": 0.0, "tick_m1": 19, "tick_m2": 26, "tick_m3": 27, "hh_csr_m1": 0.3, "hh_csr_m2": 0.7, "hh_csr_m3": 1.0, "fr_trim": 14465.01, "nota": ""}, {"cliente": "Intursa", "fr": 2970.08, "hb": 0.0, "total": 2970.08, "bitacoras": 11, "hh_evol": 17.0, "sla_evol": 1.7, "tickets": 11, "hh_soporte": 2.6, "incidentes": 2, "reqs_csr": 2, "sla_pct": 54.5, "t_resol_avg": 83.5, "hh_total": 19.6, "usd_por_hh_evol": 524.0, "usd_por_hh_total": 455.0, "team": "Mistura", "kam": "Zinthia Mansilla", "sdm": "Tomas", "segmento": "Estándar", "bit_m1": 2, "bit_m2": 6, "bit_m3": 3, "hh_m1": 3.0, "hh_m2": 9.0, "hh_m3": 5.0, "tick_m1": 4, "tick_m2": 2, "tick_m3": 5, "hh_csr_m1": 0.5, "hh_csr_m2": 1.1, "hh_csr_m3": 1.0, "fr_trim": 8910.24, "nota": ""}, {"cliente": "Oftalmosalud", "fr": 2956.85, "hb": 0.0, "total": 2956.85, "bitacoras": 13, "hh_evol": 36.0, "sla_evol": 1.7, "tickets": 38, "hh_soporte": 15.8, "incidentes": 19, "reqs_csr": 14, "sla_pct": 71.1, "t_resol_avg": 77.1, "hh_total": 51.8, "usd_por_hh_evol": 246.0, "usd_por_hh_total": 171.0, "team": "Mistura", "kam": "Zinthia Mansilla", "sdm": "Tomas", "segmento": "Alta dedicación · bajo valor", "bit_m1": 3, "bit_m2": 3, "bit_m3": 7, "hh_m1": 10.0, "hh_m2": 15.0, "hh_m3": 11.0, "tick_m1": 14, "tick_m2": 6, "tick_m3": 18, "hh_csr_m1": 5.3, "hh_csr_m2": 4.0, "hh_csr_m3": 6.4, "fr_trim": 8870.55, "nota": ""}, {"cliente": "La Protectora", "fr": 2736.2, "hb": 0.0, "total": 2736.2, "bitacoras": 5, "hh_evol": 13.0, "sla_evol": 18.0, "tickets": 5, "hh_soporte": 0.0, "incidentes": 1, "reqs_csr": 2, "sla_pct": 60.0, "t_resol_avg": 347.7, "hh_total": 13.0, "usd_por_hh_evol": 631.0, "usd_por_hh_total": 631.0, "team": "Mistura", "kam": "Zinthia Mansilla", "sdm": "Claudia", "segmento": "Estándar", "bit_m1": 1, "bit_m2": 0, "bit_m3": 4, "hh_m1": 1.0, "hh_m2": 0.0, "hh_m3": 12.0, "tick_m1": 2, "tick_m2": 0, "tick_m3": 3, "hh_csr_m1": 0.0, "hh_csr_m2": 0.0, "hh_csr_m3": 0.0, "fr_trim": 8208.6, "nota": ""}, {"cliente": "Drager Peru", "fr": 1719.75, "hb": 0.0, "total": 1719.75, "bitacoras": 2, "hh_evol": 3.0, "sla_evol": 11.5, "tickets": 8, "hh_soporte": 3.7, "incidentes": 0, "reqs_csr": 3, "sla_pct": 50.0, "t_resol_avg": 69.9, "hh_total": 6.7, "usd_por_hh_evol": 1720.0, "usd_por_hh_total": 770.0, "team": "Mistura", "kam": "Zinthia Mansilla", "sdm": "Tomas", "segmento": "Estándar", "bit_m1": 2, "bit_m2": 0, "bit_m3": 0, "hh_m1": 3.0, "hh_m2": 0.0, "hh_m3": 0.0, "tick_m1": 1, "tick_m2": 5, "tick_m3": 2, "hh_csr_m1": 0.5, "hh_csr_m2": 1.8, "hh_csr_m3": 1.4, "fr_trim": 5159.25, "nota": ""}, {"cliente": "CENTRIA", "fr": 1710.5, "hb": 0.0, "total": 1710.5, "bitacoras": 4, "hh_evol": 8.0, "sla_evol": 0.5, "tickets": 8, "hh_soporte": 3.2, "incidentes": 3, "reqs_csr": 4, "sla_pct": 50.0, "t_resol_avg": 61.6, "hh_total": 11.2, "usd_por_hh_evol": 641.0, "usd_por_hh_total": 458.0, "team": "Mistura", "kam": "Zinthia Mansilla", "sdm": "Angy", "segmento": "Estándar", "bit_m1": 2, "bit_m2": 0, "bit_m3": 2, "hh_m1": 4.0, "hh_m2": 0.0, "hh_m3": 4.0, "tick_m1": 3, "tick_m2": 3, "tick_m3": 2, "hh_csr_m1": 0.0, "hh_csr_m2": 2.2, "hh_csr_m3": 1.0, "fr_trim": 5131.5, "nota": ""}, {"cliente": "Fondos Sura", "fr": 1499.0, "hb": 0.0, "total": 1499.0, "bitacoras": 0, "hh_evol": 0.0, "sla_evol": 0.0, "tickets": 0, "hh_soporte": 0.0, "incidentes": 0, "reqs_csr": 0, "sla_pct": 0.0, "t_resol_avg": 0.0, "hh_total": 0.0, "usd_por_hh_evol": 0, "usd_por_hh_total": 0, "team": "Mistura", "kam": "Zinthia Mansilla", "sdm": "Tomas", "segmento": "Estándar", "bit_m1": 0, "bit_m2": 0, "bit_m3": 0, "hh_m1": 0.0, "hh_m2": 0.0, "hh_m3": 0.0, "tick_m1": 0, "tick_m2": 0, "tick_m3": 0, "hh_csr_m1": 0.0, "hh_csr_m2": 0.0, "hh_csr_m3": 0.0, "fr_trim": 4497.0, "nota": ""}, {"cliente": "Jockey Salud", "fr": 1495.5, "hb": 475.0, "total": 1970.5, "bitacoras": 1, "hh_evol": 1.0, "sla_evol": 3.0, "tickets": 10, "hh_soporte": 4.2, "incidentes": 3, "reqs_csr": 5, "sla_pct": 80.0, "t_resol_avg": 25.1, "hh_total": 5.2, "usd_por_hh_evol": 4486.0, "usd_por_hh_total": 863.0, "team": "Mistura", "kam": "Zinthia Mansilla", "sdm": "Tomas", "segmento": "Estándar", "bit_m1": 0, "bit_m2": 0, "bit_m3": 1, "hh_m1": 0.0, "hh_m2": 0.0, "hh_m3": 1.0, "tick_m1": 2, "tick_m2": 4, "tick_m3": 4, "hh_csr_m1": 0.0, "hh_csr_m2": 3.2, "hh_csr_m3": 1.0, "fr_trim": 4486.5, "nota": ""}, {"cliente": "Química Suiza", "fr": 1122.14, "hb": 0.0, "total": 1122.14, "bitacoras": 0, "hh_evol": 0.0, "sla_evol": 0.0, "tickets": 0, "hh_soporte": 0.0, "incidentes": 0, "reqs_csr": 0, "sla_pct": 0.0, "t_resol_avg": 0.0, "hh_total": 0.0, "usd_por_hh_evol": 0, "usd_por_hh_total": 0, "team": "Chilcano", "kam": "Paola Jacobs", "sdm": "Angy", "segmento": "Estándar", "bit_m1": 0, "bit_m2": 0, "bit_m3": 0, "hh_m1": 0.0, "hh_m2": 0.0, "hh_m3": 0.0, "tick_m1": 0, "tick_m2": 0, "tick_m3": 0, "hh_csr_m1": 0.0, "hh_csr_m2": 0.0, "hh_csr_m3": 0.0, "fr_trim": 3366.42, "nota": ""}, {"cliente": "AVLA", "fr": 1032.04, "hb": 0.0, "total": 1032.04, "bitacoras": 1, "hh_evol": 0.0, "sla_evol": 42.0, "tickets": 4, "hh_soporte": 1.2, "incidentes": 0, "reqs_csr": 3, "sla_pct": 50.0, "t_resol_avg": 32.1, "hh_total": 1.2, "usd_por_hh_evol": 0, "usd_por_hh_total": 2580.0, "team": "Mistura", "kam": "Zinthia Mansilla", "sdm": "Tomas", "segmento": "Estándar", "bit_m1": 1, "bit_m2": 0, "bit_m3": 0, "hh_m1": 0.0, "hh_m2": 0.0, "hh_m3": 0.0, "tick_m1": 1, "tick_m2": 1, "tick_m3": 2, "hh_csr_m1": 0.2, "hh_csr_m2": 1.0, "hh_csr_m3": 0.0, "fr_trim": 3096.12, "nota": ""}, {"cliente": "Pluxee (Sodexo) - Perú", "fr": 580.8, "hb": 0.0, "total": 580.8, "bitacoras": 3, "hh_evol": 4.0, "sla_evol": 1.0, "tickets": 16, "hh_soporte": 7.3, "incidentes": 5, "reqs_csr": 5, "sla_pct": 62.5, "t_resol_avg": 81.8, "hh_total": 11.3, "usd_por_hh_evol": 436.0, "usd_por_hh_total": 154.0, "team": "Mistura", "kam": "Zinthia Mansilla", "sdm": "Tomas", "segmento": "Estándar", "bit_m1": 1, "bit_m2": 2, "bit_m3": 0, "hh_m1": 1.0, "hh_m2": 3.0, "hh_m3": 0.0, "tick_m1": 8, "tick_m2": 5, "tick_m3": 3, "hh_csr_m1": 4.0, "hh_csr_m2": 2.0, "hh_csr_m3": 1.3, "fr_trim": 1742.4, "nota": ""}, {"cliente": "Ministerio de Transporte y Comunicaciones (MTC)", "fr": 0.0, "hb": 7041.6, "total": 7041.6, "bitacoras": 0, "hh_evol": 0.0, "sla_evol": 0.0, "tickets": 0, "hh_soporte": 0.0, "incidentes": 0, "reqs_csr": 0, "sla_pct": 0.0, "t_resol_avg": 0.0, "hh_total": 0.0, "usd_por_hh_evol": 0, "usd_por_hh_total": 0, "team": "Mistura", "kam": "Zinthia Mansilla", "sdm": "Tomas", "segmento": "En producción reciente", "bit_m1": 0, "bit_m2": 0, "bit_m3": 0, "hh_m1": 0.0, "hh_m2": 0.0, "hh_m3": 0.0, "tick_m1": 0, "tick_m2": 0, "tick_m3": 0, "hh_csr_m1": 0.0, "hh_csr_m2": 0.0, "hh_csr_m3": 0.0, "nota": "Salió a producción esta semana. Sin actividad evolutiva esperada en Q1.", "fr_trim": 0.0}, {"cliente": "SEDAPAR", "fr": 0.0, "hb": 4155.7, "total": 4155.7, "bitacoras": 0, "hh_evol": 0.0, "sla_evol": 0.0, "tickets": 0, "hh_soporte": 0.0, "incidentes": 0, "reqs_csr": 0, "sla_pct": 0.0, "t_resol_avg": 0.0, "hh_total": 0.0, "usd_por_hh_evol": 0, "usd_por_hh_total": 0, "team": "—", "kam": "—", "sdm": "—", "segmento": "En producción reciente", "bit_m1": 0, "bit_m2": 0, "bit_m3": 0, "hh_m1": 0.0, "hh_m2": 0.0, "hh_m3": 0.0, "tick_m1": 0, "tick_m2": 0, "tick_m3": 0, "hh_csr_m1": 0.0, "hh_csr_m2": 0.0, "hh_csr_m3": 0.0, "nota": "Salió a producción esta semana. Sin actividad evolutiva esperada en Q1.", "fr_trim": 0.0}, {"cliente": "Clinica Padre Luis Tezza", "fr": 0.0, "hb": 1123.21, "total": 1123.21, "bitacoras": 0, "hh_evol": 0.0, "sla_evol": 0.0, "tickets": 0, "hh_soporte": 0.0, "incidentes": 0, "reqs_csr": 0, "sla_pct": 0.0, "t_resol_avg": 0.0, "hh_total": 0.0, "usd_por_hh_evol": 0, "usd_por_hh_total": 0, "team": "—", "kam": "—", "sdm": "—", "segmento": "Estándar", "bit_m1": 0, "bit_m2": 0, "bit_m3": 0, "hh_m1": 0.0, "hh_m2": 0.0, "hh_m3": 0.0, "tick_m1": 0, "tick_m2": 0, "tick_m3": 0, "hh_csr_m1": 0.0, "hh_csr_m2": 0.0, "hh_csr_m3": 0.0, "fr_trim": 0.0, "nota": ""}];
+
+const SEG_CFG = {
+  'Estratégico · alta dedicación':{cls:'pill-teal',color:'#1D9E75',cardBorder:'#1D9E75',desc:'Alta facturación + alto esfuerzo evolutivo'},
+  'Estratégico · baja dedicación':{cls:'pill-amber',color:'#BA7517',cardBorder:'#BA7517',desc:'Alta facturación, poca actividad evolutiva'},
+  'Alto valor · sin evolutivo':{cls:'pill-coral',color:'#D85A30',cardBorder:'#D85A30',desc:'Facturan bien pero 0 bitácoras Q1'},
+  'Alta dedicación · bajo valor':{cls:'pill-violet',color:'#7F77DD',cardBorder:'#7F77DD',desc:'Mucho esfuerzo, baja facturación'},
+  'Estándar':{cls:'pill-gray',color:'#888780',cardBorder:'var(--border-m)',desc:'Facturación y esfuerzo normales'},
+  'En producción reciente':{cls:'pill-blue',color:'#185FA5',cardBorder:'#185FA5',desc:'Salió a producción recientemente — sin actividad evolutiva esperada aún'},
+  'En habilitación':{cls:'pill-amber',color:'#BA7517',cardBorder:'#BA7517',desc:'En proceso de habilitación — actividad Q1 no corresponde a servicio regular'},
+};
+
+function fU(n){return n>=1000?'$'+Math.round(n/1000)+'k':'$'+Math.round(n)}
+function fN(n,d=1){return Number(n).toFixed(d)}
+function sPill(s){const c=SEG_CFG[s]||{cls:'pill-gray'};return `<span class="pill ${c.cls}">${s}</span>`}
+function tPill(t){return t==='Chilcano'?`<span class="pill pill-blue">Chilcano</span>`:t==='Mistura'?`<span class="pill pill-violet">Mistura</span>`:`<span class="pill pill-gray">${t}</span>`}
+function slaColor(p){return p>=80?'var(--teal)':p>=60?'var(--amber)':'var(--coral)'}
+
+function showTab(n,b){
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  document.getElementById('pane-'+n).classList.add('active');b.classList.add('active');
+}
+
+// ── SVG helpers ──
+function svgBarH(el,labels,values,colors,opts={}){
+  const rH=32,pad={t:8,r:65,b:12,l:opts.l||170};
+  const H=labels.length*rH+pad.t+pad.b;
+  const W=el.clientWidth||700,cw=W-pad.l-pad.r;
+  const maxV=Math.max(...values,1),bh=18;
+  let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="font-family:DM Sans,sans-serif;display:block;width:100%;height:${H}px">`;
+  labels.forEach((l,i)=>{
+    const y=pad.t+i*rH,bw=Math.max((values[i]/maxV)*cw,2);
+    const col=Array.isArray(colors)?colors[i]:(colors||'#378ADD');
+    const lb=String(l).length>24?String(l).slice(0,23)+'…':String(l);
+    s+=`<text x="${pad.l-6}" y="${y+bh/2+4}" text-anchor="end" font-size="11" fill="#5F5E5A">${lb}</text>`;
+    s+=`<rect x="${pad.l}" y="${y}" width="${bw}" height="${bh}" fill="${col}" rx="3"/>`;
+    s+=`<text x="${pad.l+bw+5}" y="${y+bh/2+4}" font-size="11" fill="#5F5E5A" font-weight="500">${typeof values[i]==='number'&&values[i]%1!==0?fN(values[i]):Math.round(values[i])}</text>`;
+  });
+  s+='</svg>';
+  el.style.height=H+'px';el.style.overflow='visible';el.innerHTML=s;
+}
+
+function svgStackedH(el,labels,datasets,opts={}){
+  const rH=34,pad={t:8,r:20,b:12,l:opts.l||170};
+  const H=labels.length*rH+pad.t+pad.b;
+  const W=el.clientWidth||700,cw=W-pad.l-pad.r;
+  const totals=labels.map((_,i)=>datasets.reduce((s,d)=>s+(d.data[i]||0),0));
+  const maxV=Math.max(...totals,1),bh=20;
+  let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="font-family:DM Sans,sans-serif;display:block;width:100%;height:${H}px">`;
+  labels.forEach((l,i)=>{
+    const y=pad.t+i*rH;
+    const lb=String(l).length>24?String(l).slice(0,23)+'…':String(l);
+    s+=`<text x="${pad.l-6}" y="${y+bh/2+4}" text-anchor="end" font-size="11" fill="#5F5E5A">${lb}</text>`;
+    let xOff=pad.l;
+    datasets.forEach(d=>{
+      const v=d.data[i]||0;
+      const bw=Math.max((v/maxV)*cw,v>0?2:0);
+      if(bw>0) s+=`<rect x="${xOff}" y="${y}" width="${bw}" height="${bh}" fill="${d.color}" rx="2" opacity="0.85"/>`;
+      xOff+=bw;
+    });
+    s+=`<text x="${xOff+4}" y="${y+bh/2+4}" font-size="11" fill="#9A9890">${Math.round(totals[i])}</text>`;
+  });
+  s+='</svg>';
+  el.style.height=H+'px';el.style.overflow='visible';el.innerHTML=s;
+}
+
+function svgDonut(el,labels,values,colors){
+  const W=Math.min(el.clientWidth||320,320),H=210,cx=W/2,cy=88,r=68,ri=44;
+  const tot=values.reduce((s,v)=>s+v,0)||1;
+  let ang=-Math.PI/2;
+  let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="font-family:DM Sans,sans-serif">`;
+  values.forEach((v,i)=>{
+    const sw=(v/tot)*2*Math.PI;
+    const x1=cx+r*Math.cos(ang),y1=cy+r*Math.sin(ang);
+    const x2=cx+r*Math.cos(ang+sw),y2=cy+r*Math.sin(ang+sw);
+    const ix1=cx+ri*Math.cos(ang),iy1=cy+ri*Math.sin(ang);
+    const ix2=cx+ri*Math.cos(ang+sw),iy2=cy+ri*Math.sin(ang+sw);
+    const lg=sw>Math.PI?1:0;
+    s+=`<path d="M${x1},${y1} A${r},${r} 0 ${lg},1 ${x2},${y2} L${ix2},${iy2} A${ri},${ri} 0 ${lg},0 ${ix1},${iy1} Z" fill="${colors[i]}" stroke="white" stroke-width="2"/>`;
+    ang+=sw;
+  });
+  labels.forEach((l,i)=>{
+    const row=Math.floor(i/2),col=i%2;
+    const lx=col===0?8:W/2,ly=H-50+row*18;
+    const pct=Math.round(values[i]/tot*100);
+    s+=`<rect x="${lx}" y="${ly}" width="9" height="9" fill="${colors[i]}" rx="2"/>`;
+    s+=`<text x="${lx+13}" y="${ly+8}" font-size="10" fill="#5F5E5A">${l} ${pct}%</text>`;
+  });
+  s+='</svg>';el.innerHTML=s;
+}
+
+function svgBar(el,labels,datasets,opts={}){
+  const W=el.clientWidth||700,H=opts.h||220;
+  const pad={t:20,r:20,b:opts.b||60,l:45};
+  const cw=W-pad.l-pad.r,ch=H-pad.t-pad.b;
+  const nG=labels.length,nD=datasets.length;
+  const allV=datasets.flatMap(d=>d.data).filter(v=>v!=null&&!isNaN(v));
+  const maxV=Math.max(...allV,1);
+  const gw=cw/nG,bw=gw*0.7/nD,gap=gw*0.15;
+  let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="font-family:DM Sans,sans-serif">`;
+  for(let i=0;i<=4;i++){
+    const y=pad.t+ch-(ch*i/4);
+    s+=`<line x1="${pad.l}" y1="${y}" x2="${pad.l+cw}" y2="${y}" stroke="rgba(0,0,0,0.07)" stroke-width="1"/>`;
+    s+=`<text x="${pad.l-5}" y="${y+4}" text-anchor="end" font-size="10" fill="#9A9890">${Math.round(maxV*i/4)}</text>`;
+  }
+  datasets.forEach((ds,di)=>{
+    ds.data.forEach((v,gi)=>{
+      if(!v) return;
+      const x=pad.l+gi*gw+gap+di*bw;
+      const bh=Math.max((v/maxV)*ch,1);
+      const y=pad.t+ch-bh;
+      s+=`<rect x="${x}" y="${y}" width="${bw-1}" height="${bh}" fill="${ds.color}" rx="3"/>`;
+    });
+  });
+  labels.forEach((l,i)=>{
+    const x=pad.l+i*gw+gw/2;
+    const words=String(l).split(' ');
+    words.slice(0,2).forEach((w,wi)=>{
+      s+=`<text x="${x}" y="${H-pad.b+13+wi*12}" text-anchor="middle" font-size="10" fill="#9A9890">${w}</text>`;
+    });
+  });
+  s+=`<line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${pad.t+ch}" stroke="rgba(0,0,0,0.1)"/>`;
+  s+=`<line x1="${pad.l}" y1="${pad.t+ch}" x2="${pad.l+cw}" y2="${pad.t+ch}" stroke="rgba(0,0,0,0.1)"/>`;
+  s+='</svg>';el.innerHTML=s;
+}
+
+// ── GENERAL ──
+function renderGeneral(){
+  const top15=DATA.filter(d=>d.hh_total>0||d.total>5000).sort((a,b)=>b.hh_total-a.hh_total).slice(0,15);
+  setTimeout(()=>{
+    svgStackedH(document.getElementById('ch-top15'),
+      top15.map(d=>d.cliente),
+      [{data:top15.map(d=>d.hh_evol),color:'#185FA5'},{data:top15.map(d=>d.hh_soporte),color:'#1D9E75'}],
+      {l:200}
+    );
+    // composición %
+    const topA=DATA.filter(d=>d.hh_total>=10).sort((a,b)=>b.hh_total-a.hh_total).slice(0,15);
+    const pctEvol=topA.map(d=>d.hh_total>0?Math.round(d.hh_evol/d.hh_total*100):0);
+    svgBarH(document.getElementById('ch-composicion'),
+      topA.map(d=>d.cliente),
+      pctEvol,
+      pctEvol.map(p=>p>=70?'#185FA5':p>=40?'#7F77DD':'#1D9E75'),
+      {l:200}
+    );
+    const kamF={Zinthia:0,Paola:0};
+    DATA.forEach(d=>{if(d.kam.includes('Zinthia'))kamF.Zinthia+=d.total;else if(d.kam.includes('Paola'))kamF.Paola+=d.total;});
+    svgDonut(document.getElementById('ch-kam'),['Zinthia (Mistura)','Paola (Chilcano)'],[kamF.Zinthia,kamF.Paola],['#7F77DD','#D4537E']);
+    const teamHH={Mistura:{evol:0,sop:0},Chilcano:{evol:0,sop:0}};
+    DATA.forEach(d=>{if(teamHH[d.team]){teamHH[d.team].evol+=d.hh_evol;teamHH[d.team].sop+=d.hh_soporte;}});
+    svgBar(document.getElementById('ch-team-hh'),['Mistura','Chilcano'],[
+      {data:[Math.round(teamHH.Mistura.evol),Math.round(teamHH.Chilcano.evol)],color:'#185FA5'},
+      {data:[Math.round(teamHH.Mistura.sop),Math.round(teamHH.Chilcano.sop)],color:'#1D9E75'}
+    ],{h:200});
+  },60);
+}
+
+// ── SEGMENTOS ──
+function renderSegmentos(){
+  const segs={};
+  DATA.forEach(d=>{segs[d.segmento]=segs[d.segmento]||[];segs[d.segmento].push(d);});
+  const order=['Estratégico · alta dedicación','Estratégico · baja dedicación','Alto valor · sin evolutivo','Alta dedicación · bajo valor','Estándar'];
+  const grid=document.getElementById('seg-grid');grid.innerHTML='';
+  order.forEach(sg=>{
+    const items=segs[sg]||[];const cfg=SEG_CFG[sg];
+    const totF=items.reduce((s,d)=>s+d.total,0);
+    const div=document.createElement('div');div.className='seg-card';
+    div.style.borderLeftColor=cfg.cardBorder;
+    div.innerHTML=`<div class="seg-num" style="color:${cfg.color}">${items.length}</div><div class="seg-title">${sg}</div><div class="seg-desc">${cfg.desc}</div><div style="font-size:11px;color:var(--hint);margin-top:4px">${fU(totF)} · ${items.slice(0,2).map(d=>d.cliente.split(' ')[0]).join(', ')}${items.length>2?'…':''}</div>`;
+    div.onclick=()=>filterSegTable(sg);grid.appendChild(div);
+  });
+  const fb=document.getElementById('seg-filters');
+  fb.innerHTML=`<button class="flt on" onclick="filterSegTable('all',this)">Todos</button>`+order.map(s=>`<button class="flt" onclick="filterSegTable('${s}',this)">${s}</button>`).join('');
+  renderSegTable('all');
+}
+function filterSegTable(sg,btn){
+  if(btn){document.querySelectorAll('#seg-filters .flt').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
+  renderSegTable(sg);
+}
+function renderSegTable(sg){
+  const rows=sg==='all'?DATA:DATA.filter(d=>d.segmento===sg);
+  document.getElementById('seg-tbody').innerHTML=rows.map(d=>`<tr>
+    <td>${d.cliente}</td><td>${d.kam.split(' ')[0]}</td><td>${d.sdm}</td>
+    <td class="n hi">${fU(d.total)}</td><td class="n">${d.bitacoras||'—'}</td>
+    <td class="n">${d.hh_evol||'—'}</td><td class="n">${d.tickets||'—'}</td>
+    <td class="n">${d.hh_soporte||'—'}</td><td class="n hi">${d.hh_total||'—'}</td>
+    <td class="n" style="color:${slaColor(d.sla_pct)}">${d.sla_pct>0?d.sla_pct+'%':'—'}</td>
+    <td>${sPill(d.segmento)}</td></tr>`).join('');
+}
+
+// ── CARTERA ──
+function renderCartera(){
+  document.getElementById('cartera-tbody').innerHTML=DATA.map((d,i)=>{
+    const pctEvol=d.hh_total>0?Math.round(d.hh_evol/d.hh_total*100):0;
+    return `<tr data-team="${d.team}" data-sdm="${d.sdm}">
+      <td style="color:var(--hint);font-size:11px">${i+1}</td><td>${d.cliente}</td>
+      <td>${tPill(d.team)}</td><td style="font-size:11px">${d.sdm}</td>
+      <td class="n hi">${fU(d.total)}</td><td class="n">${d.bitacoras||'—'}</td>
+      <td class="n">${d.hh_evol||'—'}</td><td class="n">${d.tickets||'—'}</td>
+      <td class="n">${d.hh_soporte||'—'}</td><td class="n" style="font-weight:600">${d.hh_total||'—'}</td>
+      <td class="n">${d.hh_total>0?pctEvol+'%':'—'}</td>
+      <td class="n" style="color:${slaColor(d.sla_pct)}">${d.sla_pct>0?d.sla_pct+'%':'—'}</td>
+      <td class="n ${d.usd_por_hh_total>0&&d.usd_por_hh_total<80?'warn':''}">${d.usd_por_hh_total>0?fU(d.usd_por_hh_total):'—'}</td>
+      <td>${sPill(d.segmento)}</td></tr>`;
+  }).join('');
+}
+function filterCartera(val,btn){
+  document.querySelectorAll('.flt-bar .flt').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
+  document.querySelectorAll('#cartera-tbody tr').forEach(tr=>{
+    tr.style.display=(val==='all'||tr.dataset.team===val||tr.dataset.sdm===val)?'':'none';
+  });
+}
+
+// ── POR CLIENTE ──
+function renderClienteSelect(){
+  const sel=document.getElementById('cli-select');
+  sel.innerHTML=DATA.map(d=>`<option value="${d.cliente}">${d.cliente}</option>`).join('');
+  renderCliente(DATA[0].cliente);
+}
+function renderCliente(nombre){
+  const d=DATA.find(x=>x.cliente===nombre);if(!d) return;
+  const pctEvol=d.hh_total>0?Math.round(d.hh_evol/d.hh_total*100):0;
+  document.getElementById('cli-detail').innerHTML=`
+  <div class="cli-card">
+    <div class="cli-name">${d.cliente}</div>
+    <div class="cli-meta">
+      ${tPill(d.team)} <span>KAM: <strong>${d.kam}</strong></span> <span>SDM: <strong>${d.sdm}</strong></span> ${sPill(d.segmento)}
+    </div>
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-lbl">Facturación mensual</div><div class="kpi-val" style="color:var(--amber)">${fU(d.total)}</div><div class="kpi-sub">USD</div></div>
+      <div class="kpi"><div class="kpi-lbl">HH totales Q1</div><div class="kpi-val" style="color:var(--blue)">${d.hh_total}</div><div class="kpi-sub">evol. + soporte</div></div>
+      <div class="kpi"><div class="kpi-lbl">% evolutivo</div><div class="kpi-val">${d.hh_total>0?pctEvol+'%':'—'}</div><div class="kpi-sub">del servicio total</div></div>
+      <div class="kpi"><div class="kpi-lbl">USD por HH total</div><div class="kpi-val" style="color:${d.usd_por_hh_total>0&&d.usd_por_hh_total<80?'var(--coral)':'var(--text)'}">${d.usd_por_hh_total>0?fU(d.usd_por_hh_total):'—'}</div><div class="kpi-sub">eficiencia</div></div>
+    </div>
+    <div class="dim-row">
+      <div class="dim-box evol">
+        <div class="dim-title">📋 Servicio evolutivo</div>
+        <div class="dim-stat"><span class="dim-stat-lbl">Bitácoras Q1</span><span class="dim-stat-val">${d.bitacoras}</span></div>
+        <div class="dim-stat"><span class="dim-stat-lbl">HH evolutivas</span><span class="dim-stat-val">${d.hh_evol}</span></div>
+        <div class="dim-stat"><span class="dim-stat-lbl">SLA entrega prom.</span><span class="dim-stat-val">${d.sla_evol>0?d.sla_evol+'d':'—'}</span></div>
+        <div class="dim-stat"><span class="dim-stat-lbl">HH promedio/bit.</span><span class="dim-stat-val">${d.bitacoras>0?fN(d.hh_evol/d.bitacoras):'—'}</span></div>
+        <div class="dim-stat"><span class="dim-stat-lbl">Ene · Feb · Mar</span><span class="dim-stat-val">${d.bit_m1}·${d.bit_m2}·${d.bit_m3}</span></div>
+      </div>
+      <div class="dim-box soporte">
+        <div class="dim-title">🛠 Soporte CSR</div>
+        <div class="dim-stat"><span class="dim-stat-lbl">Tickets Q1</span><span class="dim-stat-val">${d.tickets}</span></div>
+        <div class="dim-stat"><span class="dim-stat-lbl">HH de soporte</span><span class="dim-stat-val">${d.hh_soporte}</span></div>
+        <div class="dim-stat"><span class="dim-stat-lbl">Incidentes</span><span class="dim-stat-val">${d.incidentes}</span></div>
+        <div class="dim-stat"><span class="dim-stat-lbl">Requerimientos</span><span class="dim-stat-val">${d.reqs_csr}</span></div>
+        <div class="dim-stat"><span class="dim-stat-lbl">SLA &lt;24h</span><span class="dim-stat-val" style="color:${slaColor(d.sla_pct)}">${d.sla_pct>0?d.sla_pct+'%':'—'}</span></div>
+        <div class="dim-stat"><span class="dim-stat-lbl">T. resol. prom.</span><span class="dim-stat-val">${d.t_resol_avg>0?fN(d.t_resol_avg)+'h':'—'}</span></div>
+        <div class="dim-stat"><span class="dim-stat-lbl">Tickets Ene·Feb·Mar</span><span class="dim-stat-val">${d.tick_m1}·${d.tick_m2}·${d.tick_m3}</span></div>
+      </div>
+      <div class="dim-box fact">
+        <div class="dim-title">💰 Facturación</div>
+        <div class="dim-stat"><span class="dim-stat-lbl">Recurrente (FR)</span><span class="dim-stat-val">${fU(d.fr)}</span></div>
+        <div class="dim-stat"><span class="dim-stat-lbl">Habilitación (HB)</span><span class="dim-stat-val" style="color:${d.hb>0?'var(--amber)':'var(--hint)'}">${d.hb>0?fU(d.hb):'—'}</span></div>
+        <div class="dim-stat"><span class="dim-stat-lbl">Total mensual</span><span class="dim-stat-val" style="color:var(--amber)">${fU(d.total)}</span></div>
+        <div class="dim-stat"><span class="dim-stat-lbl">FR trim. / HH evol.</span><span class="dim-stat-val">${d.usd_por_hh_evol>0?fU(d.usd_por_hh_evol):'—'}</span></div>
+        <div class="dim-stat"><span class="dim-stat-lbl">FR trim. / HH total</span><span class="dim-stat-val">${d.usd_por_hh_total>0?fU(d.usd_por_hh_total):'—'}</span></div>
+      </div>
+    </div>
+    ${d.bitacoras===0&&d.total>3000?`<div class="alert">⚠ <strong>Sin actividad evolutiva:</strong> Factura ${fU(d.total)}/mes pero no recibió bitácoras en Q1. Riesgo de percepción de bajo valor.</div>`:''}
+    ${d.sla_pct>0&&d.sla_pct<60?`<div class="alert">⚠ <strong>SLA CSR bajo:</strong> Solo ${d.sla_pct}% de tickets resueltos en &lt;24h. Impacta percepción de calidad del servicio.</div>`:''}
+    ${d.hb>0?`<div class="info-box">Tiene <strong>${fU(d.hb)}</strong> en habilitación activa. Al activarse, la facturación recurrente subirá a <strong>${fU(d.fr+d.hb)}</strong>/mes.</div>`:''}
+  </div>`;
+}
+
+// ── SOPORTE CSR ──
+function renderSoporte(){
+  const top20=DATA.filter(d=>d.tickets>0).sort((a,b)=>b.tickets-a.tickets).slice(0,20);
+  const topHH=DATA.filter(d=>d.hh_soporte>0).sort((a,b)=>b.hh_soporte-a.hh_soporte).slice(0,15);
+  const topSLA=DATA.filter(d=>d.sla_pct>0&&d.tickets>=5).sort((a,b)=>b.tickets-a.tickets).slice(0,20);
+  setTimeout(()=>{
+    svgBarH(document.getElementById('ch-csr-tickets'),top20.map(d=>d.cliente),top20.map(d=>d.tickets),top20.map(d=>d.incidentes/d.tickets>0.3?'#D85A30':'#1D9E75'),{l:200});
+    svgBarH(document.getElementById('ch-sla-csr'),topSLA.map(d=>d.cliente),topSLA.map(d=>d.sla_pct),topSLA.map(d=>slaColor(d.sla_pct)),{l:200});
+    svgBarH(document.getElementById('ch-hh-csr'),topHH.map(d=>d.cliente),topHH.map(d=>d.hh_soporte),topHH.map(d=>d.hh_soporte>30?'#D85A30':d.hh_soporte>15?'#BA7517':'#1D9E75'),{l:200});
+    const mistura=DATA.filter(d=>d.team==='Mistura');const chilcano=DATA.filter(d=>d.team==='Chilcano');
+    const mM=[1,2,3].map(m=>mistura.reduce((s,d)=>s+(d[`tick_m${m}`]||0),0));
+    const mC=[1,2,3].map(m=>chilcano.reduce((s,d)=>s+(d[`tick_m${m}`]||0),0));
+    svgBar(document.getElementById('ch-csr-mes'),['Enero','Febrero','Marzo'],[{data:mM,color:'#7F77DD'},{data:mC,color:'#D4537E'}],{h:200});
+  },80);
+}
+
+// ── ALERTAS ──
+function renderAlertas(){
+  // Baja dedicación evolutiva en clientes de alto valor
+  const bajaEvol=DATA.filter(d=>d.total>=5000&&d.hh_evol<10).sort((a,b)=>b.total-a.total);
+  document.getElementById('alert-baja-evol').innerHTML=(bajaEvol.length?
+    `<div class="alert" style="margin-bottom:.75rem"><strong>${bajaEvol.length} clientes</strong> de alto valor con menos de 10 HH evolutivas en Q1.</div>`:'')
+    +`<table class="tbl"><thead><tr><th>Cliente</th><th>SDM</th><th style="text-align:right">USD/mes</th><th style="text-align:right">HH evol.</th><th style="text-align:right">Tickets CSR</th><th>Acción</th></tr></thead><tbody>${
+      bajaEvol.map(d=>`<tr><td>${d.cliente}</td><td>${d.sdm}</td><td class="n hi">${fU(d.total)}</td><td class="n warn">${d.hh_evol||0}</td><td class="n">${d.tickets}</td><td style="font-size:11px;color:var(--muted)">${d.tickets>20?'Solo recibe soporte — activar evolutivo':'Agendar sesión estratégica con KAM'}</td></tr>`).join('')
+    }</tbody></table>`;
+
+  // Alta dedicación bajo retorno
+  const altaDed=DATA.filter(d=>d.hh_total>=30&&d.usd_por_hh_total>0&&d.usd_por_hh_total<100).sort((a,b)=>a.usd_por_hh_total-b.usd_por_hh_total);
+  document.getElementById('alert-alta-ded').innerHTML=`<table class="tbl"><thead><tr><th>Cliente</th><th style="text-align:right">USD/mes</th><th style="text-align:right">HH total</th><th style="text-align:right">USD/HH</th><th>Señal</th></tr></thead><tbody>${
+    altaDed.map(d=>`<tr><td>${d.cliente}</td><td class="n">${fU(d.total)}</td><td class="n">${d.hh_total}</td><td class="n warn">${fU(d.usd_por_hh_total)}</td><td>${d.usd_por_hh_total<50?`<span class="pill pill-coral">Revisar urgente</span>`:`<span class="pill pill-amber">Oportunidad upsell</span>`}</td></tr>`).join('')
+  }</tbody></table>`;
+
+  // SLA bajo
+  const slaBajo=DATA.filter(d=>d.sla_pct>0&&d.sla_pct<65&&d.tickets>=5).sort((a,b)=>a.sla_pct-b.sla_pct);
+  document.getElementById('alert-sla').innerHTML=`<table class="tbl"><thead><tr><th>Cliente</th><th>SDM</th><th style="text-align:right">Tickets</th><th style="text-align:right">SLA &lt;24h</th><th style="text-align:right">T. resol. prom.</th></tr></thead><tbody>${
+    slaBajo.map(d=>`<tr><td>${d.cliente}</td><td>${d.sdm}</td><td class="n">${d.tickets}</td><td class="n warn">${d.sla_pct}%</td><td class="n amber">${fN(d.t_resol_avg)}h</td></tr>`).join('')
+  }</tbody></table>`;
+
+  // HB activas
+  const conHB=DATA.filter(d=>d.hb>0).sort((a,b)=>b.hb-a.hb);
+  document.getElementById('alert-hb').innerHTML=`<table class="tbl"><thead><tr><th>Cliente</th><th>KAM</th><th style="text-align:right">HB USD</th><th style="text-align:right">FR USD</th><th>Estado evolutivo</th></tr></thead><tbody>${
+    conHB.map(d=>`<tr><td>${d.cliente}</td><td>${d.kam.split(' ')[0]}</td><td class="n amber">${fU(d.hb)}</td><td class="n">${fU(d.fr)}</td><td>${d.bitacoras===0?`<span class="pill pill-amber">Sin evolutivo aún</span>`:`<span class="pill pill-teal">Con evolutivo activo</span>`}</td></tr>`).join('')
+  }</tbody></table>`;
+}
+
+// ── INIT ──
+renderGeneral();renderSegmentos();renderCartera();renderClienteSelect();renderSoporte();renderAlertas();
+</script>
+</body>
+</html>
