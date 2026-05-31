@@ -6,7 +6,18 @@
 <title>CrossNet Perú — Valor al Cliente</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--blue:#185FA5;--blue-l:#378ADD;--blue-pale:#E6F1FB;--teal:#1D9E75;--teal-pale:#E2F5EE;--coral:#D85A30;--coral-pale:#FAECE7;--amber:#BA7517;--amber-pale:#FDF0DC;--violet:#7F77DD;--violet-pale:#EEEDF9;--pink:#D4537E;--text:#18180E;--muted:#5F5E5A;--hint:#9A9890;--bg:#F5F4EF;--surface:#fff;--border:rgba(0,0,0,0.08);--border-m:rgba(0,0,0,0.13);--r:10px;--r-lg:14px}
+:root{
+  --blue:#4A9EE0;--blue-l:#6BB5F0;--blue-pale:#0D2A45;
+  --teal:#2DC98A;--teal-pale:#0A2E1F;
+  --coral:#F07050;--coral-pale:#3A1A10;
+  --amber:#E0A030;--amber-pale:#352500;
+  --violet:#9B94F0;--violet-pale:#1E1A40;
+  --pink:#E06090;
+  --text:#F0EEE8;--muted:#A8A69E;--hint:#6A6860;
+  --bg:#0F1117;--surface:#181C24;
+  --border:rgba(255,255,255,0.08);--border-m:rgba(255,255,255,0.13);
+  --r:10px;--r-lg:14px;
+}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;min-height:100vh}
 /* HEADER */
@@ -33,7 +44,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
 .src-steps{font-size:12px;color:var(--hint);margin-bottom:.5rem;line-height:1.6}
 .src-steps strong{color:var(--muted)}
 kbd{background:var(--bg);padding:1px 5px;border-radius:3px;border:1px solid var(--border-m);font-family:'DM Mono',monospace;font-size:11px}
-textarea{width:100%;height:100px;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);background:var(--bg);border:1px solid var(--border-m);border-radius:var(--r);padding:.65rem;resize:vertical;outline:none}
+textarea{width:100%;height:100px;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);background:#0F1117;border:1px solid var(--border-m);border-radius:var(--r);padding:.65rem;resize:vertical;outline:none;color:var(--muted)}
 textarea:focus{border-color:var(--blue-l)}
 .src-status{font-size:12px;margin-top:.4rem;min-height:18px}
 .btn-primary{padding:10px 28px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;display:block;width:100%;margin-top:.5rem}
@@ -94,6 +105,13 @@ textarea:focus{border-color:var(--blue-l)}
 .footer{margin-top:3rem;border-top:1px solid var(--border);padding-top:1.25rem;display:flex;align-items:center;justify-content:space-between}
 .footer-l{font-size:12px;color:var(--hint)}.footer-logo{height:18px;opacity:.35}
 @media(max-width:700px){.grid,.dim-row{grid-template-columns:1fr}.box.full{grid-column:1}.container{padding:1rem 1rem 3rem}.hdr{padding:0 1rem}.metrics{grid-template-columns:repeat(2,1fr)}}
+
+* { scrollbar-width: thin; scrollbar-color: #2A2E38 #0F1117; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #0F1117; }
+::-webkit-scrollbar-thumb { background: #2A2E38; border-radius: 3px; }
+.hdr-logo, .footer-logo { filter: brightness(0) invert(1); opacity: 0.85; }
+input, select, textarea { color-scheme: dark; }
 </style>
 </head>
 <body>
@@ -230,7 +248,7 @@ textarea:focus{border-color:var(--blue-l)}
   <div id="pane-cliente" class="tab-pane">
     <div style="margin-bottom:1rem">
       <label style="font-size:12px;color:var(--hint);font-weight:500;display:block;margin-bottom:4px">Selecciona un cliente:</label>
-      <select id="cli-select" onchange="renderCliente(this.value)" style="font-size:13px;padding:6px 12px;border:1px solid var(--border-m);border-radius:var(--r);background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;width:100%;max-width:400px"></select>
+      <select id="cli-select" onchange="renderCliente(this.value)" style="font-size:13px;padding:6px 12px;border:1px solid var(--border-m);border-radius:var(--r);background:#181C24;color:var(--text);font-family:'DM Sans',sans-serif;width:100%;max-width:400px"></select>
     </div>
     <div id="cli-detail"></div>
   </div>
@@ -622,14 +640,14 @@ function svgBarH(el,labels,values,colors,opts={}){
   const H=labels.length*rH+pad.t+pad.b;
   const W=el.clientWidth||700,cw=W-pad.l-pad.r;
   const maxV=Math.max(...values,1),bh=18;
-  let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="font-family:DM Sans,sans-serif;display:block;width:100%;height:${H}px">`;
+  let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="background:transparent;font-family:DM Sans,sans-serif;display:block;width:100%;height:${H}px">`;
   labels.forEach((l,i)=>{
     const y=pad.t+i*rH,bw=Math.max((values[i]/maxV)*cw,2);
     const col=Array.isArray(colors)?colors[i]:(colors||'#378ADD');
     const lb=String(l).length>24?String(l).slice(0,23)+'…':String(l);
-    s+=`<text x="${pad.l-6}" y="${y+bh/2+4}" text-anchor="end" font-size="11" fill="#5F5E5A">${lb}</text>`;
+    s+=`<text x="${pad.l-6}" y="${y+bh/2+4}" text-anchor="end" font-size="11" fill="#A8A69E">${lb}</text>`;
     s+=`<rect x="${pad.l}" y="${y}" width="${bw}" height="${bh}" fill="${col}" rx="3"/>`;
-    s+=`<text x="${pad.l+bw+5}" y="${y+bh/2+4}" font-size="11" fill="#5F5E5A" font-weight="500">${typeof values[i]==='number'&&values[i]%1!==0?fN(values[i],1):Math.round(values[i])}</text>`;
+    s+=`<text x="${pad.l+bw+5}" y="${y+bh/2+4}" font-size="11" fill="#A8A69E" font-weight="500">${typeof values[i]==='number'&&values[i]%1!==0?fN(values[i],1):Math.round(values[i])}</text>`;
   });
   s+='</svg>';
   el.style.height=H+'px';el.style.overflow='visible';el.innerHTML=s;
@@ -641,11 +659,11 @@ function svgStackedH(el,labels,datasets,opts={}){
   const W=el.clientWidth||700,cw=W-pad.l-pad.r;
   const totals=labels.map((_,i)=>datasets.reduce((s,d)=>s+(d.data[i]||0),0));
   const maxV=Math.max(...totals,1),bh=20;
-  let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="font-family:DM Sans,sans-serif;display:block;width:100%;height:${H}px">`;
+  let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="background:transparent;font-family:DM Sans,sans-serif;display:block;width:100%;height:${H}px">`;
   labels.forEach((l,i)=>{
     const y=pad.t+i*rH;
     const lb=String(l).length>24?String(l).slice(0,23)+'…':String(l);
-    s+=`<text x="${pad.l-6}" y="${y+bh/2+4}" text-anchor="end" font-size="11" fill="#5F5E5A">${lb}</text>`;
+    s+=`<text x="${pad.l-6}" y="${y+bh/2+4}" text-anchor="end" font-size="11" fill="#A8A69E">${lb}</text>`;
     let xOff=pad.l;
     datasets.forEach(d=>{
       const v=d.data[i]||0;
@@ -653,7 +671,7 @@ function svgStackedH(el,labels,datasets,opts={}){
       if(bw>0) s+=`<rect x="${xOff}" y="${y}" width="${bw}" height="${bh}" fill="${d.color}" rx="2" opacity="0.85"/>`;
       xOff+=bw;
     });
-    s+=`<text x="${xOff+4}" y="${y+bh/2+4}" font-size="11" fill="#9A9890">${Math.round(totals[i])}</text>`;
+    s+=`<text x="${xOff+4}" y="${y+bh/2+4}" font-size="11" fill="#6A6860">${Math.round(totals[i])}</text>`;
   });
   s+='</svg>';el.style.height=H+'px';el.style.overflow='visible';el.innerHTML=s;
 }
@@ -662,7 +680,7 @@ function svgDonut(el,labels,values,colors){
   const W=Math.min(el.clientWidth||320,320),H=210,cx=W/2,cy=88,r=68,ri=44;
   const tot=values.reduce((s,v)=>s+v,0)||1;
   let ang=-Math.PI/2;
-  let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="font-family:DM Sans,sans-serif">`;
+  let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="background:transparent;font-family:DM Sans,sans-serif">`;
   values.forEach((v,i)=>{
     const sw=(v/tot)*2*Math.PI;
     const x1=cx+r*Math.cos(ang),y1=cy+r*Math.sin(ang);
@@ -670,7 +688,7 @@ function svgDonut(el,labels,values,colors){
     const ix1=cx+ri*Math.cos(ang),iy1=cy+ri*Math.sin(ang);
     const ix2=cx+ri*Math.cos(ang+sw),iy2=cy+ri*Math.sin(ang+sw);
     const lg=sw>Math.PI?1:0;
-    s+=`<path d="M${x1},${y1} A${r},${r} 0 ${lg},1 ${x2},${y2} L${ix2},${iy2} A${ri},${ri} 0 ${lg},0 ${ix1},${iy1} Z" fill="${colors[i]}" stroke="white" stroke-width="2"/>`;
+    s+=`<path d="M${x1},${y1} A${r},${r} 0 ${lg},1 ${x2},${y2} L${ix2},${iy2} A${ri},${ri} 0 ${lg},0 ${ix1},${iy1} Z" fill="${colors[i]}" stroke="#181C24" stroke-width="2"/>`;
     ang+=sw;
   });
   labels.forEach((l,i)=>{
@@ -678,7 +696,7 @@ function svgDonut(el,labels,values,colors){
     const lx=col===0?8:W/2,ly=H-50+row*18;
     const pct=Math.round(values[i]/tot*100);
     s+=`<rect x="${lx}" y="${ly}" width="9" height="9" fill="${colors[i]}" rx="2"/>`;
-    s+=`<text x="${lx+13}" y="${ly+8}" font-size="10" fill="#5F5E5A">${l} ${pct}%</text>`;
+    s+=`<text x="${lx+13}" y="${ly+8}" font-size="10" fill="#A8A69E">${l} ${pct}%</text>`;
   });
   s+='</svg>';el.innerHTML=s;
 }
@@ -690,11 +708,11 @@ function svgBar(el,labels,datasets,opts={}){
   const allV=datasets.flatMap(d=>d.data).filter(v=>v!=null&&!isNaN(v));
   const maxV=Math.max(...allV,1);
   const gw=cw/labels.length,nD=datasets.length,bw=gw*0.7/nD,gap=gw*0.15;
-  let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="font-family:DM Sans,sans-serif">`;
+  let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="background:transparent;font-family:DM Sans,sans-serif">`;
   for(let i=0;i<=4;i++){
     const y=pad.t+ch-(ch*i/4);
-    s+=`<line x1="${pad.l}" y1="${y}" x2="${pad.l+cw}" y2="${y}" stroke="rgba(0,0,0,0.07)" stroke-width="1"/>`;
-    s+=`<text x="${pad.l-5}" y="${y+4}" text-anchor="end" font-size="10" fill="#9A9890">${Math.round(maxV*i/4)}</text>`;
+    s+=`<line x1="${pad.l}" y1="${y}" x2="${pad.l+cw}" y2="${y}" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>`;
+    s+=`<text x="${pad.l-5}" y="${y+4}" text-anchor="end" font-size="10" fill="#6A6860">${Math.round(maxV*i/4)}</text>`;
   }
   datasets.forEach((ds,di)=>{
     ds.data.forEach((v,gi)=>{
@@ -706,10 +724,10 @@ function svgBar(el,labels,datasets,opts={}){
   });
   labels.forEach((l,i)=>{
     const x=pad.l+i*gw+gw/2;
-    s+=`<text x="${x}" y="${H-pad.b+13}" text-anchor="middle" font-size="11" fill="#9A9890">${l}</text>`;
+    s+=`<text x="${x}" y="${H-pad.b+13}" text-anchor="middle" font-size="11" fill="#6A6860">${l}</text>`;
   });
-  s+=`<line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${pad.t+ch}" stroke="rgba(0,0,0,0.1)"/>`;
-  s+=`<line x1="${pad.l}" y1="${pad.t+ch}" x2="${pad.l+cw}" y2="${pad.t+ch}" stroke="rgba(0,0,0,0.1)"/>`;
+  s+=`<line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${pad.t+ch}" stroke="rgba(255,255,255,0.1)"/>`;
+  s+=`<line x1="${pad.l}" y1="${pad.t+ch}" x2="${pad.l+cw}" y2="${pad.t+ch}" stroke="rgba(255,255,255,0.1)"/>`;
   s+='</svg>';el.innerHTML=s;
 }
 
