@@ -8,14 +8,15 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --blue:#185FA5;--blue-l:#378ADD;--blue-pale:#E6F1FB;
-  --coral:#D85A30;--coral-pale:#FAECE7;
-  --teal:#1D9E75;--teal-pale:#E2F5EE;
-  --amber:#BA7517;--amber-pale:#FDF0DC;
-  --violet:#7F77DD;--violet-pale:#EEEDF9;
-  --text:#18180E;--muted:#5F5E5A;--hint:#9A9890;
-  --bg:#F5F4EF;--surface:#fff;
-  --border:rgba(0,0,0,0.08);--border-m:rgba(0,0,0,0.13);
+  --blue:#4A9EE0;--blue-l:#6BB5F0;--blue-pale:#0D2A45;
+  --teal:#2DC98A;--teal-pale:#0A2E1F;
+  --coral:#F07050;--coral-pale:#3A1A10;
+  --amber:#E0A030;--amber-pale:#352500;
+  --violet:#9B94F0;--violet-pale:#1E1A40;
+  --pink:#E06090;
+  --text:#F0EEE8;--muted:#A8A69E;--hint:#6A6860;
+  --bg:#0F1117;--surface:#181C24;
+  --border:rgba(255,255,255,0.08);--border-m:rgba(255,255,255,0.13);
   --r:10px;--r-lg:14px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -74,7 +75,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
 .paste-box h3{font-size:14px;font-weight:600;margin-bottom:6px}
 .paste-steps{font-size:12px;color:var(--hint);margin-bottom:1rem;line-height:1.7}
 kbd{background:var(--bg);padding:1px 5px;border-radius:3px;border:1px solid var(--border-m);font-family:'DM Mono',monospace;font-size:11px}
-textarea{width:100%;height:150px;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);background:var(--bg);border:1px solid var(--border-m);border-radius:var(--r);padding:.75rem;resize:vertical;outline:none}
+textarea{width:100%;height:150px;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);background:#0F1117;border:1px solid var(--border-m);border-radius:var(--r);padding:.75rem;resize:vertical;outline:none;color:var(--muted)}
 textarea:focus{border-color:var(--blue-l)}
 .btn-primary{padding:9px 22px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif}
 .btn-primary:hover{background:#1450A0}
@@ -132,6 +133,13 @@ textarea:focus{border-color:var(--blue-l)}
   .act-row{grid-template-columns:28px 1fr}
   .act-badge{display:none}
 }
+
+* { scrollbar-width: thin; scrollbar-color: #2A2E38 #0F1117; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #0F1117; }
+::-webkit-scrollbar-thumb { background: #2A2E38; border-radius: 3px; }
+.hdr-logo, .footer-logo { filter: brightness(0) invert(1); opacity: 0.85; }
+input, select, textarea { color-scheme: dark; }
 </style>
 </head>
 <body>
@@ -293,18 +301,7 @@ const CLIENT_MAP = {
   'AVLA':                         {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
   'Pluxee (Sodexo) - Perú':       {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
   'Jockey Salud':                 {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
-  'GSP - Aranwa':                 {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia'},
-  'GSP - Plan Familiar':          {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia'},
-  'GSP - San Pablo Surco':        {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia'},
-  'GSP - San Gabriel':            {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia'},
-  'GSP - La Victoria':            {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia'},
-  'GSP - Santa Martha del Sur':   {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia'},
-  'GSP - San Pablo Arequipa':     {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia'},
-  'GSP - Jesús del Norte':        {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia'},
-  'GSP - San Juan Bautista':      {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia'},
-  'GSP - San Pablo Trujillo':     {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia'},
-  'GSP - Huaraz':                 {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia'},
-  'GSP - Medikcenter':            {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia'},
+  'Grupo San Pablo (GSP)':        {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia'},
   'Qalab':                        {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia'},
   'Salud Ocupacional':            {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia'},
   'Tomomedic':                    {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia'},
@@ -386,13 +383,13 @@ function svgBar(container, labels, datasets, opts={}){
   const maxV=Math.max(...allVals,1);
   const gw=cw/nG, bw=gw*0.7/nD, gap=gw*0.15;
   const yTicks=5;
-  let svg=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="font-family:DM Sans,sans-serif">`;
+  let svg=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="background:transparent;font-family:DM Sans,sans-serif">`;
   // grid
   for(let i=0;i<=yTicks;i++){
     const y=pad.t+ch-(ch*i/yTicks);
     const val=Math.round(maxV*i/yTicks);
-    svg+=`<line x1="${pad.l}" y1="${y}" x2="${pad.l+cw}" y2="${y}" stroke="rgba(0,0,0,0.07)" stroke-width="1"/>`;
-    svg+=`<text x="${pad.l-6}" y="${y+4}" text-anchor="end" font-size="10" fill="#9A9890">${val}</text>`;
+    svg+=`<line x1="${pad.l}" y1="${y}" x2="${pad.l+cw}" y2="${y}" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>`;
+    svg+=`<text x="${pad.l-6}" y="${y+4}" text-anchor="end" font-size="10" fill="#6A6860">${val}</text>`;
   }
   // bars
   datasets.forEach((ds,di)=>{
@@ -402,7 +399,7 @@ function svgBar(container, labels, datasets, opts={}){
       const bh=Math.max((v/maxV)*ch,1);
       const y=pad.t+ch-bh;
       svg+=`<rect x="${x}" y="${y}" width="${bw-1}" height="${bh}" fill="${ds.color}" rx="3"/>`;
-      if(opts.labels && nG<=6) svg+=`<text x="${x+bw/2-0.5}" y="${y-4}" text-anchor="middle" font-size="9" fill="#5F5E5A">${Math.round(v)}</text>`;
+      if(opts.labels && nG<=6) svg+=`<text x="${x+bw/2-0.5}" y="${y-4}" text-anchor="middle" font-size="9" fill="#A8A69E">${Math.round(v)}</text>`;
     });
   });
   // x labels
@@ -410,12 +407,12 @@ function svgBar(container, labels, datasets, opts={}){
     const x=pad.l+i*gw+gw/2;
     const words=String(l).split(' ');
     words.forEach((w,wi)=>{
-      svg+=`<text x="${x}" y="${H-pad.b+14+wi*12}" text-anchor="middle" font-size="10" fill="#9A9890">${w}</text>`;
+      svg+=`<text x="${x}" y="${H-pad.b+14+wi*12}" text-anchor="middle" font-size="10" fill="#6A6860">${w}</text>`;
     });
   });
   // axes
-  svg+=`<line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${pad.t+ch}" stroke="rgba(0,0,0,0.1)" stroke-width="1"/>`;
-  svg+=`<line x1="${pad.l}" y1="${pad.t+ch}" x2="${pad.l+cw}" y2="${pad.t+ch}" stroke="rgba(0,0,0,0.1)" stroke-width="1"/>`;
+  svg+=`<line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${pad.t+ch}" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>`;
+  svg+=`<line x1="${pad.l}" y1="${pad.t+ch}" x2="${pad.l+cw}" y2="${pad.t+ch}" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>`;
   svg+='</svg>';
   container.innerHTML=svg;
 }
@@ -428,15 +425,15 @@ function svgBarH(container, labels, values, colors, opts={}){
   const cw = W - pad.l - pad.r;
   const maxV = Math.max(...values, 1);
   const bh = 20;
-  let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="font-family:DM Sans,sans-serif;display:block;width:100%;height:${H}px">`;
+  let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="background:transparent;font-family:DM Sans,sans-serif;display:block;width:100%;height:${H}px">`;
   labels.forEach((l, i) => {
     const y = pad.t + i * rowH;
     const bw = Math.max((values[i] / maxV) * cw, 2);
     const col = Array.isArray(colors) ? colors[i] : (colors || '#378ADD');
     const lbl = String(l).length > 24 ? String(l).slice(0, 23) + '…' : String(l);
-    svg += `<text x="${pad.l - 8}" y="${y + bh / 2 + 4}" text-anchor="end" font-size="11" fill="#5F5E5A">${lbl}</text>`;
+    svg += `<text x="${pad.l - 8}" y="${y + bh / 2 + 4}" text-anchor="end" font-size="11" fill="#A8A69E">${lbl}</text>`;
     svg += `<rect x="${pad.l}" y="${y}" width="${bw}" height="${bh}" fill="${col}" rx="3"/>`;
-    svg += `<text x="${pad.l + bw + 6}" y="${y + bh / 2 + 4}" font-size="11" fill="#5F5E5A" font-weight="500">${Math.round(values[i] * 10) / 10}</text>`;
+    svg += `<text x="${pad.l + bw + 6}" y="${y + bh / 2 + 4}" font-size="11" fill="#A8A69E" font-weight="500">${Math.round(values[i] * 10) / 10}</text>`;
   });
   svg += '</svg>';
   container.style.height = H + 'px';
@@ -449,7 +446,7 @@ function svgDonut(container, labels, values, colors){
   const cx=W/2, cy=95, r=75, ri=48;
   const total=values.reduce((s,v)=>s+v,0)||1;
   let angle=-Math.PI/2;
-  let svg=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="font-family:DM Sans,sans-serif">`;
+  let svg=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="background:transparent;font-family:DM Sans,sans-serif">`;
   values.forEach((v,i)=>{
     const sweep=(v/total)*2*Math.PI;
     const x1=cx+r*Math.cos(angle), y1=cy+r*Math.sin(angle);
@@ -457,7 +454,7 @@ function svgDonut(container, labels, values, colors){
     const ix1=cx+ri*Math.cos(angle), iy1=cy+ri*Math.sin(angle);
     const ix2=cx+ri*Math.cos(angle+sweep), iy2=cy+ri*Math.sin(angle+sweep);
     const lg=sweep>Math.PI?1:0;
-    svg+=`<path d="M${x1},${y1} A${r},${r} 0 ${lg},1 ${x2},${y2} L${ix2},${iy2} A${ri},${ri} 0 ${lg},0 ${ix1},${iy1} Z" fill="${colors[i]}" stroke="white" stroke-width="2"/>`;
+    svg+=`<path d="M${x1},${y1} A${r},${r} 0 ${lg},1 ${x2},${y2} L${ix2},${iy2} A${ri},${ri} 0 ${lg},0 ${ix1},${iy1} Z" fill="${colors[i]}" stroke="#181C24" stroke-width="2"/>`;
     angle+=sweep;
   });
   // legend below
@@ -466,7 +463,7 @@ function svgDonut(container, labels, values, colors){
     const lx=col===0?10:W/2, ly=H-55+row*20;
     svg+=`<rect x="${lx}" y="${ly}" width="10" height="10" fill="${colors[i]}" rx="2"/>`;
     const pct=Math.round(values[i]/total*100);
-    svg+=`<text x="${lx+14}" y="${ly+9}" font-size="10" fill="#5F5E5A">${l} ${pct}%</text>`;
+    svg+=`<text x="${lx+14}" y="${ly+9}" font-size="10" fill="#A8A69E">${l} ${pct}%</text>`;
   });
   svg+='</svg>';
   container.innerHTML=svg;
@@ -479,17 +476,17 @@ function svgLine(container, labels, datasets, opts={}){
   const allVals=datasets.flatMap(d=>d.data).filter(v=>v!=null&&!isNaN(v));
   const maxV=Math.max(...allVals,1)*1.1;
   const n=labels.length;
-  let svg=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="font-family:DM Sans,sans-serif">`;
+  let svg=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="background:transparent;font-family:DM Sans,sans-serif">`;
   // grid
   for(let i=0;i<=4;i++){
     const y=pad.t+ch-(ch*i/4);
-    svg+=`<line x1="${pad.l}" y1="${y}" x2="${pad.l+cw}" y2="${y}" stroke="rgba(0,0,0,0.07)" stroke-width="1"/>`;
-    svg+=`<text x="${pad.l-5}" y="${y+4}" text-anchor="end" font-size="10" fill="#9A9890">${fmtN(maxV*i/4,1)}d</text>`;
+    svg+=`<line x1="${pad.l}" y1="${y}" x2="${pad.l+cw}" y2="${y}" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>`;
+    svg+=`<text x="${pad.l-5}" y="${y+4}" text-anchor="end" font-size="10" fill="#6A6860">${fmtN(maxV*i/4,1)}d</text>`;
   }
   // x labels
   labels.forEach((l,i)=>{
     const x=pad.l+(cw/(n-1||1))*i;
-    svg+=`<text x="${x}" y="${H-pad.b+14}" text-anchor="middle" font-size="11" fill="#9A9890">${l}</text>`;
+    svg+=`<text x="${x}" y="${H-pad.b+14}" text-anchor="middle" font-size="11" fill="#6A6860">${l}</text>`;
   });
   // lines
   datasets.forEach(ds=>{
@@ -502,10 +499,10 @@ function svgLine(container, labels, datasets, opts={}){
     });
     if(ds.dash) svg+=`<path d="${path}" fill="none" stroke="${ds.color}" stroke-width="2.5" stroke-dasharray="6,4"/>`;
     else svg+=`<path d="${path}" fill="none" stroke="${ds.color}" stroke-width="2.5"/>`;
-    pts.forEach(p=>{ svg+=`<circle cx="${p.x}" cy="${p.y}" r="5" fill="${ds.color}" stroke="white" stroke-width="2"/>`; });
+    pts.forEach(p=>{ svg+=`<circle cx="${p.x}" cy="${p.y}" r="5" fill="${ds.color}" stroke="#181C24" stroke-width="2"/>`; });
   });
-  svg+=`<line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${pad.t+ch}" stroke="rgba(0,0,0,0.1)"/>`;
-  svg+=`<line x1="${pad.l}" y1="${pad.t+ch}" x2="${pad.l+cw}" y2="${pad.t+ch}" stroke="rgba(0,0,0,0.1)"/>`;
+  svg+=`<line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${pad.t+ch}" stroke="rgba(255,255,255,0.1)"/>`;
+  svg+=`<line x1="${pad.l}" y1="${pad.t+ch}" x2="${pad.l+cw}" y2="${pad.t+ch}" stroke="rgba(255,255,255,0.1)"/>`;
   svg+='</svg>';
   container.innerHTML=svg;
 }
@@ -579,7 +576,8 @@ function processData(raw){
     const fn=new Date(r['Fecha notificación']||r['Fecha notificacion']||'');
     const hh=parseFloat(String(r['HH Utilizadas']||0).replace(',','.'))||0;
     const consultor=(r['Asignado a']||'').trim();
-    const cliente=(r['Cliente']||'').trim();
+    const clienteRaw=(r['Cliente']||'').trim().replace(/\s+/g,' ');
+    const cliente=clienteRaw.includes('GSP')?'Grupo San Pablo (GSP)':clienteRaw;
     const map=CLIENT_MAP[cliente]||{team:'Interno',kam:'—',sdm:'—'};
     return {
       titulo:r['Titulo Bitacora']||'',
@@ -702,7 +700,7 @@ function renderAll(rows){
   // CLIENTES
   const cliData={};
   rows.forEach(r=>{
-    if(r.cliente==='CrossNet Perú') return;
+    if(r.cliente==='CrossNet Perú'||r.cliente==='Interno') return;
     if(!cliData[r.cliente]) cliData[r.cliente]={bit:0,hh:0,team:r.team,kam:r.kam,sdm:r.sdm,pend:0};
     cliData[r.cliente].bit++;
     cliData[r.cliente].hh+=r.hh;
