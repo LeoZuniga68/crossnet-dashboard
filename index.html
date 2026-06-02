@@ -247,9 +247,9 @@ input, select, textarea { color-scheme: dark; }
         <div class="box full"><div class="box-title">Resumen por SDM — Q1 2026</div><div class="box-sub">Volumen, HH administradas y eficiencia de distribución</div><table class="tbl" id="sdm-resumen"><thead><tr><th>SDM</th><th style="text-align:right">Bitácoras</th><th style="text-align:right">HH total</th><th style="text-align:right">HH/bit.</th><th style="text-align:right">Clientes</th><th style="text-align:right">Pend. cliente</th><th style="text-align:right">SLA prom.</th></tr></thead><tbody></tbody></table></div>
         <div class="box full"><div class="box-title">Bitácoras por SDM — evolución mensual</div><div class="box-sub">Volumen gestionado mes a mes</div><div class="leg" id="leg-sdm-mes"></div><div class="chart-wrap" id="ch-sdm-mes"></div></div>
         <div class="box full"><div class="box-title">HH por SDM — evolución mensual</div><div class="box-sub">Horas administradas por cada SDM mes a mes</div><div class="leg" id="leg-sdm-hh"></div><div class="chart-wrap" id="ch-sdm-hh"></div></div>
-        <div class="box"><div class="box-title">Distribución de carga entre consultores — Tomas</div><div class="box-sub">¿Concentra en pocos o distribuye bien?</div><div class="chart-wrap" id="ch-sdm-tomas"></div></div>
-        <div class="box"><div class="box-title">Distribución de carga entre consultores — Claudia</div><div class="box-sub">¿Concentra en pocos o distribuye bien?</div><div class="chart-wrap" id="ch-sdm-claudia"></div></div>
-        <div class="box"><div class="box-title">Distribución de carga entre consultores — Angy</div><div class="box-sub">¿Concentra en pocos o distribuye bien?</div><div class="chart-wrap" id="ch-sdm-angy"></div></div>
+        <div class="box"><div class="box-title">Distribución de carga entre consultores — Tomás Del Piélago</div><div class="box-sub">¿Concentra en pocos o distribuye bien?</div><div class="chart-wrap" id="ch-sdm-tomas"></div></div>
+        <div class="box"><div class="box-title">Distribución de carga entre consultores — Claudia Ramírez</div><div class="box-sub">¿Concentra en pocos o distribuye bien?</div><div class="chart-wrap" id="ch-sdm-claudia"></div></div>
+        <div class="box"><div class="box-title">Distribución de carga entre consultores — Angy Medina</div><div class="box-sub">¿Concentra en pocos o distribuye bien?</div><div class="chart-wrap" id="ch-sdm-angy"></div></div>
         <div class="box"><div class="box-title">HH promedio / bitácora por SDM</div><div class="box-sub">Complejidad promedio de los requerimientos que gestiona cada SDM</div><div class="chart-wrap" id="ch-sdm-avg"></div></div>
         <div class="box full"><div class="box-title">Clientes por SDM — bitácoras y HH</div><div class="box-sub">Cartera detallada de cada SDM</div><div id="sdm-clientes-detail"></div></div>
       </div>
@@ -287,45 +287,45 @@ const LOCAL_CONSULTANTS = {
   'Mitchell Limay':'Mitchell Limay',
 };
 const CLIENT_MAP = {
-  'Clínica Internacional':        {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
-  'Calidda':                      {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
-  'Banco Ripley':                 {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
-  'MAF Perú':                     {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
-  'Inchcape Perú':                {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
-  'Indecopi':                     {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
-  'Alfin Banco (antes Banco Azteca)':{team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
-  'Intursa':                      {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
-  'Oftalmosalud':                 {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
-  'Fondos Sura':                  {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
-  'Drager Peru':                  {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
-  'AVLA':                         {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
-  'Pluxee (Sodexo) - Perú':       {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
-  'Jockey Salud':                 {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
-  'Grupo San Pablo (GSP)':        {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia'},
-  'Qalab':                        {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia'},
-  'Salud Ocupacional':            {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia'},
-  'Tomomedic':                    {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia'},
-  'AFP Integra - Sura Perú':      {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia'},
-  'Sanna':                        {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia'},
-  'MI FIBRA':                     {team:'Chilcano',kam:'Paola Jacobs',sdm:'Claudia'},
-  'Continental Travel':           {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia'},
-  'La Protectora':                {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia'},
-  'Mapfre Perú':                  {team:'Chilcano',kam:'Paola Jacobs',sdm:'Tomas'},
-  'Financiera Oh!':               {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy'},
-  'InRetail':                     {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy'},
-  'SPSA':                         {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy'},
-  'Real Plaza':                   {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy'},
-  'OECHSLE':                      {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy'},
-  'PROMART':                      {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy'},
-  'Farmacias Peruanas':           {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy'},
-  'Química Suiza':                {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy'},
-  'SBS':                          {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy'},
-  'Casa Andina Hoteles':          {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy'},
-  'Pardos Chicken':               {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy'},
-  'NGR':                          {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy'},
-  'MAKRO':                        {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy'},
-  'ONPE':                         {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy'},
-  'CENTRIA':                      {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Angy'},
+  'Clínica Internacional':        {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Calidda':                      {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Banco Ripley':                 {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'MAF Perú':                     {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Inchcape Perú':                {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Indecopi':                     {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Alfin Banco (antes Banco Azteca)':{team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Intursa':                      {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Oftalmosalud':                 {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Fondos Sura':                  {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Drager Peru':                  {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'AVLA':                         {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Pluxee (Sodexo) - Perú':       {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Jockey Salud':                 {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Grupo San Pablo (GSP)':        {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia Ramírez'},
+  'Qalab':                        {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia Ramírez'},
+  'Salud Ocupacional':            {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia Ramírez'},
+  'Tomomedic':                    {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia Ramírez'},
+  'AFP Integra - Sura Perú':      {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia Ramírez'},
+  'Sanna':                        {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia Ramírez'},
+  'MI FIBRA':                     {team:'Chilcano',kam:'Paola Jacobs',sdm:'Claudia Ramírez'},
+  'Continental Travel':           {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia Ramírez'},
+  'La Protectora':                {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia Ramírez'},
+  'Mapfre Perú':                  {team:'Chilcano',kam:'Paola Jacobs',sdm:'Tomás Del Piélago'},
+  'Financiera Oh!':               {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'InRetail':                     {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'SPSA':                         {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'Real Plaza':                   {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'OECHSLE':                      {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'PROMART':                      {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'Farmacias Peruanas':           {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'Química Suiza':                {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'SBS':                          {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'Casa Andina Hoteles':          {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'Pardos Chicken':               {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'NGR':                          {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'MAKRO':                        {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'ONPE':                         {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'CENTRIA':                      {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Angy Medina'},
 };
 const COLORS = ['#1B5FA6','#1D9E75','#BA7517','#D4537E','#7F77DD','#D85A30','#185FA5','#639922','#888780','#C96914','#2E9ED6','#A3599E'];
 
@@ -764,8 +764,8 @@ function renderAll(rows){
 // RENDER SDM
 // ═══════════════════════════════════════════════════
 function renderSDM(rows, mesLabels, cliData){
-  const SDMs = ['Tomas','Claudia','Angy'];
-  const SDM_COLORS = {Tomas:'#185FA5', Claudia:'#1D9E75', Angy:'#D4537E'};
+  const SDMs = ['Tomás Del Piélago','Claudia Ramírez','Angy Medina'];
+  const SDM_COLORS = {'Tomás Del Piélago':'#185FA5', 'Claudia Ramírez':'#1D9E75', 'Angy Medina':'#D4537E'};
 
   // Agrupar datos por SDM
   const sdmData = {};
@@ -842,7 +842,7 @@ function renderSDM(rows, mesLabels, cliData){
       const top1pct = cnSorted.length ? cnSorted[0][1]/total : 0;
       const barColors = cnSorted.map((_,i)=>i===0&&top1pct>0.5?'#D85A30':i===0?'#1D9E75':'#378ADD');
       svgBarH(
-        document.getElementById('ch-sdm-'+s.toLowerCase()),
+        document.getElementById('ch-sdm-'+s.split(' ')[0].toLowerCase().replace('á','a').replace('ó','o')),
         cnSorted.map(([k])=>k),
         cnSorted.map(([,v])=>v),
         barColors,
