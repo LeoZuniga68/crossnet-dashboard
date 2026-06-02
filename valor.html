@@ -235,9 +235,9 @@ input, select, textarea { color-scheme: dark; }
       <button class="flt on" onclick="filterCartera('all',this)">Todos</button>
       <button class="flt" onclick="filterCartera('Chilcano',this)">Team Chilcano</button>
       <button class="flt" onclick="filterCartera('Mistura',this)">Team Mistura</button>
-      <button class="flt" onclick="filterCartera('Tomas',this)">SDM Tomas</button>
-      <button class="flt" onclick="filterCartera('Claudia',this)">SDM Claudia</button>
-      <button class="flt" onclick="filterCartera('Angy',this)">SDM Angy</button>
+      <button class="flt" onclick="filterCartera('Tomás Del Piélago',this)">SDM Tomás Del Piélago</button>
+      <button class="flt" onclick="filterCartera('Claudia Ramírez',this)">SDM Claudia Ramírez</button>
+      <button class="flt" onclick="filterCartera('Angy Medina',this)">SDM Angy Medina</button>
     </div>
     <div class="box full">
       <table class="tbl"><thead><tr><th>#</th><th>Cliente</th><th>Team</th><th>SDM</th><th style="text-align:right">FR USD</th><th style="text-align:right">HB USD</th><th style="text-align:right">Bitácoras</th><th style="text-align:right">HH evol.</th><th style="text-align:right">Tickets</th><th style="text-align:right">HH sop.</th><th style="text-align:right">HH total</th><th style="text-align:right">% evol.</th><th style="text-align:right">SLA CSR</th><th style="text-align:right">FR trim/HH</th><th>Segmento</th></tr></thead>
@@ -289,41 +289,41 @@ const EXCLUIR = ['Verisure Perú','CrossNet Perú','CrossNet Chile','Crossnet Co
 const TIPOS_CSR_OK = ['Requerimiento','Incidente *','Consulta','Checklist','Feriado - Día Especial - IVR','Inducción','Incidente - Reporte *','Incidente Seguridad *','Asistencia Proyectos','Asistencia Remota','Asistencia Terreno','Evento'];
 
 const CLIENT_MAP = {
-  'Grupo San Pablo (GSP)':      {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia'},
-  'Clínica Internacional':      {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
-  'Calidda':                    {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
-  'Banco Ripley':               {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
-  'MAF Perú':                   {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
-  'Inchcape Perú':              {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
-  'Indecopi':                   {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
-  'Alfin Banco (antes Banco Azteca)':{team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
-  'Intursa':                    {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
-  'Oftalmosalud':               {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
-  'Fondos Sura':                {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
-  'Drager Peru':                {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
-  'AVLA':                       {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
-  'Pluxee (Sodexo) - Perú':     {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
-  'Jockey Salud':               {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
-  'MTC':                        {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
-  'Ministerio de Transporte y Comunicaciones (MTC)':{team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomas'},
-  'AFP Integra - Sura Perú':    {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia'},
-  'Sanna':                      {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia'},
-  'MI FIBRA':                   {team:'Chilcano',kam:'Paola Jacobs',sdm:'Claudia'},
-  'Continental Travel':         {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia'},
-  'La Protectora':              {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia'},
-  'Mapfre Perú':                {team:'Chilcano',kam:'Paola Jacobs',sdm:'Tomas'},
-  'Financiera Oh!':             {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy'},
-  'InRetail (grupo)':           {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy'},
-  'Farmacias Peruanas':         {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy'},
-  'Química Suiza':              {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy'},
-  'SBS':                        {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy'},
-  'Casa Andina Hoteles':        {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy'},
-  'Pardos Chicken':             {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy'},
-  'NGR':                        {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy'},
-  'MAKRO':                      {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy'},
-  'ONPE':                       {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy'},
-  'CENTRIA':                    {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Angy'},
-  'SEDAPAR':                    {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy'},
+  'Grupo San Pablo (GSP)':      {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia Ramírez'},
+  'Clínica Internacional':      {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Calidda':                    {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Banco Ripley':               {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'MAF Perú':                   {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Inchcape Perú':              {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Indecopi':                   {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Alfin Banco (antes Banco Azteca)':{team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Intursa':                    {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Oftalmosalud':               {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Fondos Sura':                {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Drager Peru':                {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'AVLA':                       {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Pluxee (Sodexo) - Perú':     {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Jockey Salud':               {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'MTC':                        {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Ministerio de Transporte y Comunicaciones (MTC)':{team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'AFP Integra - Sura Perú':    {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia Ramírez'},
+  'Sanna':                      {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia Ramírez'},
+  'MI FIBRA':                   {team:'Chilcano',kam:'Paola Jacobs',sdm:'Claudia Ramírez'},
+  'Continental Travel':         {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia Ramírez'},
+  'La Protectora':              {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia Ramírez'},
+  'Mapfre Perú':                {team:'Chilcano',kam:'Paola Jacobs',sdm:'Tomás Del Piélago'},
+  'Financiera Oh!':             {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'InRetail (grupo)':           {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'Farmacias Peruanas':         {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'Química Suiza':              {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'SBS':                        {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'Casa Andina Hoteles':        {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'Pardos Chicken':             {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'NGR':                        {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'MAKRO':                      {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'ONPE':                       {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'CENTRIA':                    {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Angy Medina'},
+  'SEDAPAR':                    {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
 };
 
 const SEG_CFG = {
