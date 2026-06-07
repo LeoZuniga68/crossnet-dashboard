@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CrossNet Perú — Dashboard Operaciones</title>
+<title>CrossNet Perú — Reporte Evolución</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -149,7 +149,7 @@ input, select, textarea { color-scheme: dark; }
     <img class="hdr-logo" src="https://crossnet.la/wp-content/uploads/2024/10/logo-crossnet_header.svg" alt="CrossNet" onerror="this.style.display='none';document.getElementById('logo-txt').style.display='block'">
     <span id="logo-txt" style="display:none;font-weight:600;font-size:16px;color:var(--blue)">CrossNet</span>
     <div class="hdr-div"></div>
-    <span class="hdr-title">Operaciones Perú</span>
+    <span class="hdr-title">Reporte Evolución · Perú</span>
   </div>
   <div class="hdr-right">
     <span class="period-badge" id="period-badge">Sin datos</span>
@@ -234,11 +234,23 @@ input, select, textarea { color-scheme: dark; }
 
     <div id="pane-clientes" class="tab-pane">
       <div class="grid">
-        <div class="box full"><div class="box-title">Top 10 clientes — bitácoras vs HH</div><div class="box-sub">Mayor volumen no siempre es mayor esfuerzo</div><div class="leg"><span class="li"><span class="ls" style="background:#378ADD"></span>Bitácoras</span><span class="li"><span class="ls" style="background:#D85A30"></span>HH</span></div><div class="chart-wrap" id="ch-cli"></div></div>
-        <div class="box full"><div class="box-title">HH promedio / bitácora por cliente</div><div class="box-sub">Verde &lt;4 HH · Amarillo 4–7 · Rojo &gt;7</div><div class="chart-wrap" id="ch-cli-avg"></div></div>
-        <div class="box"><div class="box-title">Team Zinthia Mansilla — Mistura</div><div class="box-sub">Cartera de clientes</div><table class="tbl" id="t-mistura"><thead><tr><th>Cliente</th><th style="text-align:right">Bit.</th><th style="text-align:right">HH</th><th>SDM</th></tr></thead><tbody></tbody></table></div>
-        <div class="box"><div class="box-title">Team Paola Jacobs — Chilcano</div><div class="box-sub">Cartera de clientes</div><table class="tbl" id="t-chilcano"><thead><tr><th>Cliente</th><th style="text-align:right">Bit.</th><th style="text-align:right">HH</th><th>SDM</th></tr></thead><tbody></tbody></table></div>
-        <div class="box full"><div class="box-title">Bitácoras pendientes por cliente</div><div class="box-sub">Bloqueadas esperando acción del cliente</div><div id="pendientes-section"></div></div>
+        <!-- TOP BITÁCORAS vs HH por Team -->
+        <div class="box"><div class="box-title">Team Mistura — bitácoras vs HH</div><div class="box-sub">Mayor volumen no siempre es mayor esfuerzo</div><div class="leg"><span class="li"><span class="ls" style="background:#378ADD"></span>Bitácoras</span><span class="li"><span class="ls" style="background:#D85A30"></span>HH</span></div><div class="chart-wrap" id="ch-cli-mistura"></div></div>
+        <div class="box"><div class="box-title">Team Chilcano — bitácoras vs HH</div><div class="box-sub">Mayor volumen no siempre es mayor esfuerzo</div><div class="leg"><span class="li"><span class="ls" style="background:#378ADD"></span>Bitácoras</span><span class="li"><span class="ls" style="background:#D85A30"></span>HH</span></div><div class="chart-wrap" id="ch-cli-chilcano"></div></div>
+        <!-- HH PROMEDIO por Team -->
+        <div class="box"><div class="box-title">Team Mistura — HH promedio / bitácora</div><div class="box-sub">Indicador de complejidad por cliente · Verde &lt;4 · Amarillo 4–7 · Rojo &gt;7</div><div class="chart-wrap" id="ch-avg-mistura"></div></div>
+        <div class="box"><div class="box-title">Team Chilcano — HH promedio / bitácora</div><div class="box-sub">Indicador de complejidad por cliente · Verde &lt;4 · Amarillo 4–7 · Rojo &gt;7</div><div class="chart-wrap" id="ch-avg-chilcano"></div></div>
+        <!-- SLA por Team -->
+        <div class="box"><div class="box-title">Team Mistura — cumplimiento de fecha comprometida</div><div class="box-sub">% bitácoras entregadas en o antes de la fecha comprometida · Verde ≥85% · Amarillo 65–85% · Rojo &lt;65%</div><div class="chart-wrap" id="ch-sla-mistura"></div></div>
+        <div class="box"><div class="box-title">Team Chilcano — cumplimiento de fecha comprometida</div><div class="box-sub">% bitácoras entregadas en o antes de la fecha comprometida · Verde ≥85% · Amarillo 65–85% · Rojo &lt;65%</div><div class="chart-wrap" id="ch-sla-chilcano"></div></div>
+        <!-- TENDENCIA MENSUAL -->
+        <div class="box full"><div class="box-title">Tendencia mensual de bitácoras — Mistura vs Chilcano</div><div class="box-sub">Evolución del volumen de requerimientos mes a mes por equipo</div><div class="leg"><span class="li"><span class="ls" style="background:#7F77DD"></span>Team Mistura</span><span class="li"><span class="ls" style="background:#D4537E"></span>Team Chilcano</span></div><div class="chart-wrap" id="ch-trend-teams"></div></div>
+        <!-- CONCENTRACIÓN HH -->
+        <div class="box"><div class="box-title">Team Mistura — concentración de HH</div><div class="box-sub">% del esfuerzo total del team por cliente</div><div class="chart-wrap" id="ch-conc-mistura"></div></div>
+        <div class="box"><div class="box-title">Team Chilcano — concentración de HH</div><div class="box-sub">% del esfuerzo total del team por cliente</div><div class="chart-wrap" id="ch-conc-chilcano"></div></div>
+        <!-- TABLAS -->
+        <div class="box"><div class="box-title">Team Zinthia Mansilla — Mistura</div><div class="box-sub">Cartera de clientes</div><table class="tbl" id="t-mistura"><thead><tr><th>Cliente</th><th style="text-align:right">Bit.</th><th style="text-align:right">HH</th><th style="text-align:right">SLA%</th><th>SDM</th></tr></thead><tbody></tbody></table></div>
+        <div class="box"><div class="box-title">Team Paola Jacobs — Chilcano</div><div class="box-sub">Cartera de clientes</div><table class="tbl" id="t-chilcano"><thead><tr><th>Cliente</th><th style="text-align:right">Bit.</th><th style="text-align:right">HH</th><th style="text-align:right">SLA%</th><th>SDM</th></tr></thead><tbody></tbody></table></div>
       </div>
     </div>
 
@@ -574,6 +586,7 @@ function processData(raw){
   const rows=raw.map(r=>{
     const fc=new Date(r['Fecha Creación']||r['Fecha Creacion']||'');
     const fn=new Date(r['Fecha notificación']||r['Fecha notificacion']||'');
+    const fcomp=new Date(r['Fecha Compromiso']||'');
     const hh=parseFloat(String(r['HH Utilizadas']||0).replace(',','.'))||0;
     const consultor=(r['Asignado a']||'').trim();
     const clienteRaw=(r['Cliente']||'').trim().replace(/\s+/g,' ');
@@ -590,6 +603,8 @@ function processData(raw){
       mesKey:isNaN(fc)?null:`${fc.getFullYear()}-${String(fc.getMonth()+1).padStart(2,'0')}`,
       mesLabel:isNaN(fc)?null:fc.toLocaleString('es',{month:'short',year:'numeric'}).replace(' de ',' '),
       diasEntrega:(!isNaN(fc)&&!isNaN(fn)&&fn>fc)?Math.round((fn-fc)/86400000):null,
+      fechaCompromiso:isNaN(fcomp)?null:r['Fecha Compromiso'],
+      fechaNotif:isNaN(fn)?null:r['Fecha notificación']||r['Fecha notificacion'],
       team:map.team, kam:map.kam, sdm:map.sdm,
     };
   }).filter(r=>r.mes!==null);
@@ -701,33 +716,116 @@ function renderAll(rows){
   const cliData={};
   rows.forEach(r=>{
     if(r.cliente==='CrossNet Perú'||r.cliente==='Interno') return;
-    if(!cliData[r.cliente]) cliData[r.cliente]={bit:0,hh:0,team:r.team,kam:r.kam,sdm:r.sdm,pend:0};
+    if(!cliData[r.cliente]) cliData[r.cliente]={bit:0,hh:0,team:r.team,kam:r.kam,sdm:r.sdm,slaArr:[]};
     cliData[r.cliente].bit++;
     cliData[r.cliente].hh+=r.hh;
-    if(r.pendientePor==='Cliente') cliData[r.cliente].pend++;
+    if(r.diasEntrega!==null&&r.diasEntrega>=0&&r.fechaCompromiso){
+      const fc=new Date(r.fechaCompromiso);
+      const fn=new Date(r.fechaNotif);
+      if(!isNaN(fc)&&!isNaN(fn)) cliData[r.cliente].slaArr.push(fn<=fc?1:0);
+    }
   });
-  const cliArr=Object.entries(cliData).sort((a,b)=>b[1].hh-a[1].hh);
-  const top10=cliArr.slice(0,10);
+
+  // SLA % por cliente desde fecha compromiso
+  rows.forEach(r=>{
+    if(!r.cliente||r.cliente==='CrossNet Perú') return;
+    const d=cliData[r.cliente];if(!d) return;
+  });
+
+  const byTeam=(team)=>Object.entries(cliData)
+    .filter(([,v])=>v.team===team)
+    .sort((a,b)=>b[1].bit-a[1].bit);
+
+  const mistura=byTeam('Mistura');
+  const chilcano=byTeam('Chilcano');
+
+  // Calcular SLA% desde rows directamente
+  const slaByClient={};
+  rows.forEach(r=>{
+    if(!r.cliente||r.cliente==='CrossNet Perú') return;
+    if(!slaByClient[r.cliente]) slaByClient[r.cliente]={ok:0,total:0};
+    if(r.fechaCompromiso && r.fechaNotif){
+      const fc=new Date(r.fechaCompromiso), fn=new Date(r.fechaNotif);
+      if(!isNaN(fc)&&!isNaN(fn)){
+        slaByClient[r.cliente].total++;
+        if(fn<=fc) slaByClient[r.cliente].ok++;
+      }
+    }
+  });
+  const getSLA=(cli)=>{
+    const s=slaByClient[cli];
+    return s&&s.total>0?Math.round(s.ok/s.total*100):null;
+  };
+  const slaColor=(p)=>p===null?'#6A6860':p>=85?'#2DC98A':p>=65?'#E0A030':'#F07050';
 
   setTimeout(()=>{
-    svgBar(document.getElementById('ch-cli'),top10.map(([k])=>k),[{data:top10.map(([,v])=>v.bit),color:'#378ADD'},{data:top10.map(([,v])=>Math.round(v.hh)),color:'#D85A30'}],{h:300,b:80});
-    const avgHH=top10.map(([,v])=>+(v.bit?v.hh/v.bit:0).toFixed(1));
-    svgBarH(document.getElementById('ch-cli-avg'),top10.map(([k])=>k),avgHH,avgHH.map(v=>v>=7?'#D85A30':v>=4?'#BA7517':'#1D9E75'),{l:180});
+    // ── TOP BITÁCORAS vs HH por team ──
+    const renderCliBar=(elId, data)=>{
+      const top=data.slice(0,8);
+      svgBar(document.getElementById(elId),
+        top.map(([k])=>k),
+        [{data:top.map(([,v])=>v.bit),color:'#378ADD'},
+         {data:top.map(([,v])=>Math.round(v.hh)),color:'#D85A30'}],
+        {h:260,b:80});
+    };
+    renderCliBar('ch-cli-mistura', mistura);
+    renderCliBar('ch-cli-chilcano', chilcano);
+
+    // ── HH PROMEDIO por team ──
+    const renderAvgBar=(elId, data)=>{
+      const top=data.filter(([,v])=>v.bit>0).slice(0,8);
+      const avgs=top.map(([,v])=>+(v.hh/v.bit).toFixed(1));
+      svgBarH(document.getElementById(elId),
+        top.map(([k])=>k), avgs,
+        avgs.map(v=>v>=7?'#F07050':v>=4?'#E0A030':'#2DC98A'),
+        {l:180});
+    };
+    renderAvgBar('ch-avg-mistura', mistura);
+    renderAvgBar('ch-avg-chilcano', chilcano);
+
+    // ── SLA CUMPLIMIENTO por team ──
+    const renderSLABar=(elId, data)=>{
+      const top=data.filter(([k])=>getSLA(k)!==null).slice(0,8);
+      const pcts=top.map(([k])=>getSLA(k));
+      svgBarH(document.getElementById(elId),
+        top.map(([k])=>k), pcts,
+        pcts.map(p=>slaColor(p)),
+        {l:180});
+    };
+    renderSLABar('ch-sla-mistura', mistura);
+    renderSLABar('ch-sla-chilcano', chilcano);
+
+    // ── TENDENCIA MENSUAL por team ──
+    const mTrend=mesLabels.map(l=>rows.filter(r=>r.mesLabel===l&&r.team==='Mistura').length);
+    const cTrend=mesLabels.map(l=>rows.filter(r=>r.mesLabel===l&&r.team==='Chilcano').length);
+    svgBar(document.getElementById('ch-trend-teams'), mesLabels,
+      [{data:mTrend,color:'#7F77DD'},{data:cTrend,color:'#D4537E'}],
+      {h:220});
+
+    // ── CONCENTRACIÓN HH por team ──
+    const renderConc=(elId, data)=>{
+      const totalHH=data.reduce((s,[,v])=>s+v.hh,0)||1;
+      const top=data.slice(0,8);
+      const pcts=top.map(([,v])=>Math.round(v.hh/totalHH*100));
+      svgBarH(document.getElementById(elId),
+        top.map(([k])=>k), pcts,
+        pcts.map((p,i)=>i===0?'#D85A30':i<=2?'#E0A030':'#4A9EE0'),
+        {l:180});
+    };
+    renderConc('ch-conc-mistura', mistura);
+    renderConc('ch-conc-chilcano', chilcano);
   },100);
 
-  // Team tables
+  // ── TABLAS con SLA ──
   ['Zinthia Mansilla','Paola Jacobs'].forEach((kam,ti)=>{
     const id=ti===0?'t-mistura':'t-chilcano';
     const data=Object.entries(cliData).filter(([,v])=>v.kam===kam).sort((a,b)=>b[1].bit-a[1].bit);
-    document.querySelector('#'+id+' tbody').innerHTML=data.map(([k,v])=>`<tr><td>${k}</td><td class="n">${v.bit}</td><td class="n">${Math.round(v.hh)}</td><td>${v.sdm}</td></tr>`).join('');
+    document.querySelector('#'+id+' tbody').innerHTML=data.map(([k,v])=>{
+      const sp=getSLA(k);
+      const slaCell=sp!==null?`<span style="color:${slaColor(sp)};font-weight:500">${sp}%</span>`:'—';
+      return `<tr><td>${k}</td><td class="n">${v.bit}</td><td class="n">${Math.round(v.hh)}</td><td class="n">${slaCell}</td><td>${v.sdm}</td></tr>`;
+    }).join('');
   });
-
-  // Pendientes
-  const pendSec=document.getElementById('pendientes-section');
-  const pendCli=Object.entries(cliData).filter(([,v])=>v.pend>0).sort((a,b)=>b[1].pend-a[1].pend);
-  pendSec.innerHTML=pendCli.length
-    ?`<div class="alert"><strong>${pendCli.reduce((s,[,v])=>s+v.pend,0)} bitácoras</strong> pendientes de acción del cliente.</div><table class="tbl"><thead><tr><th>Cliente</th><th style="text-align:right">Pend.</th><th>KAM</th><th>SDM</th></tr></thead><tbody>${pendCli.map(([k,v])=>`<tr><td>${k}</td><td class="n warn">${v.pend}</td><td>${v.kam}</td><td>${v.sdm}</td></tr>`).join('')}</tbody></table>`
-    :`<div class="info-box">Sin bitácoras pendientes por cliente. ✓</div>`;
 
   // SLA
   const slaPorMes={};
