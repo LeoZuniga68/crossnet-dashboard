@@ -194,7 +194,7 @@ input, select, textarea { color-scheme: dark; }
       <div class="metric"><div class="m-label">HH promedio / bit.</div><div class="m-value" id="m-hh-avg">—</div><div class="m-sub">mediana <span id="m-hh-med">—</span> HH</div></div>
       <div class="metric"><div class="m-label">Meses en datos</div><div class="m-value" id="m-meses">—</div><div class="m-sub" id="m-rango">—</div></div>
       <div class="metric"><div class="m-label">Días prom. entrega</div><div class="m-value" id="m-sla">—</div><div class="m-sub">mediana <span id="m-sla-med">—</span> días</div></div>
-      <div class="metric hl-coral"><div class="m-label">Pend. por cliente</div><div class="m-value" id="m-pend">—</div><div class="m-sub" id="m-pend-pct">—</div></div>
+      <div class="metric"><div class="m-label">HH sin registrar</div><div class="m-value" id="m-sin-hh">—</div><div class="m-sub" id="m-sin-hh-sub">—</div></div>
     </div>
 
     <div class="tab-row">
@@ -212,7 +212,7 @@ input, select, textarea { color-scheme: dark; }
         <div class="box"><div class="box-title">Bitácoras y HH por mes</div><div class="box-sub">Volumen mensual vs horas invertidas</div><div class="leg"><span class="li"><span class="ls" style="background:#378ADD"></span>Bitácoras</span><span class="li"><span class="ls" style="background:#D85A30"></span>HH</span></div><div class="chart-wrap" id="ch-mes"></div></div>
         <div class="box"><div class="box-title">Distribución de HH por rango</div><div class="box-sub">Cantidad de bitácoras según esfuerzo</div><div class="chart-wrap" id="ch-dist"></div></div>
         <div class="box"><div class="box-title">Por KAM</div><div class="box-sub">Bitácoras por equipo comercial</div><div class="chart-wrap" id="ch-kam"></div></div>
-        <div class="box"><div class="box-title">Pendiente por</div><div class="box-sub">Responsable de desbloqueo</div><div class="chart-wrap" id="ch-pend"></div></div>
+        <div class="box"><div class="box-title">Registro de HH</div><div class="box-sub">Bitácoras con y sin horas registradas — indica disciplina operativa del equipo</div><div class="chart-wrap" id="ch-hh-reg"></div></div>
       </div>
     </div>
 
@@ -256,7 +256,7 @@ input, select, textarea { color-scheme: dark; }
 
     <div id="pane-sdm" class="tab-pane">
       <div class="grid">
-        <div class="box full"><div class="box-title">Resumen por SDM — Q1 2026</div><div class="box-sub">Volumen, HH administradas y eficiencia de distribución</div><table class="tbl" id="sdm-resumen"><thead><tr><th>SDM</th><th style="text-align:right">Bitácoras</th><th style="text-align:right">HH total</th><th style="text-align:right">HH/bit.</th><th style="text-align:right">Clientes</th><th style="text-align:right">Pend. cliente</th><th style="text-align:right">SLA prom.</th></tr></thead><tbody></tbody></table></div>
+        <div class="box full"><div class="box-title">Resumen por SDM — Q1 2026</div><div class="box-sub">Volumen, HH administradas y eficiencia de distribución</div><table class="tbl" id="sdm-resumen"><thead><tr><th>SDM</th><th style="text-align:right">Bitácoras</th><th style="text-align:right">HH total</th><th style="text-align:right">HH/bit.</th><th style="text-align:right">Clientes</th><th style="text-align:right">SLA prom.</th></tr></thead><tbody></tbody></table></div>
         <div class="box full"><div class="box-title">Bitácoras por SDM — evolución mensual</div><div class="box-sub">Volumen gestionado mes a mes</div><div class="leg" id="leg-sdm-mes"></div><div class="chart-wrap" id="ch-sdm-mes"></div></div>
         <div class="box full"><div class="box-title">HH por SDM — evolución mensual</div><div class="box-sub">Horas administradas por cada SDM mes a mes</div><div class="leg" id="leg-sdm-hh"></div><div class="chart-wrap" id="ch-sdm-hh"></div></div>
         <div class="box"><div class="box-title">Distribución de carga entre consultores — Tomás Del Piélago</div><div class="box-sub">¿Concentra en pocos o distribuye bien?</div><div class="chart-wrap" id="ch-sdm-tomas"></div></div>
@@ -598,7 +598,7 @@ function processData(raw){
       consultorLabel:LOCAL_CONSULTANTS[consultor]||null,
       esLocal:!!LOCAL_CONSULTANTS[consultor],
       hh, tieneHH:(r['HH?']||'')==='Con Horas',
-      pendientePor:(r['Pendiente Por']||'').trim(),
+      // pendientePor eliminado — campo no confiable en bitácoras verificadas
       mes:isNaN(fc)?null:fc.getMonth()+1,
       mesKey:isNaN(fc)?null:`${fc.getFullYear()}-${String(fc.getMonth()+1).padStart(2,'0')}`,
       mesLabel:isNaN(fc)?null:fc.toLocaleString('es',{month:'short',year:'numeric'}).replace(' de ',' '),
@@ -636,7 +636,7 @@ function renderAll(rows){
   const diasArr=rows.filter(r=>r.diasEntrega!==null&&r.diasEntrega>=0).map(r=>r.diasEntrega);
   const slaAvg=diasArr.length?diasArr.reduce((s,v)=>s+v,0)/diasArr.length:0;
   const slaMed=diasArr.length?median(diasArr):0;
-  const pendCliente=rows.filter(r=>r.pendientePor==='Cliente').length;
+  const pendCliente=0; // eliminado
 
   document.getElementById('m-total').textContent=fmt(totalBit);
   document.getElementById('m-hh').textContent=fmt(Math.round(totalHH));
@@ -647,8 +647,10 @@ function renderAll(rows){
   document.getElementById('m-rango').textContent=nMeses===1?mesLabels[0]:mesLabels[0]+' → '+mesLabels[nMeses-1];
   document.getElementById('m-sla').textContent=fmtN(slaAvg);
   document.getElementById('m-sla-med').textContent=fmtN(slaMed,0);
-  document.getElementById('m-pend').textContent=pendCliente;
-  document.getElementById('m-pend-pct').textContent=fmtN(pendCliente/totalBit*100,1)+'% del total';
+  // métrica pendiente eliminada
+  const sinHH=rows.filter(r=>!r.tieneHH).length;
+  document.getElementById('m-sin-hh').textContent=sinHH;
+  document.getElementById('m-sin-hh-sub').textContent=fmtN(sinHH/totalBit*100,1)+'% sin registrar';
 
   // By mes
   const byMes={};
@@ -668,8 +670,9 @@ function renderAll(rows){
     const kamK=Object.keys(kamCount),kamV=Object.values(kamCount);
     svgDonut(document.getElementById('ch-kam'),kamK,kamV,['#7F77DD','#D4537E','#378ADD']);
     const pp={CrossNet:0,Cliente:0};
-    rows.forEach(r=>{const k=r.pendientePor==='Cliente'?'Cliente':'CrossNet';pp[k]++;});
-    svgDonut(document.getElementById('ch-pend'),['CrossNet','Cliente'],[pp.CrossNet,pp.Cliente],['#185FA5','#D85A30']);
+    const conHH=rows.filter(r=>r.tieneHH).length;
+    const sinHH2=totalBit-conHH;
+    svgDonut(document.getElementById('ch-hh-reg'),['Con HH registradas','Sin HH registradas'],[conHH,sinHH2],['#2DC98A','#F07050']);
   },50);
 
   // LOCAL TEAM
@@ -869,7 +872,7 @@ function renderSDM(rows, mesLabels, cliData){
   const sdmData = {};
   SDMs.forEach(s=>{
     sdmData[s] = {
-      bit:0, hh:0, pend:0,
+      bit:0, hh:0,
       clientes: new Set(),
       consultores: {},
       diasArr: [],
@@ -884,7 +887,7 @@ function renderSDM(rows, mesLabels, cliData){
     sdmData[s].bit++;
     sdmData[s].hh += r.hh;
     sdmData[s].clientes.add(r.cliente);
-    if(r.pendientePor==='Cliente') sdmData[s].pend++;
+    // pend eliminado
     if(r.diasEntrega!==null&&r.diasEntrega>=0) sdmData[s].diasArr.push(r.diasEntrega);
     if(sdmData[s].byMes[r.mesLabel]){ sdmData[s].byMes[r.mesLabel].bit++; sdmData[s].byMes[r.mesLabel].hh+=r.hh; }
     // por consultor
@@ -897,14 +900,13 @@ function renderSDM(rows, mesLabels, cliData){
     const d = sdmData[s];
     const slaP = d.diasArr.length ? fmtN(d.diasArr.reduce((a,v)=>a+v,0)/d.diasArr.length) : '—';
     const hhAvgS = d.bit ? fmtN(d.hh/d.bit) : '—';
-    const pendCls = d.pend > 0 ? 'warn' : '';
     return `<tr>
       <td><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${SDM_COLORS[s]};margin-right:6px"></span><strong>${s}</strong></td>
       <td class="n hi">${d.bit}</td>
       <td class="n" style="color:#378ADD;font-weight:600">${Math.round(d.hh)}</td>
       <td class="n">${hhAvgS}</td>
       <td class="n">${d.clientes.size}</td>
-      <td class="n ${pendCls}">${d.pend}</td>
+
       <td class="n">${slaP}d</td>
     </tr>`;
   }).join('');
@@ -982,7 +984,7 @@ function renderSDM(rows, mesLabels, cliData){
               <td class="n">${v.bit}</td>
               <td class="n">${Math.round(v.hh)}</td>
               <td class="n">${v.bit?fmtN(v.hh/v.bit):'-'}</td>
-              <td class="n ${v.pend>0?'warn':''}">${v.pend||'—'}</td>
+
             </tr>`).join('')}
           </tbody>
         </table>
@@ -1007,7 +1009,6 @@ function renderConclusiones(d){
   const maxHHmes=Math.max(...mesLabels.map(l=>tData[localSorted[0]]?.byMes[l]?.hh||0));
   const cliArr=Object.entries(cliData).filter(([,v])=>v.bit>=5).sort((a,b)=>(b[1].hh/b[1].bit)-(a[1].hh/a[1].bit));
   const cliMasComplejo=cliArr[0];
-  const pctPend=Math.round(pendCliente/totalBit*100);
   const misturaBit=rows.filter(r=>r.team==='Mistura').length;
   const chilcanoBit=rows.filter(r=>r.team==='Chilcano').length;
   const misturaHH=rows.filter(r=>r.team==='Mistura').reduce((s,r)=>s+r.hh,0);
@@ -1044,12 +1045,7 @@ function renderConclusiones(d){
       <div class="conc-body"><strong>${localSorted[0]}</strong> y <strong>${localSorted[1]}</strong> concentran el <strong>${top2pct}% de bitácoras</strong> y <strong>${top2hhpct}% de HH</strong>. Pico de ${Math.round(maxHHmes)} HH en un mes — nivel potencialmente insostenible.</div>
       <div class="conc-kpi">📌 ${localSorted[0]} ${tData[localSorted[0]].bit} bit. · ${localSorted[1]} ${tData[localSorted[1]].bit} bit.</div>
     </div>
-    <div class="conc-card ${pctPend>=5?'alrt':'warn'}">
-      <div class="conc-tag ${pctPend>=5?'alrt':'warn'}">${pctPend>=5?'⚠ Alerta':'⚠ Atención'}</div>
-      <div class="conc-title">Bitácoras pendientes por acción del cliente</div>
-      <div class="conc-body"><strong>${pendCliente} bitácoras (${pctPend}%)</strong> bloqueadas esperando respuesta del cliente. Representa tiempo de consultor inmovilizado.</div>
-      <div class="conc-kpi">📌 Objetivo: pendientes por cliente &lt;2% del total</div>
-    </div>
+    
     ${cliMasComplejo?`<div class="conc-card warn">
       <div class="conc-tag warn">⚠ Complejidad técnica</div>
       <div class="conc-title">${cliMasComplejo[0]} concentra el mayor esfuerzo por bitácora</div>
@@ -1066,7 +1062,7 @@ function renderConclusiones(d){
 
   <div class="conc-sec-title">Acciones tácticas — corto plazo</div>
   <div class="act-grid">
-    <div class="act-row"><div class="act-num imm">1</div><div><div class="act-title">Gestionar las ${pendCliente} bitácoras pendientes por cliente</div><div class="act-desc">Establecer deadline de respuesta (máx. 5 días hábiles) y escalar a través del KAM. Objetivo: llevar pendientes por cliente a &lt;2% del total activo.</div></div><span class="act-badge imm">Inmediata</span></div>
+    
     <div class="act-row"><div class="act-num imm">2</div><div><div class="act-title">Definir techo mensual de HH por consultor</div><div class="act-desc">Establecer límite de <strong>100–120 HH/mes</strong> con revisión semanal. Activar reasignación al superar el 80% del techo.</div></div><span class="act-badge imm">Inmediata</span></div>
     ${outliers.length?`<div class="act-row"><div class="act-num short">3</div><div><div class="act-title">Revisar bitácoras de alto esfuerzo (&gt;20 HH)</div><div class="act-desc">Las <strong>${outliers.length} bitácora${outliers.length>1?'s':''}</strong> que superaron las 20 HH deben analizarse e implementar validación previa para bitácoras estimadas en &gt;15 HH.</div></div><span class="act-badge short">Corto plazo</span></div>`:''}
     <div class="act-row"><div class="act-num short">${outliers.length?4:3}</div><div><div class="act-title">Plan de onboarding para Mitchell Limay</div><div class="act-desc">Meta progresiva: 10 bitácoras en el primer mes completo, 20 en el segundo, 30 en el tercero. Mentoría de Oscar Bardales. Cuentas de baja-media complejidad para arrancar.</div></div><span class="act-badge short">Corto plazo</span></div>
@@ -1077,7 +1073,7 @@ function renderConclusiones(d){
     <div class="act-row"><div class="act-num med">A</div><div><div class="act-title">Segmentar clientes por modelo de atención</div><div class="act-desc">Matriz Volumen × HH/bitácora: alta complejidad → consultor senior dedicado y steering quincenal. Alto volumen y baja complejidad → playbooks estándar.</div></div><span class="act-badge med">Mediano plazo</span></div>
     <div class="act-row"><div class="act-num med">B</div><div><div class="act-title">Shifting hacia bitácoras proactivas</div><div class="act-desc">Meta: <strong>≥30% de bitácoras proactivas</strong> por cliente estratégico. Categorizar cada bitácora en Podio como reactiva o proactiva y reportar mensualmente.</div></div><span class="act-badge med">Mediano plazo</span></div>
     <div class="act-row"><div class="act-num med">C</div><div><div class="act-title">Biblioteca de soluciones reutilizables</div><div class="act-desc">Mapear los 20 tipos de requerimientos más frecuentes en Plataforma (~79% del volumen) y documentar soluciones estándar. Objetivo: reducir 30% las HH en bitácoras replicables.</div></div><span class="act-badge med">Mediano plazo</span></div>
-    <div class="act-row"><div class="act-num med">D</div><div><div class="act-title">Dashboard integrado al ciclo operativo semanal</div><div class="act-desc">Incorporar la revisión de HH acumuladas, bitácoras en riesgo de SLA y pendientes por cliente a la reunión semanal de equipo.</div></div><span class="act-badge med">Mediano plazo</span></div>
+    <div class="act-row"><div class="act-num med">D</div><div><div class="act-title">Dashboard integrado al ciclo operativo semanal</div><div class="act-desc">Incorporar la revisión de HH acumuladas, bitácoras en riesgo de SLA y cumplimiento de fechas a la reunión semanal de equipo.</div></div><span class="act-badge med">Mediano plazo</span></div>
   </div>`;
 }
 </script>
