@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CrossNet Perú — Reporte Ejecutivo de Servicio</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#4A9EE0;--blue-l:#6BB5F0;--blue-pale:#0D2A45;
+  --teal:#2DC98A;--teal-pale:#0A2E1F;
+  --coral:#F07050;--coral-pale:#3A1A10;
+  --amber:#E0A030;--amber-pale:#352500;
+  --violet:#9B94F0;--violet-pale:#1E1A40;
+  --text:#F0EEE8;--muted:#A8A69E;--hint:#6A6860;
+  --bg:#0F1117;--surface:#181C24;--surface2:#1E2330;
+  --border:rgba(255,255,255,0.08);--border-m:rgba(255,255,255,0.13);
+  --r:10px;--r-lg:14px;--r-xl:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+*{scrollbar-width:thin;scrollbar-color:#2A2E38 #0F1117}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:#0F1117}
+::-webkit-scrollbar-thumb{background:#2A2E38;border-radius:3px}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;min-height:100vh}
+.hdr{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:58px;position:sticky;top:0;z-index:200;gap:1rem;flex-wrap:wrap}
+.hdr-left{display:flex;align-items:center;gap:12px}
+.hdr-logo{height:24px;filter:brightness(0) invert(1);opacity:.85}
+.hdr-div{width:1px;height:18px;background:var(--border-m)}
+.hdr-title{font-size:13px;color:var(--muted)}
+.btn-ghost{padding:5px 14px;background:transparent;color:var(--muted);border:1px solid var(--border-m);border-radius:var(--r);font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif}
+.btn-ghost:hover{background:var(--surface2)}
+.bdg{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;background:var(--blue-pale);color:var(--blue)}
+/* SELECTOR */
+.sel-wrap{max-width:640px;margin:3rem auto;text-align:center;padding:0 2rem}
+.sel-wrap h2{font-size:20px;font-weight:600;margin-bottom:.5rem}
+.sel-wrap p{font-size:13px;color:var(--muted);margin-bottom:1.5rem;line-height:1.6}
+select.cli-sel{width:100%;font-size:14px;padding:10px 16px;border:1px solid var(--border-m);border-radius:var(--r);background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:1rem;color-scheme:dark}
+.btn-ver{width:100%;padding:12px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif}
+.btn-ver:hover{background:#3A8ECF}
+/* REPORT */
+.report{max-width:900px;margin:0 auto;padding:2rem 2rem 4rem}
+/* COVER */
+.cover{background:linear-gradient(135deg,#0D1A2E 0%,#0D2A45 50%,#0A1E35 100%);border:1px solid var(--border-m);border-radius:var(--r-xl);padding:2.5rem 2.5rem 2rem;margin-bottom:1.5rem;position:relative;overflow:hidden}
+.cover::before{content:'';position:absolute;top:-60px;right:-60px;width:240px;height:240px;border-radius:50%;background:rgba(74,158,224,0.06);pointer-events:none}
+.cover-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.5rem;gap:1rem;flex-wrap:wrap}
+.cover-logo{height:28px;filter:brightness(0) invert(1);opacity:.9}
+.cover-period{font-size:12px;color:var(--blue);font-weight:500;background:var(--blue-pale);padding:4px 12px;border-radius:20px}
+.cover-client{font-size:28px;font-weight:600;color:#fff;margin-bottom:.25rem;line-height:1.2}
+.cover-sub{font-size:13px;color:rgba(255,255,255,.4);margin-bottom:1.25rem}
+.cover-meta{display:flex;gap:1.5rem;flex-wrap:wrap}
+.cover-meta-item{font-size:12px;color:rgba(255,255,255,.4)}
+.cover-meta-item strong{color:rgba(255,255,255,.75);font-weight:500}
+.cover-divider{height:1px;background:rgba(255,255,255,.08);margin:1.25rem 0}
+/* KAM LETTER */
+.kam-letter{background:rgba(255,255,255,.04);border-radius:var(--r);padding:1rem 1.25rem;border-left:3px solid rgba(74,158,224,.4)}
+.kam-letter-label{font-size:10px;color:rgba(255,255,255,.35);font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+.kam-letter-text{font-size:13px;color:rgba(255,255,255,.6);line-height:1.7;font-style:italic}
+.kam-letter-sig{font-size:12px;color:rgba(255,255,255,.35);margin-top:.5rem}
+/* SECTION */
+.sec-title{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--hint);margin:1.75rem 0 .9rem;display:flex;align-items:center;gap:8px}
+.sec-title::after{content:'';flex:1;height:.5px;background:var(--border)}
+.sec-icon{font-size:14px}
+/* KPI GRID */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:1rem}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:.9rem 1rem}
+.kpi.ab{border-left:3px solid var(--blue)}.kpi.at{border-left:3px solid var(--teal)}.kpi.aa{border-left:3px solid var(--amber)}.kpi.ac{border-left:3px solid var(--coral)}.kpi.av{border-left:3px solid var(--violet)}
+.kpi-label{font-size:10px;color:var(--hint);font-weight:500;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em}
+.kpi-value{font-size:24px;font-weight:600;line-height:1;font-family:'DM Mono',monospace}
+.kpi-sub{font-size:11px;color:var(--hint);margin-top:3px}
+/* VALUE CARD */
+.valor-card{background:linear-gradient(135deg,#0D2A45,#1E1A40);border:1px solid var(--border-m);border-radius:var(--r-lg);padding:1.5rem;margin-bottom:1rem}
+.valor-label{font-size:10px;color:rgba(255,255,255,.35);font-weight:500;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.4rem}
+.valor-main{font-size:38px;font-weight:600;font-family:'DM Mono',monospace;color:#fff;line-height:1;margin-bottom:.2rem}
+.valor-sub{font-size:12px;color:rgba(255,255,255,.4);margin-bottom:1.25rem;line-height:1.5}
+.valor-breakdown{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:.75rem}
+.vb{background:rgba(255,255,255,.05);border-radius:var(--r);padding:.75rem 1rem}
+.vb-label{font-size:10px;color:rgba(255,255,255,.35);font-weight:500;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+.vb-hh{font-size:13px;color:rgba(255,255,255,.5);margin-bottom:2px}
+.vb-value{font-size:18px;font-weight:600;font-family:'DM Mono',monospace;color:#fff}
+.vb-tarifa{font-size:10px;color:rgba(255,255,255,.3);margin-top:2px}
+.valor-note{font-size:11px;color:rgba(255,255,255,.25);line-height:1.5;font-style:italic}
+/* INSIGHT */
+.insight{background:var(--surface2);border-radius:var(--r);padding:.85rem 1rem;margin-bottom:.75rem;font-size:13px;color:var(--muted);line-height:1.6;border-left:3px solid var(--border-m)}
+.insight.positive{border-left-color:var(--teal);background:var(--teal-pale);color:#9AE8C4}
+.insight.warning{border-left-color:var(--amber);background:var(--amber-pale);color:#E0C080}
+.insight.alert{border-left-color:var(--coral);background:var(--coral-pale);color:#F0A090}
+.insight.info{border-left-color:var(--blue);background:var(--blue-pale);color:#90C8F0}
+.insight strong{color:inherit;font-weight:600}
+/* MONTHLY BAR */
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:1rem}
+.box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.1rem 1.25rem}
+.box-title{font-size:12px;font-weight:500;color:var(--text);margin-bottom:.75rem}
+.chart-wrap{overflow:visible}
+/* TOP BITÁCORAS */
+.top-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:.5px solid var(--border);font-size:12px}
+.top-row:last-child{border-bottom:none}
+.top-num{width:20px;font-size:11px;color:var(--hint);flex-shrink:0;text-align:right}
+.top-title{color:var(--muted);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top-bar-wrap{width:80px;flex-shrink:0}
+.top-bar-bg{height:4px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden}
+.top-bar-fill{height:100%;background:var(--blue);border-radius:2px}
+.top-hh{font-family:'DM Mono',monospace;font-size:11px;color:var(--blue);width:45px;text-align:right;flex-shrink:0}
+/* TREND BARS */
+.trend-row{display:flex;align-items:center;gap:10px;margin-bottom:7px;font-size:12px}
+.trend-label{color:var(--muted);width:100px;flex-shrink:0;font-size:11px}
+.trend-bg{flex:1;background:rgba(255,255,255,.06);border-radius:3px;height:8px;overflow:hidden}
+.trend-fill{height:100%;border-radius:3px}
+.trend-val{color:var(--text);font-family:'DM Mono',monospace;font-size:11px;width:36px;text-align:right;flex-shrink:0}
+/* MADUREZ */
+.madurez-wrap{padding:.5rem 0}
+.madurez-scale{display:flex;gap:6px;margin-bottom:.6rem}
+.madurez-dot{flex:1;height:8px;border-radius:4px;background:rgba(255,255,255,.08);transition:background .2s}
+.madurez-dot.active{background:var(--blue)}
+.madurez-dot.partial{background:rgba(74,158,224,.35)}
+.madurez-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--hint);margin-bottom:.75rem}
+.madurez-desc{font-size:12px;color:var(--muted);line-height:1.5}
+/* SUMMARY TABLE */
+.sum-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:1rem}
+.sum-tbl th{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--hint);padding:7px 10px;border-bottom:1px solid var(--border);text-align:left}
+.sum-tbl td{padding:8px 10px;border-bottom:1px solid var(--border);color:var(--muted)}
+.sum-tbl td:first-child{color:var(--text);font-weight:500}
+.sum-tbl td.n{font-family:'DM Mono',monospace;text-align:right}
+.sum-tbl td.hi{color:var(--blue);font-weight:600}
+.sum-tbl tr:last-child td{border-bottom:none}
+.sum-tbl tr.total-row td{background:rgba(74,158,224,.06);color:var(--text);font-weight:600}
+/* ROADMAP */
+.roadmap-item{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start;padding:10px 0;border-bottom:.5px solid var(--border)}
+.roadmap-item:last-child{border-bottom:none}
+.roadmap-num{width:24px;height:24px;border-radius:50%;background:var(--surface2);color:var(--blue);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--border-m)}
+.roadmap-content{flex:1}
+.roadmap-iniciativa{font-size:13px;color:var(--muted);font-style:italic;border-bottom:.5px dashed var(--border);padding-bottom:3px;margin-bottom:3px}
+.roadmap-objetivo{font-size:11px;color:var(--hint);font-style:italic}
+.roadmap-prioridad{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;white-space:nowrap;align-self:flex-start}
+.p-alta{background:var(--coral-pale);color:var(--coral)}
+.p-media{background:var(--amber-pale);color:var(--amber)}
+.p-baja{background:var(--blue-pale);color:var(--blue)}
+/* FOOTER */
+.rep-footer{margin-top:2.5rem;border-top:1px solid var(--border);padding-top:1.25rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem}
+.rep-footer-l{font-size:11px;color:var(--hint)}
+.rep-footer-logo{height:16px;filter:brightness(0) invert(1);opacity:.3}
+.confidential{text-align:center;font-size:10px;color:var(--hint);letter-spacing:.1em;text-transform:uppercase;margin-top:.75rem}
+@media print{.hdr,.sel-wrap{display:none}.report{padding:0}body{background:#0F1117}}
+@media(max-width:600px){.kpi-grid{grid-template-columns:repeat(2,1fr)}.chart-row,.valor-breakdown{grid-template-columns:1fr}.cover{padding:1.5rem}.cover-client{font-size:22px}}
+
+/* UPLOAD SCREEN */
+.upload-screen{max-width:720px;margin:2rem auto;padding:0 2rem}
+.upload-hero{text-align:center;padding:2rem 0 1.5rem}
+.upload-hero h2{font-size:18px;font-weight:600;margin-bottom:.4rem}
+.upload-hero p{font-size:13px;color:var(--muted);line-height:1.6}
+.src-cards{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:1.25rem}
+.src-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:1rem 1.25rem}
+.src-header{display:flex;align-items:center;gap:10px;margin-bottom:.6rem}
+.src-icon{width:32px;height:32px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.src-title{font-size:13px;font-weight:600;color:var(--text)}
+.src-desc{font-size:11px;color:var(--hint);margin-top:1px}
+.src-steps{font-size:12px;color:var(--hint);margin-bottom:.5rem;line-height:1.6}
+.src-steps strong{color:var(--muted)}
+kbd{background:var(--surface2);padding:1px 5px;border-radius:3px;border:1px solid var(--border-m);font-family:'DM Mono',monospace;font-size:11px}
+textarea{width:100%;height:90px;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);background:#0A0D12;border:1px solid var(--border-m);border-radius:var(--r);padding:.65rem;resize:vertical;outline:none;color-scheme:dark}
+textarea:focus{border-color:var(--blue)}
+.src-status{font-size:12px;margin-top:.35rem;min-height:16px}
+.progress-wrap{margin-top:.75rem;display:none}
+.progress-bar{height:4px;background:var(--border-m);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--blue);border-radius:2px;width:0;transition:width .3s}
+.progress-msg{font-size:12px;color:var(--hint);margin-top:.4rem;text-align:center}
+.btn-primary{padding:10px 28px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;display:block;width:100%;margin-top:.5rem}
+.btn-primary:hover{background:#3A8ECF}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-left">
+    <img class="hdr-logo" src="https://crossnet.la/wp-content/uploads/2024/10/logo-crossnet_header.svg" alt="CrossNet" onerror="this.style.display='none'">
+    <div class="hdr-div"></div>
+    <span class="hdr-title">Reporte Ejecutivo de Servicio</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px">
+    <span class="bdg" id="hdr-period">Sin datos</span>
+    <button class="btn-ghost" onclick="resetView()">← Cargar nuevos datos</button>
+    <button class="btn-ghost" onclick="window.print()">🖨 Imprimir / PDF</button>
+  </div>
+</header>
+
+<!-- ══ UPLOAD SCREEN ══ -->
+<div id="upload-screen">
+  <div class="upload-screen">
+    <div class="upload-hero">
+      <div style="font-size:3rem;margin-bottom:.75rem">📋</div>
+      <h2>Reporte Ejecutivo de Servicio</h2>
+      <p>Pega el contenido de los 3 archivos del período para generar los reportes por cliente.<br>Los 3 archivos deben cubrir el mismo período de tiempo.</p>
+    </div>
+    <div class="src-cards">
+      <div class="src-card">
+        <div class="src-header">
+          <div class="src-icon" style="background:var(--blue-pale)">📋</div>
+          <div><div class="src-title">1. Bitácoras (Servicio Evolutivo)</div><div class="src-desc">Export del Portal CrossNet · bitácoras verificadas del período</div></div>
+        </div>
+        <div class="src-steps"><strong>Pasos:</strong> Portal → Export bitácoras → Bloc de notas → <kbd>Ctrl+A</kbd> → <kbd>Ctrl+C</kbd> → pegar aquí</div>
+        <textarea id="txt-bit" placeholder="Pega aquí el CSV de bitácoras..." oninput="chk()" onpaste="setTimeout(chk,100)" onkeyup="chk()"></textarea>
+        <div class="src-status" id="st-bit" style="color:var(--hint)">Esperando datos…</div>
+      </div>
+      <div class="src-card">
+        <div class="src-header">
+          <div class="src-icon" style="background:var(--teal-pale)">🛠</div>
+          <div><div class="src-title">2. Tickets CSR (Soporte)</div><div class="src-desc">Export del sistema CSR · tickets del período filtrado por Perú</div></div>
+        </div>
+        <div class="src-steps"><strong>Pasos:</strong> Sistema CSR → Export tickets Perú → Bloc de notas → <kbd>Ctrl+A</kbd> → <kbd>Ctrl+C</kbd> → pegar aquí</div>
+        <textarea id="txt-csr" placeholder="Pega aquí el CSV de tickets CSR..." oninput="chk()" onpaste="setTimeout(chk,100)" onkeyup="chk()"></textarea>
+        <div class="src-status" id="st-csr" style="color:var(--hint)">Esperando datos…</div>
+      </div>
+      <div class="src-card">
+        <div class="src-header">
+          <div class="src-icon" style="background:var(--amber-pale)">💰</div>
+          <div><div class="src-title">3. Facturación recurrente (FR)</div><div class="src-desc">Export del Portal CrossNet · Detalle de Facturación Mensual · solo FR</div></div>
+        </div>
+        <div class="src-steps"><strong>Pasos:</strong> Portal → Facturación → Export → Bloc de notas → <kbd>Ctrl+A</kbd> → <kbd>Ctrl+C</kbd> → pegar aquí</div>
+        <textarea id="txt-fact" placeholder="Pega aquí el CSV de facturación..." oninput="chk()" onpaste="setTimeout(chk,100)" onkeyup="chk()"></textarea>
+        <div class="src-status" id="st-fact" style="color:var(--hint)">Esperando datos…</div>
+      </div>
+    </div>
+    <div class="progress-wrap" id="prog-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="prog-fill"></div></div>
+      <div class="progress-msg" id="prog-msg">Procesando…</div>
+    </div>
+    <button class="btn-primary" id="btn-load" onclick="loadAll()" disabled>Cargar reportes</button>
+    <div id="load-err" style="font-size:12px;color:var(--coral);margin-top:.5rem;text-align:center"></div>
+  </div>
+</div>
+
+<!-- ══ SELECTOR ══ -->
+<div id="selector-view" style="display:none">
+  <div class="sel-wrap">
+    <div style="font-size:2.5rem;margin-bottom:.75rem">📊</div>
+    <h2>Selecciona un cliente</h2>
+    <p id="sel-period-desc" style="font-size:13px;color:var(--muted);margin-bottom:1.25rem"></p>
+    <select class="cli-sel" id="cli-select"></select>
+    <button class="btn-ver" onclick="showReport()">Ver reporte →</button>
+  </div>
+</div>
+
+<!-- ══ REPORT ══ -->
+<div id="report-view" style="display:none">
+  <div class="report" id="report-content"></div>
+</div>
+
+<script>
+// ════ CONFIG ════
+const TARIFA_CN=120, TARIFA_CSR=80;
+const EN_PRODUCCION=['Ministerio de Transporte y Comunicaciones (MTC)','MTC','SEDAPAR'];
+const EN_HABILITACION=['Calidda'];
+const INRETAIL=['InRetail','SPSA','Oechsle','Real Plaza','Promart','REAL PLAZA'];
+const EXCLUIR=['Verisure Perú','CrossNet Perú','CrossNet Chile','Crossnet Colombia','Crossnet Argentina','CrossNet México'];
+const TIPOS_INC=['Incidente *','Incidente - Reporte *','Incidente Seguridad *'];
+const TIPOS_CSR_OK=['Requerimiento','Incidente *','Consulta','Checklist','Feriado - Día Especial - IVR','Inducción','Incidente - Reporte *','Incidente Seguridad *','Asistencia Proyectos','Asistencia Remota','Asistencia Terreno','Evento'];
+const CLIENT_MAP={
+  'Grupo San Pablo (GSP)':     {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia Ramírez'},
+  'Clínica Internacional':     {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Calidda':                   {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Banco Ripley':              {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'MAF Perú':                  {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Inchcape Perú':             {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Indecopi':                  {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Alfin Banco (antes Banco Azteca)':{team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Intursa':                   {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Oftalmosalud':              {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Fondos Sura':               {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Drager Peru':               {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'AVLA':                      {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Pluxee (Sodexo) - Perú':    {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Jockey Salud':              {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'MTC':                       {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'Ministerio de Transporte y Comunicaciones (MTC)':{team:'Mistura',kam:'Zinthia Mansilla',sdm:'Tomás Del Piélago'},
+  'AFP Integra - Sura Perú':   {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia Ramírez'},
+  'Sanna':                     {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia Ramírez'},
+  'MI FIBRA':                  {team:'Chilcano',kam:'Paola Jacobs',sdm:'Claudia Ramírez'},
+  'Continental Travel':        {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia Ramírez'},
+  'La Protectora':             {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Claudia Ramírez'},
+  'Mapfre Perú':               {team:'Chilcano',kam:'Paola Jacobs',sdm:'Tomás Del Piélago'},
+  'Financiera Oh!':            {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'InRetail (grupo)':          {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'Farmacias Peruanas':        {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'Química Suiza':             {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'SBS':                       {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'Casa Andina Hoteles':       {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'Pardos Chicken':            {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'NGR':                       {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'MAKRO':                     {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'ONPE':                      {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+  'CENTRIA':                   {team:'Mistura',kam:'Zinthia Mansilla',sdm:'Angy Medina'},
+  'SEDAPAR':                   {team:'Chilcano',kam:'Paola Jacobs',sdm:'Angy Medina'},
+};
+
+// ════ UTILS ════
+let DATA=[];
+function fU(n){return n>=1000?'USD '+Math.round(n/1000).toLocaleString()+'k':'USD '+Math.round(n)}
+function fN(n,d=1){return Number(n).toFixed(d)}
+function slaColor(p){return p>=80?'var(--teal)':p>=65?'var(--amber)':'var(--coral)'}
+function slaLabel(p){return p>=80?'Excelente':p>=65?'Aceptable':'Por mejorar'}
+function normCli(x){
+  x=String(x).trim().replace(/\s+/g,' ');
+  if(INRETAIL.includes(x)) return 'InRetail (grupo)';
+  if(x.includes('GSP')) return 'Grupo San Pablo (GSP)';
+  return x;
+}
+
+// ════ CSV PARSER ════
+function parseCSV(text){
+  const lines=text.split('\n');
+  const first=lines[0]||'';
+  const delim=(first.split(';').length>first.split(',').length)?';':',';
+  const headers=splitLine(lines[0],delim).map(h=>h.replace(/^"|"$/g,'').trim());
+  const data=[];
+  for(let i=1;i<lines.length;i++){
+    const line=lines[i].trim();if(!line) continue;
+    const vals=splitLine(line,delim);
+    const row={};
+    headers.forEach((h,idx)=>{
+      let v=(vals[idx]||'').replace(/^"|"$/g,'').trim();
+      const n=parseFloat(v.replace(',','.'));
+      row[h]=(!isNaN(n)&&v!==''&&!/^\d{4}-/.test(v)&&v.length<12)?n:v;
+    });
+    data.push(row);
+  }
+  return {data,headers,delim};
+}
+function splitLine(line,delim){
+  const r=[];let cur='',inQ=false;
+  for(let i=0;i<line.length;i++){
+    const c=line[i];
+    if(c==='"'){inQ=!inQ;}
+    else if(c===delim&&!inQ){r.push(cur);cur='';}
+    else{cur+=c;}
+  }
+  r.push(cur);return r;
+}
+
+// ════ PARSE FACTURACIÓN (nested quotes format) ════
+function parseFact(text){
+  const lines=text.split('\n');
+  const rows=[];
+  for(let i=1;i<lines.length;i++){
+    let line=lines[i].trim();if(!line) continue;
+    if(line.startsWith('"')&&line.endsWith('"')) line=line.slice(1,-1);
+    line=line.replace(/""/g,'"');
+    const parts=splitLine(line,',');
+    if(parts.length>=9){
+      const usd=parseFloat((parts[6]||'0').replace(',','.'));
+      rows.push({
+        pais:parts[0],
+        cliente:normCli(parts[1].trim()),
+        tipo:parts[8].trim(),
+        usd:isNaN(usd)?0:usd,
+      });
+    }
+  }
+  // Solo FR, solo Perú, excluir internos
+  return rows.filter(r=>r.pais==='Perú'&&r.tipo==='FR'&&!EXCLUIR.includes(r.cliente));
+}
+
+// ════ STATUS CHECK ════
+function chk(){
+  const sources=[
+    {txtId:'txt-bit',stId:'st-bit',check:d=>d.headers.includes('Cliente')&&d.headers.includes('HH Utilizadas')},
+    {txtId:'txt-csr',stId:'st-csr',check:d=>d.headers.includes('Unique ID')&&d.headers.includes('Ticket País')},
+    {txtId:'txt-fact',stId:'st-fact',check:d=>true}, // fact has custom parser
+  ];
+  let allOk=true;
+  sources.forEach((src,idx)=>{
+    const txt=document.getElementById(src.txtId).value.trim();
+    const st=document.getElementById(src.stId);
+    if(!txt){st.textContent='Esperando datos…';st.style.color='var(--hint)';allOk=false;return;}
+    try{
+      if(idx===2){
+        // Facturación: just check has content
+        const lines=txt.split('\n').filter(l=>l.trim()).length;
+        st.textContent=`✓ ${lines} líneas detectadas`;st.style.color='var(--teal)';
+      } else {
+        const p=parseCSV(txt);
+        if(src.check(p)){st.textContent=`✓ ${p.data.length} filas`;st.style.color='var(--teal)'}
+        else{st.textContent=`⚠ Columnas no reconocidas`;st.style.color='var(--coral)';allOk=false;}
+      }
+    } catch(e){st.textContent='⚠ Error al leer';st.style.color='var(--coral)';allOk=false;}
+  });
+  const btn=document.getElementById('btn-load');
+  btn.disabled=!allOk;btn.style.opacity=allOk?'1':'0.4';
+}
+
+function setProgress(pct,msg){
+  document.getElementById('prog-wrap').style.display='block';
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-msg').textContent=msg;
+}
+
+// ════ LOAD ALL ════
+function loadAll(){
+  setProgress(10,'Leyendo bitácoras…');
+  setTimeout(()=>{
+    try{
+      const rawBit=parseCSV(document.getElementById('txt-bit').value.trim()).data;
+      setProgress(35,'Leyendo tickets CSR…');
+      const rawCSR=parseCSV(document.getElementById('txt-csr').value.trim()).data;
+      setProgress(60,'Leyendo facturación…');
+      const rawFact=parseFact(document.getElementById('txt-fact').value.trim());
+      setProgress(80,'Procesando y cruzando datos…');
+      DATA=buildData(rawBit,rawCSR,rawFact);
+      setProgress(100,'¡Listo!');
+      setTimeout(()=>{
+        buildSelector();
+        document.getElementById('upload-screen').style.display='none';
+        document.getElementById('selector-view').style.display='block';
+      },300);
+    } catch(e){
+      document.getElementById('load-err').textContent='Error: '+e.message;
+      console.error(e);
+    }
+  },50);
+}
+
+// ════ BUILD DATA ════
+function buildData(rawBit,rawCSR,rawFact){
+  // Period detection from bitácoras
+  const dates=rawBit.map(r=>new Date(r['Fecha Creación']||r['Fecha Creacion']||'')).filter(d=>!isNaN(d));
+  const minDate=new Date(Math.min(...dates));
+  const maxDate=new Date(Math.max(...dates));
+  const ML={1:'Enero',2:'Febrero',3:'Marzo',4:'Abril',5:'Mayo',6:'Junio',7:'Julio',8:'Agosto',9:'Septiembre',10:'Octubre',11:'Noviembre',12:'Diciembre'};
+  const periodo=minDate.getMonth()===maxDate.getMonth()&&minDate.getFullYear()===maxDate.getFullYear()
+    ?ML[minDate.getMonth()+1]+' '+minDate.getFullYear()
+    :`${ML[minDate.getMonth()+1]} — ${ML[maxDate.getMonth()+1]} ${maxDate.getFullYear()}`;
+  document.getElementById('hdr-period').textContent=periodo;
+  document.getElementById('sel-period-desc').textContent=`${DATA.length||''} clientes con datos en el período: ${periodo}`;
+
+  // Unique months
+  const mesSet=new Set();
+  rawBit.forEach(r=>{
+    const fc=new Date(r['Fecha Creación']||r['Fecha Creacion']||'');
+    if(!isNaN(fc)) mesSet.add(`${fc.getFullYear()}-${String(fc.getMonth()+1).padStart(2,'0')}`);
+  });
+  const meses=[...mesSet].sort().map(k=>{
+    const [y,m]=k.split('-');
+    return {num:parseInt(m),label:ML[parseInt(m)]+' '+y,key:k};
+  });
+
+  // FACTURACIÓN por cliente
+  const factMap={};
+  rawFact.forEach(r=>{
+    if(!factMap[r.cliente]) factMap[r.cliente]=0;
+    factMap[r.cliente]+=r.usd;
+  });
+
+  // BITÁCORAS por cliente
+  const bitMap={};
+  rawBit.forEach(r=>{
+    const cli=normCli(r['Cliente']||'');
+    if(EXCLUIR.includes(cli)||cli==='CrossNet Perú') return;
+    const hh=parseFloat(String(r['HH Utilizadas']||0).replace(',','.'))||0;
+    const fc=new Date(r['Fecha Creación']||r['Fecha Creacion']||'');
+    const fn=new Date(r['Fecha notificación']||r['Fecha notificacion']||'');
+    const fcomp=new Date(r['Fecha Compromiso']||'');
+    const mes=isNaN(fc)?null:fc.getMonth()+1;
+    if(!bitMap[cli]) bitMap[cli]={bit:0,hh:0,slaOk:0,slaTot:0,byMes:{}};
+    bitMap[cli].bit++;
+    bitMap[cli].hh+=hh;
+    if(!isNaN(fcomp)&&!isNaN(fn)){
+      bitMap[cli].slaTot++;
+      if(fn<=fcomp) bitMap[cli].slaOk++;
+    }
+    if(mes){
+      if(!bitMap[cli].byMes[mes]) bitMap[cli].byMes[mes]={bit:0,hh:0};
+      bitMap[cli].byMes[mes].bit++;
+      bitMap[cli].byMes[mes].hh+=hh;
+    }
+  });
+
+  // CSR por cliente — SLA SOLO para incidentes
+  const csrMap={};
+  rawCSR.filter(r=>{
+    const pais=(r['Ticket País']||r['Ticket Pais']||'').trim();
+    return pais==='Perú'&&TIPOS_CSR_OK.includes((r['Tipo']||'').trim());
+  }).forEach(r=>{
+    const cli=normCli(r['Cliente']||'');
+    if(EXCLUIR.includes(cli)) return;
+    const n1=parseFloat(r['Para el Cierre N1 Tiempo Dedicación']||0)||0;
+    const n2=parseFloat(r['Para el Cierre N2 Tiempo Dedicación']||0)||0;
+    const n3=parseFloat(r['Para el Cierre N3 Tiempo Dedicación']||0)||0;
+    const hh=n1+n2+n3;
+    const fc=new Date(r['Created on']||'');
+    const fs=new Date(r['Para el Cierre Fecha Solución (24hrs)']||'');
+    const hrs=(!isNaN(fc)&&!isNaN(fs))?(fs-fc)/3600000:null;
+    const mes=isNaN(fc)?null:fc.getMonth()+1;
+    const tipo=(r['Tipo']||'').trim();
+    const esIncidente=TIPOS_INC.includes(tipo);
+    if(!csrMap[cli]) csrMap[cli]={tickets:0,hh:0,incidentes:0,reqs:0,consultas:0,otros:0,incSlaOk:0,incSlaTot:0,tResolArr:[],byMes:{}};
+    csrMap[cli].tickets++;
+    csrMap[cli].hh+=hh;
+    if(esIncidente){
+      csrMap[cli].incidentes++;
+      if(hrs!==null){
+        csrMap[cli].incSlaTot++;
+        if(hrs<=24) csrMap[cli].incSlaOk++;
+        csrMap[cli].tResolArr.push(hrs);
+      }
+    } else if(tipo==='Requerimiento') csrMap[cli].reqs++;
+    else if(tipo==='Consulta') csrMap[cli].consultas++;
+    else csrMap[cli].otros++;
+    if(mes){
+      if(!csrMap[cli].byMes[mes]) csrMap[cli].byMes[mes]={tickets:0,hh:0};
+      csrMap[cli].byMes[mes].tickets++;
+      csrMap[cli].byMes[mes].hh+=hh;
+    }
+  });
+
+  // MERGE
+  const allCli=new Set([...Object.keys(factMap),...Object.keys(bitMap),...Object.keys(csrMap)]);
+  const out=[];
+  allCli.forEach(cli=>{
+    if(EXCLUIR.includes(cli)||cli==='CrossNet Perú') return;
+    const f=factMap[cli]||0;
+    const b=bitMap[cli]||{bit:0,hh:0,slaOk:0,slaTot:0,byMes:{}};
+    const c=csrMap[cli]||{tickets:0,hh:0,incidentes:0,reqs:0,consultas:0,otros:0,incSlaOk:0,incSlaTot:0,tResolArr:[],byMes:{}};
+    const map=CLIENT_MAP[cli]||{team:'—',kam:'—',sdm:'—'};
+
+    let bBit=b.bit,bHH=b.hh,bSlaOk=b.slaOk,bSlaTot=b.slaTot;
+    let cTick=c.tickets,cHH=c.hh,cInc=c.incidentes,cReqs=c.reqs,cConsultas=c.consultas;
+    let nota='',isHab=false,isProd=false;
+
+    if(EN_HABILITACION.some(e=>cli.toLowerCase().includes(e.toLowerCase()))){
+      bBit=0;bHH=0;bSlaOk=0;bSlaTot=0;cTick=0;cHH=0;cInc=0;cReqs=0;cConsultas=0;
+      nota='Salió a producción recientemente. La actividad Q1 corresponde al proceso de habilitación, no al servicio consultivo regular.';
+      isHab=true;
+    }
+    if(EN_PRODUCCION.some(e=>cli===e||cli.toLowerCase().includes(e.toLowerCase()))){
+      nota='Inició operaciones recientemente. El servicio evolutivo pleno comenzará a partir del siguiente período.';
+      isProd=true;
+    }
+
+    const sla_bit_pct=bSlaTot>0?Math.round(bSlaOk/bSlaTot*100):0;
+    const sla_inc_pct=c.incSlaTot>0?Math.round(c.incSlaOk/c.incSlaTot*100):0;
+    const t_resol_prom=c.tResolArr.length?c.tResolArr.reduce((s,v)=>s+v,0)/c.tResolArr.length:0;
+    const hh_total=bHH+cHH;
+    const valor_cn=Math.round(bHH*TARIFA_CN);
+    const valor_csr=Math.round(cHH*TARIFA_CSR);
+
+    const byMes={};
+    meses.forEach(m=>{
+      byMes[m.num]={
+        label:m.label.split(' ')[0],
+        bit:b.byMes[m.num]?.bit||0,
+        hhEvol:b.byMes[m.num]?.hh||0,
+        tickets:c.byMes[m.num]?.tickets||0,
+      };
+    });
+
+    // Top bitácoras
+    const topBit=[];
+    // We can't easily get per-bitacora titles here without storing them
+    // Store in bitMap during processing
+    out.push({
+      cliente:cli,fr:Math.round(f*100)/100,
+      team:map.team,kam:map.kam,sdm:map.sdm,periodo,
+      es_habilitacion:isHab,es_produccion_reciente:isProd,nota,
+      bit_total:bBit,hh_evol:Math.round(bHH*10)/10,
+      sla_bit_pct,
+      hh_prom_bit:bBit>0?Math.round(bHH/bBit*10)/10:0,
+      tickets:cTick,hh_csr:cHH,incidentes:cInc,
+      reqs_csr:cReqs,consultas:cConsultas,otros_csr:Math.max(cTick-cInc-cReqs-cConsultas,0),
+      sla_inc_pct,t_resol_prom:Math.round(t_resol_prom*10)/10,
+      hh_total:Math.round(hh_total*10)/10,
+      valor_cn,valor_csr,tarifa_cn:TARIFA_CN,tarifa_csr:TARIFA_CSR,
+      byMes,meses,top_bit:[],
+    });
+  });
+
+  out.sort((a,b)=>b.fr-a.fr);
+
+  // Update period description
+  document.getElementById('sel-period-desc').textContent=`${out.length} clientes con datos · período: ${periodo}`;
+  return out;
+}
+
+// ════ SELECTOR ════
+function buildSelector(){
+  const sel=document.getElementById('cli-select');
+  sel.innerHTML='';
+  DATA.forEach(d=>{
+    const o=document.createElement('option');
+    o.value=d.cliente;o.textContent=d.cliente;sel.appendChild(o);
+  });
+}
+
+function showReport(){
+  const nombre=document.getElementById('cli-select').value;
+  const d=DATA.find(x=>x.cliente===nombre);
+  if(!d) return;
+  renderReport(d);
+  document.getElementById('selector-view').style.display='none';
+  document.getElementById('report-view').style.display='block';
+  window.scrollTo(0,0);
+}
+
+function showSelector(){
+  document.getElementById('report-view').style.display='none';
+  document.getElementById('selector-view').style.display='block';
+}
+
+function resetView(){
+  document.getElementById('report-view').style.display='none';
+  document.getElementById('selector-view').style.display='none';
+  document.getElementById('upload-screen').style.display='block';
+  document.getElementById('prog-wrap').style.display='none';
+  ['txt-bit','txt-csr','txt-fact'].forEach(id=>document.getElementById(id).value='');
+  ['st-bit','st-csr','st-fact'].forEach(id=>{
+    const el=document.getElementById(id);el.textContent='Esperando datos…';el.style.color='var(--hint)';
+  });
+  document.getElementById('btn-load').disabled=true;
+  document.getElementById('load-err').textContent='';
+}
+
+// ════ MADUREZ ════
+const MADUREZ_DESC = [
+  '',
+  'Implementación básica — la plataforma está operativa con configuración estándar. Las funcionalidades clave están por habilitar.',
+  'Adopción inicial — los canales principales están activos. Se están explorando las primeras integraciones y automatizaciones.',
+  'En desarrollo — múltiples canales integrados, primeras automatizaciones activas. El equipo opera con fluidez en la plataforma.',
+  'Madurez avanzada — integraciones CRM, automatización de flujos y analítica activa. El cliente saca partido estratégico de la plataforma.',
+  'Excelencia operativa — la plataforma está completamente integrada al ecosistema del cliente. La IA y automatización son parte del servicio diario.',
+];
+function setMadurez(cliId,nivel){
+  const dots=document.querySelectorAll('#madurez-'+cliId+' .madurez-dot');
+  dots.forEach((d,i)=>{d.className='madurez-dot';if(i+1<=nivel)d.classList.add('active');else if(i+1===nivel+1)d.classList.add('partial');});
+  document.getElementById('madurez-desc-'+cliId).textContent=MADUREZ_DESC[nivel]||'';
+  document.getElementById('madurez-num-'+cliId).textContent=nivel;
+}
+
+// ════ SVG ════
+function svgMiniBar(values,colors,labels){
+  const W=260,H=110,pad={t:12,r:8,b:28,l:28};
+  const cw=W-pad.l-pad.r,ch=H-pad.t-pad.b;
+  const maxV=Math.max(...values,1);
+  const bw=(cw/values.length)*0.55,gap=(cw/values.length)*0.225;
+  let s=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;display:block">`;
+  s+=`<line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${pad.t+ch}" stroke="rgba(255,255,255,0.06)"/>`;
+  s+=`<line x1="${pad.l}" y1="${pad.t+ch}" x2="${pad.l+cw}" y2="${pad.t+ch}" stroke="rgba(255,255,255,0.06)"/>`;
+  values.forEach((v,i)=>{
+    const x=pad.l+i*(cw/values.length)+gap;
+    const bh=Math.max((v/maxV)*ch,v>0?2:0);
+    const y=pad.t+ch-bh;
+    s+=`<rect x="${x}" y="${y}" width="${bw}" height="${bh}" fill="${colors[i]}" rx="3" opacity="0.85"/>`;
+    s+=`<text x="${x+bw/2}" y="${H-pad.b+13}" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.35)" font-family="DM Sans,sans-serif">${labels[i]}</text>`;
+    if(v>0) s+=`<text x="${x+bw/2}" y="${y-4}" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.45)" font-family="DM Mono,monospace">${Math.round(v)}</text>`;
+  });
+  s+='</svg>';return s;
+}
+
+function svgGauge(pct,color,size=72){
+  const r=26,cx=36,cy=36,circ=2*Math.PI*r;
+  const dash=circ*Math.min(pct,100)/100,gap=circ-dash;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 72 72">
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="7"/>
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="7"
+      stroke-dasharray="${dash} ${gap}" stroke-linecap="round"
+      transform="rotate(-90 ${cx} ${cy})"/>
+  </svg>`;
+}
+
+
+
+// ════ RENDER ════
+function renderReport(d){
+  const meses=d.meses||[];
+  const mesLabels=meses.map(m=>m.label.split(' ')[0]); // short: Ene, Feb, Mar
+  const bitPorMes=meses.map(m=>d.bit_mes[m.num]||0);
+  const hhPorMes=meses.map(m=>d.hh_mes[m.num]||0);
+  const tickPorMes=meses.map(m=>d.tick_mes[m.num]||0);
+
+  // Insights evolutivo
+  const insEvol=[];
+  if(d.bit_total===0){
+    insEvol.push({t:'info',txt:'No se registraron requerimientos evolutivos en este período.'});
+  } else {
+    if(d.sla_bit_pct>=85) insEvol.push({t:'positive',txt:`<strong>${d.sla_bit_pct}%</strong> de los requerimientos fue entregado en o antes de la fecha comprometida — alta confiabilidad del equipo consultor.`});
+    else if(d.sla_bit_pct>=65) insEvol.push({t:'warning',txt:`El <strong>${d.sla_bit_pct}%</strong> de los requerimientos fue entregado en o antes de la fecha comprometida.`});
+    else insEvol.push({t:'alert',txt:`El <strong>${d.sla_bit_pct}%</strong> de los requerimientos fue entregado en o antes de la fecha comprometida. Revisaremos con el equipo las causas para mejorar en el próximo período.`});
+  }
+
+  // Insights CSR
+  const insCsr=[];
+  if(d.tick_total===0){
+    insCsr.push({t:'info',txt:'No se registraron tickets de soporte en este período.'});
+  } else {
+    if(d.sla_inc_pct>=80) insCsr.push({t:'positive',txt:`<strong>${d.sla_inc_pct}%</strong> de los incidentes resuelto en menos de 24 horas — nivel de servicio excelente.`});
+    else if(d.sla_inc_pct>=65) insCsr.push({t:'warning',txt:`SLA de incidentes &lt;24h: <strong>${d.sla_inc_pct}%</strong>. Tiempo promedio de resolución: <strong>${fN(d.t_resol_prom)}h</strong>.`});
+    else insCsr.push({t:'alert',txt:`SLA incidentes &lt;24h: <strong>${d.sla_inc_pct}%</strong>, con tiempo promedio de <strong>${fN(d.t_resol_prom)}h</strong>. Estamos trabajando en reducir este indicador.`});
+    const pctInc=Math.round(d.incidentes/d.tick_total*100);
+    if(pctInc<=25) insCsr.push({t:'positive',txt:`Solo el <strong>${pctInc}%</strong> de los tickets fueron incidentes — señal de estabilidad en la plataforma.`});
+    else if(pctInc<=40) insCsr.push({t:'info',txt:`El <strong>${pctInc}%</strong> de los tickets correspondió a incidentes, atendidos con respuesta prioritaria por el CSR.`});
+    else insCsr.push({t:'warning',txt:`El <strong>${pctInc}%</strong> de tickets fueron incidentes. Vale analizar las causas raíz para reducir la ocurrencia en el próximo período.`});
+  }
+
+  // Madurez default (3 si tiene bitácoras, 2 si no)
+  const madurezDefault = d.bit_total>20?3:d.bit_total>5?2:1;
+
+  const html=`
+  <!-- COVER -->
+  <div class="cover">
+    <div class="cover-top">
+      <img class="cover-logo" src="https://crossnet.la/wp-content/uploads/2024/10/logo-crossnet_header.svg" alt="CrossNet" onerror="this.style.display='none'">
+      <span class="cover-period">${d.periodo} · Reporte Ejecutivo de Servicio</span>
+    </div>
+    <div class="cover-client">${d.cliente}</div>
+    <div class="cover-sub">Evolución Consultiva · Soporte Operativo CSR · Valor del Servicio</div>
+    <div class="cover-meta">
+      <div class="cover-meta-item">KAM <strong>${d.kam}</strong></div>
+      <div class="cover-meta-item">SDM <strong>${d.sdm}</strong></div>
+      <div class="cover-meta-item">Equipo <strong>${d.team}</strong></div>
+      <div class="cover-meta-item">Modelo <strong>Evolución y Consultoría 2.0</strong></div>
+    </div>
+    <div class="cover-divider"></div>
+    <!-- CARTA KAM -->
+    <div class="kam-letter">
+      <div class="kam-letter-label">Mensaje del KAM</div>
+      <div class="kam-letter-text" id="kam-text-${d.cliente.replace(/\s/g,'_')}" contenteditable="true">
+        Durante este trimestre nuestro equipo dedicó ${d.hh_total} horas especializadas a la operación de ${d.cliente}, combinando consultoría evolutiva y soporte continuo 7×24. Este reporte resume el trabajo realizado, los resultados obtenidos y las iniciativas que priorizamos juntos para el próximo período.
+      </div>
+      <div class="kam-letter-sig">— ${d.kam}, KAM CrossNet Perú &nbsp;|&nbsp; ${d.sdm}, SDM</div>
+      <div style="font-size:10px;color:rgba(255,255,255,.2);margin-top:.4rem;font-style:italic">Haz clic en el texto para personalizarlo antes de la reunión.</div>
+    </div>
+  </div>
+
+  ${d.es_habilitacion||d.es_produccion_reciente?`<div class="insight info">ℹ️ <strong>Contexto:</strong> ${d.es_habilitacion?'Cliente en proceso de habilitación. La actividad reflejada corresponde a la implementación inicial.':'Cliente con inicio de operaciones reciente. El servicio evolutivo pleno comenzará a partir del siguiente período.'}</div>`:''}
+
+  <!-- VALOR DEL SERVICIO -->
+  <div class="sec-title"><span class="sec-icon">💎</span>Valor del servicio CrossNet en el período</div>
+  <div class="valor-card">
+    <div class="valor-label">Valor equivalente acumulado — ${d.periodo}</div>
+    <div class="valor-main">USD ${(d.valor_cn+d.valor_csr).toLocaleString()}</div>
+    <div class="valor-sub">Calculado sobre tarifa de mercado para consultoría especializada Genesys Cloud en la región.<br>Este valor refleja el esfuerzo total del equipo CrossNet dedicado a su operación en el trimestre.</div>
+    <div class="valor-breakdown">
+      <div class="vb">
+        <div class="vb-label">📋 Consultoría evolutiva (CN)</div>
+        <div class="vb-hh">${d.hh_evol} HH especializadas</div>
+        <div class="vb-value">USD ${d.valor_cn.toLocaleString()}</div>
+        <div class="vb-tarifa">Tarifa referencia: USD ${d.tarifa_cn}/hora</div>
+      </div>
+      <div class="vb">
+        <div class="vb-label">🛠 Soporte operativo CSR 7×24</div>
+        <div class="vb-hh">${Math.ceil(d.hh_csr)} HH especializadas</div>
+        <div class="vb-value">USD ${d.valor_csr.toLocaleString()}</div>
+        <div class="vb-tarifa">Tarifa referencia: USD ${d.tarifa_csr}/hora</div>
+      </div>
+    </div>
+    <div class="valor-note">* Los valores de referencia corresponden a tarifas de mercado para servicios de consultoría e implementación Genesys Cloud en Latinoamérica. No representan la facturación CrossNet, la cual incluye licencias de plataforma, productos propios e infraestructura.</div>
+  </div>
+
+  <!-- MADUREZ DIGITAL -->
+  <div class="sec-title"><span class="sec-icon">📈</span>Índice de madurez digital — Genesys Cloud</div>
+  <div class="box" style="margin-bottom:1rem">
+    <div class="box-title">Nivel de adopción y madurez de la plataforma</div>
+    <div class="madurez-wrap" id="madurez-${d.cliente.replace(/\s/g,'_')}">
+      <div class="madurez-scale">
+        ${[1,2,3,4,5].map(n=>`<div class="madurez-dot ${n<=madurezDefault?'active':n===madurezDefault+1?'partial':''}" data-n="${n}" onclick="setMadurez('${d.cliente.replace(/\s/g,'_')}',${n})"></div>`).join('')}
+      </div>
+      <div class="madurez-labels"><span>1 · Básico</span><span>2 · Inicial</span><span>3 · En desarrollo</span><span>4 · Avanzado</span><span>5 · Excelencia</span></div>
+      <div class="madurez-desc" id="madurez-desc-${d.cliente.replace(/\s/g,'_')}">${MADUREZ_DESC[madurezDefault]}</div>
+      <div style="font-size:11px;color:var(--hint);margin-top:.5rem">Nivel actual: <strong id="madurez-num-${d.cliente.replace(/\s/g,'_')}" style="color:var(--blue)">${madurezDefault}</strong> / 5 &nbsp;·&nbsp; Haz clic en los puntos para ajustar.</div>
+    </div>
+  </div>
+
+  <!-- EVOLUTIVO -->
+  <div class="sec-title"><span class="sec-icon">📋</span>Servicio evolutivo — Consultoría CrossNet</div>
+  <div class="kpi-grid">
+    <div class="kpi ab"><div class="kpi-label">Requerimientos</div><div class="kpi-value" style="color:var(--blue)">${d.bit_total}</div><div class="kpi-sub">bitácoras verificadas</div></div>
+    <div class="kpi ab"><div class="kpi-label">HH consultoría</div><div class="kpi-value" style="color:var(--blue)">${d.hh_evol}</div><div class="kpi-sub">horas especializadas</div></div>
+    <div class="kpi at"><div class="kpi-label">% Bitácoras en fecha</div><div class="kpi-value" style="color:${slaColor(d.sla_bit_pct)}">${d.sla_bit_pct>0?d.sla_bit_pct+'%':'—'}</div><div class="kpi-sub">en o antes de compromiso</div></div>
+    <div class="kpi av"><div class="kpi-label">Requerimientos en plazo</div><div class="kpi-value" style="color:${slaColor(d.sla_bit_pct)}">${d.sla_bit_pct>0?d.sla_bit_pct+'%':'—'}</div><div class="kpi-sub">entregados a tiempo</div></div>
+    <div class="kpi av"><div class="kpi-label">HH / requerimiento</div><div class="kpi-value">${d.hh_prom_bit}</div><div class="kpi-sub">esfuerzo promedio</div></div>
+  </div>
+  ${insEvol.map(i=>`<div class="insight ${i.t}">${i.txt}</div>`).join('')}
+
+  ${d.bit_total>0?`
+  <div class="chart-row">
+    <div class="box"><div class="box-title">Bitácoras por mes</div><div class="chart-wrap">${svgMiniBar(bitPorMes,Array(meses.length).fill('#4A9EE0'),mesLabels)}</div></div>
+    <div class="box"><div class="box-title">HH consultivas por mes</div><div class="chart-wrap">${svgMiniBar(hhPorMes,Array(meses.length).fill('#9B94F0'),mesLabels)}</div></div>
+  </div>
+  <div class="sec-title" style="margin-top:1.25rem"><span class="sec-icon">⭐</span>Principales iniciativas ejecutadas</div>
+  <div class="box" style="margin-bottom:1rem">
+    ${d.top_bit.map(([titulo,hh],i)=>{
+      const maxHH=d.top_bit[0][1];
+      return `<div class="top-row">
+        <div class="top-num">${i+1}</div>
+        <div class="top-title">${titulo}</div>
+        <div class="top-bar-wrap"><div class="top-bar-bg"><div class="top-bar-fill" style="width:${Math.round(hh/maxHH*100)}%"></div></div></div>
+        <div class="top-hh">${hh} HH</div>
+      </div>`;}).join('')}
+    <div style="font-size:11px;color:var(--hint);padding:8px 0 2px;font-style:italic">Iniciativas ordenadas por esfuerzo técnico. El SDM puede complementar con las de mayor impacto estratégico.</div>
+  </div>`:''}
+
+  <!-- CSR -->
+  <div class="sec-title"><span class="sec-icon">🛠</span>Soporte operativo — Centro de Servicios Regional (CSR)</div>
+  <div class="insight info">El CSR garantiza la <strong>continuidad operativa 7×24×365</strong> de su plataforma Genesys Cloud. Cada ticket representa una atención especializada para mantener la operación sin interrupciones.</div>
+  <div class="kpi-grid">
+    <div class="kpi at"><div class="kpi-label">Tickets atendidos</div><div class="kpi-value" style="color:var(--teal)">${d.tick_total}</div><div class="kpi-sub">soporte 7×24×365</div></div>
+    <div class="kpi at"><div class="kpi-label">HH de soporte</div><div class="kpi-value" style="color:var(--teal)">${Math.ceil(d.hh_csr)}</div><div class="kpi-sub">horas especializadas</div></div>
+    <div class="kpi at"><div class="kpi-label">SLA incidentes &lt;24h</div><div class="kpi-value" style="color:${slaColor(d.sla_inc_pct)}">${d.sla_inc_pct>0?d.sla_inc_pct+'%':'—'}</div><div class="kpi-sub">solo incidentes</div></div>
+    <div class="kpi aa"><div class="kpi-label">T. prom. resolución</div><div class="kpi-value">${fN(d.t_resol_prom)}</div><div class="kpi-sub">horas promedio</div></div>
+    <div class="kpi ac"><div class="kpi-label">Incidentes</div><div class="kpi-value" style="color:${d.incidentes===0?'var(--teal)':'var(--coral)'}">${d.incidentes}</div><div class="kpi-sub">${d.tick_total>0?Math.round(d.incidentes/d.tick_total*100)+'% del total':'—'}</div></div>
+    <div class="kpi ab"><div class="kpi-label">Reqs. + consultas</div><div class="kpi-value">${d.reqs_csr+d.consultas}</div><div class="kpi-sub">cambios y consultas</div></div>
+  </div>
+  ${insCsr.map(i=>`<div class="insight ${i.t}">${i.txt}</div>`).join('')}
+
+  ${d.tick_total>0?`
+  <div class="chart-row">
+    <div class="box"><div class="box-title">Tickets por mes</div><div class="chart-wrap">${svgMiniBar(tickPorMes,Array(meses.length).fill('#2DC98A'),mesLabels)}</div></div>
+    <div class="box"><div class="box-title">Composición de tickets</div>
+      <div style="padding:.25rem 0">
+        ${[['Incidentes',d.incidentes,'var(--coral)'],['Requerimientos',d.reqs_csr,'var(--blue)'],['Consultas',d.consultas,'var(--violet)'],['Otros',d.otros_csr,'var(--hint)']].filter(x=>x[1]>0).map(([lbl,val,color])=>{
+          const pct=Math.round(val/d.tick_total*100);
+          return `<div class="trend-row"><div class="trend-label">${lbl}</div><div class="trend-bg"><div class="trend-fill" style="width:${pct}%;background:${color}"></div></div><div class="trend-val">${val}</div></div>`;
+        }).join('')}
+      </div>
+    </div>
+  </div>`:''}
+
+  <!-- RESUMEN -->
+  <div class="sec-title"><span class="sec-icon">📊</span>Resumen de dedicación — ${d.periodo}</div>
+  <div class="box" style="margin-bottom:1rem">
+    <table class="sum-tbl">
+      <thead><tr><th>Dimensión del servicio</th><th style="text-align:right">Atenciones</th><th style="text-align:right">HH dedicadas</th><th style="text-align:right">Valor equiv. USD</th></tr></thead>
+      <tbody>
+        <tr><td>📋 Consultoría evolutiva (CN)</td><td class="n">${d.bit_total} bitácoras</td><td class="n hi">${d.hh_evol} HH</td><td class="n">USD ${d.valor_cn.toLocaleString()}</td></tr>
+        <tr><td>🛠 Soporte operativo CSR 7×24</td><td class="n">${d.tick_total} tickets</td><td class="n hi">${Math.ceil(d.hh_csr)} HH</td><td class="n">USD ${d.valor_csr.toLocaleString()}</td></tr>
+        <tr class="total-row"><td>💎 Total servicio CrossNet</td><td class="n"></td><td class="n" style="color:var(--blue)">${d.hh_total} HH</td><td class="n" style="color:var(--blue)">USD ${(d.valor_cn+d.valor_csr).toLocaleString()}</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ROADMAP Q2 -->
+  <div class="sec-title"><span class="sec-icon">🗺</span>Roadmap acordado — próximo período</div>
+  <div class="box" style="margin-bottom:.75rem">
+    <div style="font-size:12px;color:var(--hint);margin-bottom:.75rem">Iniciativas priorizadas para el siguiente trimestre. <span style="color:rgba(255,255,255,.2);font-style:italic">Haz clic en los textos para editarlos antes de la reunión.</span></div>
+    ${[1,2,3].map(n=>`
+    <div class="roadmap-item">
+      <div class="roadmap-num">${n}</div>
+      <div class="roadmap-content">
+        <div class="roadmap-iniciativa" contenteditable="true" style="color:var(--muted)">Iniciativa ${n} — completar en reunión ejecutiva</div>
+        <div class="roadmap-objetivo" contenteditable="true">Objetivo de negocio: ¿qué KPI o dolor del cliente impacta esta iniciativa?</div>
+      </div>
+      <div class="roadmap-prioridad ${n===1?'p-alta':n===2?'p-media':'p-baja'}" contenteditable="true">${n===1?'Alta':n===2?'Media':'Por definir'}</div>
+    </div>`).join('')}
+  </div>
+
+  <!-- FOOTER -->
+  <div class="rep-footer">
+    <div class="rep-footer-l">CrossNet Perú · ${d.periodo} · Preparado por ${d.kam} y ${d.sdm}</div>
+    <img class="rep-footer-logo" src="https://crossnet.la/wp-content/uploads/2024/10/logo-crossnet_header.svg" alt="CrossNet" onerror="this.style.display='none'">
+  </div>
+  <div class="confidential">Documento confidencial · Uso exclusivo CrossNet y cliente · No distribuir</div>
+  `;
+
+  document.getElementById('report-content').innerHTML=html;
+}
+
+function setMadurez(clienteId,nivel){
+  const dots=document.querySelectorAll(`#madurez-${clienteId} .madurez-dot`);
+  dots.forEach((d,i)=>{
+    d.className='madurez-dot';
+    if(i+1<=nivel) d.classList.add('active');
+    else if(i+1===nivel+1) d.classList.add('partial');
+  });
+  document.getElementById('madurez-desc-'+clienteId).textContent=MADUREZ_DESC[nivel]||'';
+  document.getElementById('madurez-num-'+clienteId).textContent=nivel;
+}
+</script>
+</body>
+</html>
