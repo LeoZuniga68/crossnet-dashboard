@@ -451,11 +451,16 @@ function buildData(rawBit,rawCSR,rawFact){
   });
 
   // BITÁCORAS por cliente
-  const bitMap={};
+  const bitMap={}, topBitStore={};
   rawBit.forEach(r=>{
     const cli=normCli(r['Cliente']||'');
     if(EXCLUIR.includes(cli)||cli==='CrossNet Perú') return;
     const hh=parseFloat(String(r['HH Utilizadas']||0).replace(',','.'))||0;
+    // Store top bitácoras by HH
+    if(hh>0){
+      if(!topBitStore[cli]) topBitStore[cli]=[];
+      topBitStore[cli].push([r['Titulo Bitacora']||'Sin título', Math.round(hh*10)/10]);
+    }
     const fc=new Date(r['Fecha Creación']||r['Fecha Creacion']||'');
     const fn=new Date(r['Fecha notificación']||r['Fecha notificacion']||'');
     const fcomp=new Date(r['Fecha Compromiso']||'');
@@ -557,6 +562,17 @@ function buildData(rawBit,rawCSR,rawFact){
     const topBit=[];
     // We can't easily get per-bitacora titles here without storing them
     // Store in bitMap during processing
+    // Build bit_mes, hh_mes, tick_mes for renderReport compatibility
+    const bit_mes={}, hh_mes={}, tick_mes={};
+    meses.forEach(m=>{
+      bit_mes[m.num]=b.byMes[m.num]?.bit||0;
+      hh_mes[m.num]=b.byMes[m.num]?.hh||0;
+      tick_mes[m.num]=c.byMes[m.num]?.tickets||0;
+    });
+
+    // top_bit from stored titles
+    const topBitArr=(topBitStore[cli]||[]).sort((a,b)=>b[1]-a[1]).slice(0,5);
+
     out.push({
       cliente:cli,fr:Math.round(f*100)/100,
       team:map.team,kam:map.kam,sdm:map.sdm,periodo,
@@ -564,12 +580,12 @@ function buildData(rawBit,rawCSR,rawFact){
       bit_total:bBit,hh_evol:Math.round(bHH*10)/10,
       sla_bit_pct,
       hh_prom_bit:bBit>0?Math.round(bHH/bBit*10)/10:0,
-      tickets:cTick,hh_csr:cHH,incidentes:cInc,
+      tick_total:cTick,tickets:cTick,hh_csr:cHH,incidentes:cInc,
       reqs_csr:cReqs,consultas:cConsultas,otros_csr:Math.max(cTick-cInc-cReqs-cConsultas,0),
       sla_inc_pct,t_resol_prom:Math.round(t_resol_prom*10)/10,
       hh_total:Math.round(hh_total*10)/10,
       valor_cn,valor_csr,tarifa_cn:TARIFA_CN,tarifa_csr:TARIFA_CSR,
-      byMes,meses,top_bit:[],
+      byMes,meses,bit_mes,hh_mes,tick_mes,top_bit:topBitArr,
     });
   });
 
@@ -627,6 +643,13 @@ const MADUREZ_DESC = [
   'Madurez avanzada — integraciones CRM, automatización de flujos y analítica activa. El cliente saca partido estratégico de la plataforma.',
   'Excelencia operativa — la plataforma está completamente integrada al ecosistema del cliente. La IA y automatización son parte del servicio diario.',
 ];
+  } catch(e) {
+    document.getElementById('report-content').innerHTML = '<div style="padding:2rem;color:#F07050;font-size:13px;background:#3A1A10;border-radius:10px;margin:2rem">⚠ Error al generar el reporte: <strong>' + e.message + '</strong><br><br><small>' + e.stack + '</small></div>';
+    console.error('renderReport error:', e);
+  }
+}
+// END renderReport
+
 function setMadurez(cliId,nivel){
   const dots=document.querySelectorAll('#madurez-'+cliId+' .madurez-dot');
   dots.forEach((d,i)=>{d.className='madurez-dot';if(i+1<=nivel)d.classList.add('active');else if(i+1===nivel+1)d.classList.add('partial');});
@@ -669,11 +692,12 @@ function svgGauge(pct,color,size=72){
 
 // ════ RENDER ════
 function renderReport(d){
+  try {
   const meses=d.meses||[];
   const mesLabels=meses.map(m=>m.label.split(' ')[0]); // short: Ene, Feb, Mar
-  const bitPorMes=meses.map(m=>d.bit_mes[m.num]||0);
-  const hhPorMes=meses.map(m=>d.hh_mes[m.num]||0);
-  const tickPorMes=meses.map(m=>d.tick_mes[m.num]||0);
+  const bitPorMes=meses.map(m=>(d.bit_mes&&d.bit_mes[m.num])||0);
+  const hhPorMes=meses.map(m=>(d.hh_mes&&d.hh_mes[m.num])||0);
+  const tickPorMes=meses.map(m=>(d.tick_mes&&d.tick_mes[m.num])||0);
 
   // Insights evolutivo
   const insEvol=[];
@@ -861,6 +885,13 @@ function renderReport(d){
 
   document.getElementById('report-content').innerHTML=html;
 }
+
+  } catch(e) {
+    document.getElementById('report-content').innerHTML = '<div style="padding:2rem;color:#F07050;font-size:13px;background:#3A1A10;border-radius:10px;margin:2rem">⚠ Error al generar el reporte: <strong>' + e.message + '</strong><br><br><small>' + e.stack + '</small></div>';
+    console.error('renderReport error:', e);
+  }
+}
+// END renderReport
 
 function setMadurez(clienteId,nivel){
   const dots=document.querySelectorAll(`#madurez-${clienteId} .madurez-dot`);
