@@ -199,7 +199,7 @@ textarea:focus{border-color:var(--blue)}
           <div><div class="src-title">1. Bitácoras (Servicio Evolutivo)</div><div class="src-desc">Export del Portal CrossNet · bitácoras verificadas del período</div></div>
         </div>
         <div class="src-steps"><strong>Pasos:</strong> Portal → Export bitácoras → Bloc de notas → <kbd>Ctrl+A</kbd> → <kbd>Ctrl+C</kbd> → pegar aquí</div>
-        <textarea id="txt-bit" placeholder="Pega aquí el CSV de bitácoras..." oninput="chk()" onpaste="setTimeout(chk,100)" onkeyup="chk()"></textarea>
+        <textarea id="txt-bit" placeholder="Pega aquí el CSV de bitácoras..."></textarea><button onclick="verOne('bit')" style="margin-top:4px;padding:4px 12px;font-size:11px;background:transparent;border:1px solid var(--border-m);border-radius:6px;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif">Verificar ✓</button>
         <div class="src-status" id="st-bit" style="color:var(--hint)">Esperando datos…</div>
       </div>
       <div class="src-card">
@@ -208,7 +208,7 @@ textarea:focus{border-color:var(--blue)}
           <div><div class="src-title">2. Tickets CSR (Soporte)</div><div class="src-desc">Export del sistema CSR · tickets del período filtrado por Perú</div></div>
         </div>
         <div class="src-steps"><strong>Pasos:</strong> Sistema CSR → Export tickets Perú → Bloc de notas → <kbd>Ctrl+A</kbd> → <kbd>Ctrl+C</kbd> → pegar aquí</div>
-        <textarea id="txt-csr" placeholder="Pega aquí el CSV de tickets CSR..." oninput="chk()" onpaste="setTimeout(chk,100)" onkeyup="chk()"></textarea>
+        <textarea id="txt-csr" placeholder="Pega aquí el CSV de tickets CSR..."></textarea><button onclick="verOne('csr')" style="margin-top:4px;padding:4px 12px;font-size:11px;background:transparent;border:1px solid var(--border-m);border-radius:6px;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif">Verificar ✓</button>
         <div class="src-status" id="st-csr" style="color:var(--hint)">Esperando datos…</div>
       </div>
       <div class="src-card">
@@ -217,7 +217,7 @@ textarea:focus{border-color:var(--blue)}
           <div><div class="src-title">3. Facturación recurrente (FR)</div><div class="src-desc">Export del Portal CrossNet · Detalle de Facturación Mensual · solo FR</div></div>
         </div>
         <div class="src-steps"><strong>Pasos:</strong> Portal → Facturación → Export → Bloc de notas → <kbd>Ctrl+A</kbd> → <kbd>Ctrl+C</kbd> → pegar aquí</div>
-        <textarea id="txt-fact" placeholder="Pega aquí el CSV de facturación..." oninput="chk()" onpaste="setTimeout(chk,100)" onkeyup="chk()"></textarea>
+        <textarea id="txt-fact" placeholder="Pega aquí el CSV de facturación..."></textarea><button onclick="verOne('fact')" style="margin-top:4px;padding:4px 12px;font-size:11px;background:transparent;border:1px solid var(--border-m);border-radius:6px;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif">Verificar ✓</button>
         <div class="src-status" id="st-fact" style="color:var(--hint)">Esperando datos…</div>
       </div>
     </div>
@@ -361,6 +361,29 @@ function parseFact(text){
 }
 
 // ════ STATUS CHECK ════
+function verOne(src){
+  const txtId='txt-'+src, stId='st-'+src;
+  const txt=document.getElementById(txtId).value.trim();
+  const st=document.getElementById(stId);
+  if(!txt){st.textContent='⚠ Cuadro vacío — pega el contenido primero';st.style.color='var(--coral)';return;}
+  try{
+    if(src==='fact'){
+      const lines=txt.split('\n').filter(l=>l.trim()).length;
+      st.textContent='✓ '+lines+' líneas detectadas';st.style.color='var(--teal)';
+    } else if(src==='bit'){
+      const p=parseCSV(txt);
+      const ok=p.headers.some(h=>h.includes('Cliente'));
+      if(ok){st.textContent='✓ '+p.data.length+' filas · columnas OK';st.style.color='var(--teal)';}
+      else{st.textContent='⚠ No se encontró columna Cliente. Columnas: '+p.headers.slice(0,5).join(', ');st.style.color='var(--coral)';}
+    } else if(src==='csr'){
+      const p=parseCSV(txt);
+      const ok=p.data.length>0;
+      if(ok){st.textContent='✓ '+p.data.length+' filas detectadas';st.style.color='var(--teal)';}
+      else{st.textContent='⚠ Sin filas. Columnas: '+p.headers.slice(0,5).join(', ');st.style.color='var(--coral)';}
+    }
+  } catch(e){st.textContent='⚠ Error: '+e.message;st.style.color='var(--coral)';}
+}
+
 function chk(){
   let allOk = true;
 
@@ -427,17 +450,27 @@ function setProgress(pct,msg){
 
 // ════ LOAD ALL ════
 function loadAll(){
+  const txtBit=document.getElementById('txt-bit').value.trim();
+  const txtCsr=document.getElementById('txt-csr').value.trim();
+  const txtFact=document.getElementById('txt-fact').value.trim();
+  const err=document.getElementById('load-err');
+  if(!txtBit){err.textContent='⚠ Falta el CSV de bitácoras';return;}
+  if(!txtCsr){err.textContent='⚠ Falta el CSV de tickets CSR';return;}
+  if(!txtFact){err.textContent='⚠ Falta el CSV de facturación';return;}
+  err.textContent='';
   setProgress(10,'Leyendo bitácoras…');
   setTimeout(()=>{
     try{
-      const rawBit=parseCSV(document.getElementById('txt-bit').value.trim()).data;
+      const rawBit=parseCSV(txtBit).data;
+      if(!rawBit.length){throw new Error('CSV de bitácoras sin filas de datos');}
       setProgress(35,'Leyendo tickets CSR…');
-      const rawCSR=parseCSV(document.getElementById('txt-csr').value.trim()).data;
+      const rawCSR=parseCSV(txtCsr).data;
       setProgress(60,'Leyendo facturación…');
-      const rawFact=parseFact(document.getElementById('txt-fact').value.trim());
+      const rawFact=parseFact(txtFact);
       setProgress(80,'Procesando y cruzando datos…');
       DATA=buildData(rawBit,rawCSR,rawFact);
-      setProgress(100,'¡Listo!');
+      if(!DATA.length){throw new Error('No se encontraron clientes en los datos');}
+      setProgress(100,'✓ '+DATA.length+' clientes cargados');
       setTimeout(()=>{
         buildSelector();
         document.getElementById('upload-screen').style.display='none';
