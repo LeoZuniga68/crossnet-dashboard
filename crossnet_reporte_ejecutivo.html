@@ -225,7 +225,7 @@ textarea:focus{border-color:var(--blue)}
       <div class="progress-bar"><div class="progress-fill" id="prog-fill"></div></div>
       <div class="progress-msg" id="prog-msg">Procesando…</div>
     </div>
-    <button class="btn-primary" id="btn-load" onclick="loadAll()" disabled>Cargar reportes</button>
+    <button class="btn-primary" id="btn-load" onclick="loadAll()" style="opacity:1;cursor:pointer">Cargar reportes</button>
     <div id="load-err" style="font-size:12px;color:var(--coral);margin-top:.5rem;text-align:center"></div>
   </div>
 </div>
@@ -362,30 +362,61 @@ function parseFact(text){
 
 // ════ STATUS CHECK ════
 function chk(){
-  const sources=[
-    {txtId:'txt-bit',stId:'st-bit',check:d=>d.headers.includes('Cliente')&&d.headers.includes('HH Utilizadas')},
-    {txtId:'txt-csr',stId:'st-csr',check:d=>d.headers.includes('Unique ID')&&d.headers.includes('Ticket País')},
-    {txtId:'txt-fact',stId:'st-fact',check:d=>true}, // fact has custom parser
-  ];
-  let allOk=true;
-  sources.forEach((src,idx)=>{
-    const txt=document.getElementById(src.txtId).value.trim();
-    const st=document.getElementById(src.stId);
-    if(!txt){st.textContent='Esperando datos…';st.style.color='var(--hint)';allOk=false;return;}
-    try{
-      if(idx===2){
-        // Facturación: just check has content
-        const lines=txt.split('\n').filter(l=>l.trim()).length;
-        st.textContent=`✓ ${lines} líneas detectadas`;st.style.color='var(--teal)';
+  let allOk = true;
+
+  // Bitácoras
+  const txtBit = document.getElementById('txt-bit').value.trim();
+  const stBit = document.getElementById('st-bit');
+  if(!txtBit){
+    stBit.textContent='Esperando datos…';stBit.style.color='var(--hint)';allOk=false;
+  } else {
+    try {
+      const p = parseCSV(txtBit);
+      const hasCliente = p.headers.some(h=>h.trim()==='Cliente');
+      const hasHH = p.headers.some(h=>h.includes('HH'));
+      if(hasCliente){
+        stBit.textContent='✓ '+p.data.length+' filas detectadas';stBit.style.color='var(--teal)';
       } else {
-        const p=parseCSV(txt);
-        if(src.check(p)){st.textContent=`✓ ${p.data.length} filas`;st.style.color='var(--teal)'}
-        else{st.textContent=`⚠ Columnas no reconocidas`;st.style.color='var(--coral)';allOk=false;}
+        stBit.textContent='⚠ Columnas: '+p.headers.slice(0,4).join(', ');stBit.style.color='var(--coral)';allOk=false;
       }
-    } catch(e){st.textContent='⚠ Error al leer';st.style.color='var(--coral)';allOk=false;}
-  });
-  const btn=document.getElementById('btn-load');
-  btn.disabled=!allOk;btn.style.opacity=allOk?'1':'0.4';
+    } catch(e){stBit.textContent='⚠ '+e.message;stBit.style.color='var(--coral)';allOk=false;}
+  }
+
+  // CSR
+  const txtCsr = document.getElementById('txt-csr').value.trim();
+  const stCsr = document.getElementById('st-csr');
+  if(!txtCsr){
+    stCsr.textContent='Esperando datos…';stCsr.style.color='var(--hint)';allOk=false;
+  } else {
+    try {
+      const p = parseCSV(txtCsr);
+      const hasId = p.headers.some(h=>h.includes('ID')||h.includes('id'));
+      if(hasId||p.data.length>0){
+        stCsr.textContent='✓ '+p.data.length+' filas detectadas';stCsr.style.color='var(--teal)';
+      } else {
+        stCsr.textContent='⚠ Columnas: '+p.headers.slice(0,4).join(', ');stCsr.style.color='var(--coral)';allOk=false;
+      }
+    } catch(e){stCsr.textContent='⚠ '+e.message;stCsr.style.color='var(--coral)';allOk=false;}
+  }
+
+  // Facturación — formato especial con comillas anidadas
+  const txtFact = document.getElementById('txt-fact').value.trim();
+  const stFact = document.getElementById('st-fact');
+  if(!txtFact){
+    stFact.textContent='Esperando datos…';stFact.style.color='var(--hint)';allOk=false;
+  } else {
+    const lines = txtFact.split('\n').filter(l=>l.trim()).length;
+    if(lines > 1){
+      stFact.textContent='✓ '+lines+' líneas detectadas';stFact.style.color='var(--teal)';
+    } else {
+      stFact.textContent='⚠ Archivo parece vacío';stFact.style.color='var(--coral)';allOk=false;
+    }
+  }
+
+  const btn = document.getElementById('btn-load');
+  btn.disabled = !allOk;
+  btn.style.opacity = allOk ? '1' : '0.4';
+  btn.style.cursor = allOk ? 'pointer' : 'not-allowed';
 }
 
 function setProgress(pct,msg){
@@ -413,8 +444,9 @@ function loadAll(){
         document.getElementById('selector-view').style.display='block';
       },300);
     } catch(e){
-      document.getElementById('load-err').textContent='Error: '+e.message;
-      console.error(e);
+      document.getElementById('load-err').innerHTML='<strong>Error al procesar:</strong> '+e.message+'<br><small style="color:var(--hint)">Revisa que los 3 archivos sean los correctos y estén completos.</small>';
+      document.getElementById('prog-wrap').style.display='none';
+      console.error('loadAll error:', e);
     }
   },50);
 }
@@ -608,12 +640,14 @@ function buildSelector(){
 
 function showReport(){
   const nombre=document.getElementById('cli-select').value;
+  if(!nombre){alert('Selecciona un cliente');return;}
   const d=DATA.find(x=>x.cliente===nombre);
-  if(!d) return;
-  renderReport(d);
+  if(!d){alert('No se encontraron datos para: '+nombre);return;}
+  document.getElementById('report-content').innerHTML='<div style="padding:2rem;text-align:center;color:var(--muted)">Generando reporte…</div>';
   document.getElementById('selector-view').style.display='none';
   document.getElementById('report-view').style.display='block';
   window.scrollTo(0,0);
+  setTimeout(()=>renderReport(d), 50);
 }
 
 function showSelector(){
