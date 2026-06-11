@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Test CSV</title>
+<style>
+body{font-family:sans-serif;padding:2rem;background:#0F1117;color:#F0EEE8;max-width:700px;margin:0 auto}
+textarea{width:100%;height:120px;font-size:12px;padding:8px;background:#181C24;color:#F0EEE8;border:1px solid rgba(255,255,255,0.15);border-radius:6px;margin-bottom:8px;display:block}
+button{padding:8px 20px;background:#4A9EE0;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px;margin-right:8px;margin-bottom:8px}
+.result{margin-top:1rem;padding:1rem;background:#181C24;border-radius:6px;font-size:13px;line-height:1.8;white-space:pre-wrap}
+.ok{color:#2DC98A}.err{color:#F07050}.info{color:#4A9EE0}
+</style>
+</head>
+<body>
+
+<h2>Diagnóstico CSV — CrossNet</h2>
+<p style="color:#A8A69E;font-size:13px">Pega el CSV de bitácoras y haz clic en Analizar.</p>
+
+<textarea id="txt" placeholder="Pega aquí el CSV..."></textarea>
+
+<button onclick="analizar()">Analizar CSV</button>
+<button onclick="document.getElementById('txt').value='';document.getElementById('result').innerHTML=''">Limpiar</button>
+
+<div class="result" id="result">Esperando...</div>
+
+<script>
+function analizar(){
+  var txt = document.getElementById('txt').value;
+  var res = document.getElementById('result');
+
+  if(!txt || txt.trim().length === 0){
+    res.innerHTML = '<span class="err">⚠ El cuadro está vacío. Pega el CSV primero.</span>';
+    return;
+  }
+
+  var lines = txt.split('\n').filter(function(l){ return l.trim().length > 0; });
+  var firstLine = lines[0] || '';
+
+  // Detect delimiter
+  var nComas = (firstLine.match(/,/g)||[]).length;
+  var nPuntos = (firstLine.match(/;/g)||[]).length;
+  var delim = nPuntos > nComas ? ';' : ',';
+
+  // Parse headers
+  var headers = firstLine.split(delim).map(function(h){ return h.replace(/"/g,'').trim(); });
+
+  var out = [];
+  out.push('<span class="ok">✓ Texto recibido: ' + txt.length + ' caracteres</span>');
+  out.push('<span class="ok">✓ Líneas: ' + lines.length + '</span>');
+  out.push('<span class="info">Delimitador: "' + delim + '"</span>');
+  out.push('<span class="info">Columnas (' + headers.length + '): ' + headers.join(' | ') + '</span>');
+  out.push('');
+
+  // Check key columns
+  var hasCliente = headers.some(function(h){ return h === 'Cliente'; });
+  var hasHH = headers.some(function(h){ return h.includes('HH'); });
+  var hasFecha = headers.some(function(h){ return h.includes('Fecha'); });
+
+  if(hasCliente) out.push('<span class="ok">✓ Columna "Cliente" encontrada</span>');
+  else out.push('<span class="err">⚠ Columna "Cliente" NO encontrada</span>');
+
+  if(hasHH) out.push('<span class="ok">✓ Columna HH encontrada</span>');
+  if(hasFecha) out.push('<span class="ok">✓ Columnas de fecha encontradas</span>');
+
+  out.push('');
+  out.push('<span class="info">Primera fila de datos:</span>');
+  out.push(lines[1] || '(vacía)');
+
+  res.innerHTML = out.join('\n');
+}
+</script>
+</body>
+</html>
