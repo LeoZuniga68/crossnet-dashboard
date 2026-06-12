@@ -320,7 +320,8 @@ function parseCSV(text){
     headers.forEach((h,idx)=>{
       let v=(vals[idx]||'').replace(/^"|"$/g,'').trim();
       const n=parseFloat(v.replace(',','.'));
-      row[h]=(!isNaN(n)&&v!==''&&!/^\d{4}-/.test(v)&&v.length<12)?n:v;
+      const isNum=!isNaN(n)&&v!==''&&!/^\d{4}-/.test(v)&&v.length<12&&!v.includes('%')&&!v.includes(' ');
+      row[h]=isNum?n:v;
     });
     data.push(row);
   }
@@ -365,23 +366,45 @@ function verOne(src){
   const txtId='txt-'+src, stId='st-'+src;
   const txt=document.getElementById(txtId).value.trim();
   const st=document.getElementById(stId);
-  if(!txt){st.textContent='⚠ Cuadro vacío — pega el contenido primero';st.style.color='var(--coral)';return;}
-  try{
-    if(src==='fact'){
-      const lines=txt.split('\n').filter(l=>l.trim()).length;
-      st.textContent='✓ '+lines+' líneas detectadas';st.style.color='var(--teal)';
-    } else if(src==='bit'){
-      const p=parseCSV(txt);
-      const ok=p.headers.some(h=>h.includes('Cliente'));
-      if(ok){st.textContent='✓ '+p.data.length+' filas · columnas OK';st.style.color='var(--teal)';}
-      else{st.textContent='⚠ No se encontró columna Cliente. Columnas: '+p.headers.slice(0,5).join(', ');st.style.color='var(--coral)';}
-    } else if(src==='csr'){
-      const p=parseCSV(txt);
-      const ok=p.data.length>0;
-      if(ok){st.textContent='✓ '+p.data.length+' filas detectadas';st.style.color='var(--teal)';}
-      else{st.textContent='⚠ Sin filas. Columnas: '+p.headers.slice(0,5).join(', ');st.style.color='var(--coral)';}
+  if(!txt){
+    st.textContent='⚠ Cuadro vacío — pega el contenido primero';
+    st.style.color='var(--coral)';
+    return;
+  }
+  // Simple line count — always works regardless of format
+  const lines=txt.split('\n').filter(function(l){return l.trim().length>0;});
+  const firstLine=lines[0]||'';
+  const delim=(firstLine.split(';').length>firstLine.split(',').length)?';':',';
+  const headers=firstLine.split(delim).map(function(h){return h.replace(/"/g,'').trim();});
+  const nData=lines.length-1;
+
+  if(src==='bit'){
+    const hasCliente=headers.some(function(h){return h==='Cliente';});
+    if(hasCliente){
+      st.textContent='✓ '+nData+' bitácoras detectadas · delimitador "'+delim+'"';
+      st.style.color='var(--teal)';
+    } else {
+      st.textContent='⚠ Columna Cliente no encontrada. Columnas: '+headers.slice(0,5).join(', ');
+      st.style.color='var(--coral)';
     }
-  } catch(e){st.textContent='⚠ Error: '+e.message;st.style.color='var(--coral)';}
+  } else if(src==='csr'){
+    const hasCliente=headers.some(function(h){return h==='Cliente'||h.includes('Cliente');});
+    if(hasCliente&&nData>0){
+      st.textContent='✓ '+nData+' tickets detectados · delimitador "'+delim+'"';
+      st.style.color='var(--teal)';
+    } else {
+      st.textContent='⚠ Revisar formato. Columnas: '+headers.slice(0,5).join(', ');
+      st.style.color='var(--coral)';
+    }
+  } else if(src==='fact'){
+    if(nData>0){
+      st.textContent='✓ '+nData+' filas de facturación detectadas';
+      st.style.color='var(--teal)';
+    } else {
+      st.textContent='⚠ Archivo parece vacío';
+      st.style.color='var(--coral)';
+    }
+  }
 }
 
 function chk(){
@@ -486,6 +509,7 @@ function loadAll(){
 
 // ════ BUILD DATA ════
 function buildData(rawBit,rawCSR,rawFact){
+  console.log('buildData: bit='+rawBit.length+' csr='+rawCSR.length+' fact='+rawFact.length);
   // Period detection from bitácoras
   const dates=rawBit.map(r=>new Date(r['Fecha Creación']||r['Fecha Creacion']||'')).filter(d=>!isNaN(d));
   const minDate=new Date(Math.min(...dates));
@@ -759,6 +783,7 @@ function svgGauge(pct,color,size=72){
 
 // ════ RENDER ════
 function renderReport(d){
+  console.log('renderReport:', d.cliente);
   try {
   const meses=d.meses||[];
   const mesLabels=meses.map(m=>m.label.split(' ')[0]); // short: Ene, Feb, Mar
