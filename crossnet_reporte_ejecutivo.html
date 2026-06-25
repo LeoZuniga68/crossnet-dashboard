@@ -734,19 +734,6 @@ const MADUREZ_DESC = [
   'Madurez avanzada — integraciones CRM, automatización de flujos y analítica activa. El cliente saca partido estratégico de la plataforma.',
   'Excelencia operativa — la plataforma está completamente integrada al ecosistema del cliente. La IA y automatización son parte del servicio diario.',
 ];
-  } catch(e) {
-    document.getElementById('report-content').innerHTML = '<div style="padding:2rem;color:#F07050;font-size:13px;background:#3A1A10;border-radius:10px;margin:2rem">⚠ Error al generar el reporte: <strong>' + e.message + '</strong><br><br><small>' + e.stack + '</small></div>';
-    console.error('renderReport error:', e);
-  }
-}
-// END renderReport
-
-function setMadurez(cliId,nivel){
-  const dots=document.querySelectorAll('#madurez-'+cliId+' .madurez-dot');
-  dots.forEach((d,i)=>{d.className='madurez-dot';if(i+1<=nivel)d.classList.add('active');else if(i+1===nivel+1)d.classList.add('partial');});
-  document.getElementById('madurez-desc-'+cliId).textContent=MADUREZ_DESC[nivel]||'';
-  document.getElementById('madurez-num-'+cliId).textContent=nivel;
-}
 
 // ════ SVG ════
 function svgMiniBar(values,colors,labels){
@@ -976,7 +963,6 @@ function renderReport(d){
   `;
 
   document.getElementById('report-content').innerHTML=html;
-}
 
   } catch(e) {
     document.getElementById('report-content').innerHTML = '<div style="padding:2rem;color:#F07050;font-size:13px;background:#3A1A10;border-radius:10px;margin:2rem">⚠ Error al generar el reporte: <strong>' + e.message + '</strong><br><br><small>' + e.stack + '</small></div>';
